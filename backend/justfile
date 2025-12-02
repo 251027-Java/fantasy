@@ -29,14 +29,17 @@ verify:
 default: clean verify
 
 # launch the application
+[group('run')]
 run: clean
     {{ maven }} spring-boot:run
 
 # launch the application with the debugger
+[group('run')]
 debug: clean
     {{ maven }} spring-boot:run -Dspring-boot.run.jvmArguments="{{ debug_args }}"
 
-# compile the program
+# compile the program and trigger hot reload
+[group('run')]
 compile:
     {{ maven }} compile
 
@@ -76,3 +79,14 @@ db-export filepath='fantasy.data':
 # create container with a given data file
 [group('db')]
 db-create-with filepath: _db-create (_db-init filepath)
+
+# runs tests
+[group('test')]
+test:
+    {{ maven }} test
+    {{ maven }} jacoco:report
+
+# view coverage
+[group('test')]
+view-coverage:
+    start "target/site/jacoco/index.html"
