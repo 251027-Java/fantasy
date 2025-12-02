@@ -1,4 +1,6 @@
 maven := './mvnw'
+jar_loc := 'target/fantasy-1.0-0-dist.jar'
+db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
 
 alias refresh := compile
@@ -37,3 +39,40 @@ debug: clean
 # compile the program
 compile:
     {{ maven }} compile
+
+_db-create:
+    docker run --name {{ db_container }} -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres
+
+_db-init filepath:
+    docker cp {{ filepath }} {{ db_container }}:/tmp/dbdata
+    @sleep 2
+    docker exec {{ db_container }} psql -U postgres -v ON_ERROR_STOP=1 -q -f tmp/dbdata
+
+# create the container and set up the database
+[group('db')]
+db-create: _db-create
+# TODO how to set up database without running the spring boot app?
+
+# destroy the database container
+[group('db')]
+db-destroy:
+    docker rm -f {{ db_container }}
+
+# start the database container
+[group('db')]
+db-start:
+    docker start {{ db_container }}
+
+# stop the database container
+[group('db')]
+db-stop:
+    docker stop {{ db_container }}
+
+# export the database
+[group('db')]
+db-export filepath='fantasy.data':
+    docker exec {{ db_container }} pg_dump -U postgres -F p postgres > {{ filepath }}
+
+# create container with a given data file
+[group('db')]
+db-create-with filepath: _db-create (_db-init filepath)
