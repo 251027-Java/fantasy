@@ -88,5 +88,5 @@ test:
 
 # view coverage
 [group('test')]
-view-coverage:
-    start "target/site/jacoco/index.html"
+view-coverage cmd:
+    {{ cmd }} "target/site/jacoco/index.html"
