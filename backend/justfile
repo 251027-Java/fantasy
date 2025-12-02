@@ -1,0 +1,101 @@
+maven := './mvnw'
+jar_loc := 'target/fantasy-0.0.1.jar'
+db_container := 'fantasy-db'
+debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+
+alias refresh := compile
+
+# style check
+[group('style')]
+check:
+    {{ maven }} spotless:check
+    {{ maven }} checkstyle:check
+
+# format all code
+[group('style')]
+format:
+    {{ maven }} spotless:apply
+
+# removes artifacts and temporary files
+clean:
+    {{ maven }} clean
+
+# verify project integrity
+verify:
+    {{ maven }} verify
+
+# builds the jar
+build: clean
+    {{ maven }} package spring-boot:repackage
+
+# cleans and verifies project integrity
+[default]
+default: clean verify
+
+# launch the application
+[group('run')]
+run: clean
+    {{ maven }} spring-boot:run
+
+# launch the jar
+[group('run')]
+runj:
+    java -jar {{ jar_loc }}
+
+# launch the application with the debugger
+[group('run')]
+debug: clean
+    {{ maven }} spring-boot:run -Dspring-boot.run.jvmArguments="{{ debug_args }}"
+
+# compile the program and trigger hot reload
+[group('run')]
+compile:
+    {{ maven }} compile
+
+_db-create:
+    docker run --name {{ db_container }} -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres
+
+_db-init filepath:
+    docker cp {{ filepath }} {{ db_container }}:/tmp/dbdata
+    @sleep 2
+    docker exec {{ db_container }} psql -U postgres -v ON_ERROR_STOP=1 -q -f tmp/dbdata
+
+# create the container and set up the database
+[group('db')]
+db-create: _db-create
+# TODO how to set up database without running the spring boot app?
+
+# destroy the database container
+[group('db')]
+db-destroy:
+    docker rm -f {{ db_container }}
+
+# start the database container
+[group('db')]
+db-start:
+    docker start {{ db_container }}
+
+# stop the database container
+[group('db')]
+db-stop:
+    docker stop {{ db_container }}
+
+# export the database
+[group('db')]
+db-export filepath='fantasy.data':
+    docker exec {{ db_container }} pg_dump -U postgres -F p postgres > {{ filepath }}
+
+# create container with a given data file
+[group('db')]
+db-create-with filepath: _db-create (_db-init filepath)
+
+# runs tests
+[group('test')]
+test:
+    {{ maven }} test
+    {{ maven }} jacoco:report
+
+# view coverage
+[group('test')]
+view-coverage cmd='start':
+    {{ cmd }} "target/site/jacoco/index.html"
