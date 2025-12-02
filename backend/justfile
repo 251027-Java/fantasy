@@ -1,5 +1,5 @@
 maven := './mvnw'
-jar_loc := 'target/fantasy-1.0-0-dist.jar'
+jar_loc := 'target/fantasy-0.0.1.jar'
 db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
 
@@ -24,6 +24,10 @@ clean:
 verify:
     {{ maven }} verify
 
+# builds the jar
+build: clean
+    {{ maven }} package spring-boot:repackage
+
 # cleans and verifies project integrity
 [default]
 default: clean verify
@@ -32,6 +36,11 @@ default: clean verify
 [group('run')]
 run: clean
     {{ maven }} spring-boot:run
+
+# launch the jar
+[group('run')]
+runj:
+    java -jar {{ jar_loc }}
 
 # launch the application with the debugger
 [group('run')]
@@ -88,5 +97,5 @@ test:
 
 # view coverage
 [group('test')]
-view-coverage cmd:
+view-coverage cmd='start':
     {{ cmd }} "target/site/jacoco/index.html"
