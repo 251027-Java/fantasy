@@ -1,4 +1,4 @@
-package dev.revature.fantasy.SleeperRequest.SleeperResponseModels;
+package dev.revature.fantasy.sleeperRequest.sleeperResponseModels;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

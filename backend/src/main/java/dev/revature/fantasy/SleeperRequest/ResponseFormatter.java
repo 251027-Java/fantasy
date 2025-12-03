@@ -1,4 +1,4 @@
-package dev.revature.fantasy.SleeperRequest;
+package dev.revature.fantasy.sleeperRequest;
 
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import dev.revature.fantasy.Logger.GlobalLogger;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperPlayerResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperRosterUserResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperLeagueResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperMatchupResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperNFLStateResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperUserResponse;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperUsernameResponse;
+import dev.revature.fantasy.logger.GlobalLogger;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperLeagueResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperMatchupResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperNFLStateResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperPlayerResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperRosterUserResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperUserResponse;
+import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.SleeperUsernameResponse;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 

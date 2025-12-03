@@ -1,4 +1,4 @@
-package dev.revature.fantasy.SleeperRequest;
+package dev.revature.fantasy.sleeperRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +9,8 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.net.ConnectException;
 
-import dev.revature.fantasy.Logger.GlobalLogger;
-import dev.revature.fantasy.Exceptions.HttpConnectionException;
+import dev.revature.fantasy.exceptions.HttpConnectionException;
+import dev.revature.fantasy.logger.GlobalLogger;
 
 public class SleeperRequestHandler {
 

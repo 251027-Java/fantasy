@@ -1,4 +1,4 @@
-package dev.revature.fantasy.Model;
+package dev.revature.fantasy.model;
 
 import java.io.Serializable;
 import java.util.Objects;

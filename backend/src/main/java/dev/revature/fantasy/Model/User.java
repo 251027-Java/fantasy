@@ -1,4 +1,4 @@
-package dev.revature.fantasy.Model;
+package dev.revature.fantasy.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

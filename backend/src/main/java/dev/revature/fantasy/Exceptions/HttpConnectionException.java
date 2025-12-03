@@ -1,4 +1,4 @@
-package dev.revature.fantasy.Exceptions;
+package dev.revature.fantasy.exceptions;
 
 import java.net.ConnectException;
 
