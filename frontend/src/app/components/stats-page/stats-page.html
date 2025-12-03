@@ -1,11 +1,13 @@
-<h1>{{displayedComponentTitle}}</h1>
-
 <div>
-    @for (tab of tabs; track tab.label) {
-        <button (click)="selectTab(tab)">{{tab.label}}</button>
-    }
-</div>
+    <h1>{{displayedComponentTitle}}</h1>
 
-<div>
-    <ng-container *ngComponentOutlet="activeTab.component"></ng-container>
+    <div>
+        @for (tab of tabs; track tab.label) {
+            <button (click)="selectTab(tab)">{{tab.label}}</button>
+        }
+    </div>
+
+    <div>
+        <ng-container *ngComponentOutlet="activeTab.component"></ng-container>
+    </div>
 </div>
