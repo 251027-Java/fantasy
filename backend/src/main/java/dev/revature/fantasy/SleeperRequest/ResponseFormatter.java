@@ -89,7 +89,7 @@ public class ResponseFormatter {
      * @param leagueId the id of the league
      * @return a list of users
      */
-    public static List<SleeperUserResponse> getUsersFromLeague(long leagueId) {
+    public static List<SleeperUserResponse> getUsersFromLeague(String leagueId) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getUsersFromLeague(leagueId);
             if (response.statusCode() == 200) {
@@ -104,8 +104,8 @@ public class ResponseFormatter {
         return List.of();
     }
 
-    public static List<SleeperRosterUserResponse> getRostersFromLeagueId(long leagueId) {
-        try {
+    public static List<SleeperRosterUserResponse> getRostersFromLeagueId(String leagueId) {
+        try {  
             HttpResponse<String> response = SleeperRequestHandler.getRostersFromLeague(leagueId);
             if (response.statusCode() == 200) {
                 List<SleeperRosterUserResponse> resp = om.readValue(response.body(),
@@ -120,7 +120,7 @@ public class ResponseFormatter {
         return List.of();
     }
 
-    public static List<SleeperMatchupResponse> getMatchupsFromLeagueIdAndWeek(long leagueId, int weekNum) {
+    public static List<SleeperMatchupResponse> getMatchupsFromLeagueIdAndWeek(String leagueId, int weekNum) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(leagueId, weekNum);
             if (response.statusCode() == 200) {

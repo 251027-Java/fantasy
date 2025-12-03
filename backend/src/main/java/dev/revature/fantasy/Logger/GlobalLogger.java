@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class GlobalLogger {
     private static Logger actualLogger; // e.g., an instance of java.util.logging.Logger or org.slf4j.Logger
-
+    //TODO: use config file to setup logger
 
     // Methods to delegate to the actual logger
     public static void info(String message) {

@@ -1,8 +1,10 @@
 package dev.revature.fantasy.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class ScoreDto {
     private double totalLuck;
     private double medLuck;

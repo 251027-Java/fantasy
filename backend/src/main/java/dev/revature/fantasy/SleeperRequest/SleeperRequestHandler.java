@@ -121,8 +121,8 @@ public class SleeperRequestHandler {
      *                                 sending or receiving or if the request is
      *                                 interrupted
      */
-    public static HttpResponse<String> getUsersFromLeague(long leagueId) 
-        throws HttpConnectionException {
+    public static HttpResponse<String> getUsersFromLeague(String leagueId) 
+        throws HttpConnectionException {   
         HttpClient client = HttpClient.newHttpClient();
 
         // build an HttpRequest
@@ -153,7 +153,7 @@ public class SleeperRequestHandler {
      * @return The response from sleeper api
      * @throws HttpConnectionException
      */
-    public static HttpResponse<String> getRostersFromLeague(long leagueId) 
+    public static HttpResponse<String> getRostersFromLeague(String leagueId) 
         throws HttpConnectionException {
         HttpClient client = HttpClient.newHttpClient();
 
@@ -178,7 +178,7 @@ public class SleeperRequestHandler {
         }
     }
 
-    public static HttpResponse<String> getMatchupsFromLeagueIdAndWeek(long leagueId, int weekNum) 
+    public static HttpResponse<String> getMatchupsFromLeagueIdAndWeek(String leagueId, int weekNum) 
         throws HttpConnectionException {
         HttpClient client = HttpClient.newHttpClient();
 

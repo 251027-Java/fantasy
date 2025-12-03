@@ -20,6 +20,9 @@ public class WeekScore {
     @Column(name = "score")
     private Double score;
 
+    @Column(name = "league_id")
+    private String leagueId;
+
     
 
     
