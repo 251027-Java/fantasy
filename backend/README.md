@@ -76,7 +76,7 @@ just db-export [filepath]
 Start the database:
 
 ```sh
-just start
+just db-start
 ```
 
 ### Stop
@@ -84,7 +84,7 @@ just start
 Stop the database:
 
 ```sh
-just stop
+just db-stop
 ```
 
 ### Destroy/Delete
@@ -92,7 +92,7 @@ just stop
 Destroy the database:
 
 ```sh
-just destroy
+just db-destroy
 ```
 
 ## Testing
