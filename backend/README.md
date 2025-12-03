@@ -30,7 +30,7 @@ Once the database has started, use the following command to start the backend:
 just run
 ```
 
-The backend will be accessible through http://localhost:8080. While running, documentation of our endpoints will be located at http://localhost:8080/swagger-ui/index.html.
+The backend will be accessible through http://localhost:8080. While running, documentation of our endpoints will be located at http://localhost:8080/api-docs.
 
 ### Related running commands
 
