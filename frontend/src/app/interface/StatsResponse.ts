@@ -4,7 +4,7 @@ export interface StatsResponse {
 
 export interface Stats {
 	name: string;
-	scores: Score[];
+	scores: Score;
 }
 
 export interface Score {

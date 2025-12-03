@@ -1,20 +1,29 @@
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            @for (pair of (headers | keyvalue); track pair.key) {
-                <th>{{pair.value}}</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for (member of getLuckStats().stats; track member.name) {
+<div>
+    <table>
+        <thead>
             <tr>
-                <td>{{member.name}}</td>
-                @for (pair of (member | keyvalue); track pair.key){
-                    <td>{{pair.value}}</td>
+                <th>Name</th>
+                @for (pair of headers; track pair[0]) {
+                    <th>{{pair[1]}}</th>
                 }
             </tr>
+        </thead>
+
+        @if (getLuckStats().stats.length > 0) {
+            <tbody>
+                @for (member of getLuckStats().stats; track member.name) {
+                    <tr>
+                        <td>{{member.name}}</td>
+                        @for (pair of headers; track pair[0]) {
+                            <td>{{member.scores[pair[0]]}}</td>
+                        }
+                    </tr>
+                }
+            </tbody>
         }
-    </tbody>
-</table>
+    </table>
+
+    @if (getLuckStats().stats.length == 0) {
+        <p>There are no scores to show!</p>
+    }
+</div>
