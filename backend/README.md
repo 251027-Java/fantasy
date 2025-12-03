@@ -1,4 +1,4 @@
-# Fantasy Backend
+# Fantasy backend
 
 The backend for our fantasy football web application.
 
@@ -10,7 +10,7 @@ We require the following tools to run our backend:
 - [Docker](https://docs.docker.com/get-started/get-docker/)
 - [Java 25](https://adoptium.net/temurin/releases/?version=25&os=any&arch=any)
 
-## `just` Commands
+## `just` commands
 
 We use [just](https://just.systems/man/en/) as our command runner for ease of use. The following sections will reference our recipes defined in our [justfile](./justfile). 
 
@@ -22,13 +22,17 @@ just -l
 
 ## Running
 
-Ensure the database is running prior to running the program. See [Database Management](#database-management) for more information on working with databases in this project.
+Ensure the database is running prior to running the program. See [Database management](#database-management) for more information on working with databases in this project.
 
 Once the database has started, use the following command to start the backend:
 
 ```sh
 just run
 ```
+
+The backend will be accessible through http://localhost:8080. While running, documentation of our endpoints will be located at http://localhost:8080/swagger-ui/index.html.
+
+### Related running commands
 
 To launch with the debugger:
 
@@ -43,7 +47,7 @@ just compile
 just refresh # an alias for compile
 ```
 
-## Database Management
+## Database management
 
 ### Creation
 
