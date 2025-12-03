@@ -55,7 +55,7 @@ public class RosterUserService {
                 return rosterUser;
             }
         ).toList();
-        return repo.saveAll(rosterUsers);
+        return repo.batchUpsert(rosterUsers);
     }
     
 

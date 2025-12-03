@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import dev.revature.fantasy.model.RosterUser;
 
-public interface RosterUserRepo extends JpaRepository<RosterUser, Long> {
+public interface RosterUserRepo extends JpaRepository<RosterUser, Long>, RosterUserRepoCustom {
     public Optional<RosterUser> findByUserIdAndLeagueId(String userId, String leagueId);
     public Optional<RosterUser> findByRosterIdAndLeagueId(Integer rosterId, String leagueId);
     
