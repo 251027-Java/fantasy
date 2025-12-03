@@ -31,7 +31,7 @@ just run # start the server
 
 This will launch a PostgreSQL database in a docker container. If you'd like to connect to this database elsewhere, you can use the following connection string: `postgresql://postgres:secret@localhost:5432/postgres`.
 
-In addition, the server will be launched and can be accessed at http://localhost:8080. While the server is running, you can access the documentation of our endpoints at http://localhost:8080/api.
+In addition, the server will be launched and can be accessed at `http://localhost:8080`. While the server is running, you can access the documentation of our endpoints at `http://localhost:8080/api`.
 
 If you want to learn more about what you can do with our backend, feel free to read the other sections.
 
@@ -45,7 +45,7 @@ Once the database has started, use the following command to start the backend:
 just run
 ```
 
-The backend will be accessible through http://localhost:8080. While running, documentation of our endpoints will be located at http://localhost:8080/api.
+The backend will be accessible through `http://localhost:8080`. While running, documentation of our endpoints will be located at `http://localhost:8080/api`.
 
 ### Related running commands
 
@@ -122,7 +122,7 @@ just test
 
 ## Building
 
-Generate a jar located in the `target` directory:
+Generate a jar located in the `target/` directory:
 
 ```sh
 just build
