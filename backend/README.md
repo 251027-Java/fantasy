@@ -64,6 +64,8 @@ just refresh # an alias for compile
 
 ## Database management
 
+A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection string if necessary: `postgresql://postgres:secret@localhost:5432/postgres`.
+
 ### Creation
 
 Create and start a fresh database with no initial data:
@@ -102,7 +104,7 @@ Stop the database:
 just db-stop
 ```
 
-### Destroy/Delete
+### Destroy/delete
 
 Destroy the database:
 
