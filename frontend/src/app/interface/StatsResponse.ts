@@ -12,9 +12,9 @@ export interface Score {
 	medLuck: number;
 	apLuck: number;
 	apWins: number;
-	apLoses: number;
+	apLosses: number;
 	apTies: number;
 	wins: number;
-	loses: number;
+	losses: number;
 	ties: number;
 }

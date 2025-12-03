@@ -1,1 +1,20 @@
-<p>luck-scores works!</p>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            @for (pair of (headers | keyvalue); track pair.key) {
+                <th>{{pair.value}}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (member of getLuckStats().stats; track member.name) {
+            <tr>
+                <td>{{member.name}}</td>
+                @for (pair of (member | keyvalue); track pair.key){
+                    <td>{{pair.value}}</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
