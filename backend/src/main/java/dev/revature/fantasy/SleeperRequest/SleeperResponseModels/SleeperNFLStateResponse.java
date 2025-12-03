@@ -13,19 +13,14 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @NoArgsConstructor
 @AllArgsConstructor
-public class SleeperLeagueResponse {
-    @JsonProperty("total_rosters")
-    private int numTeams;
+public class SleeperNFLStateResponse {
+    @JsonProperty("week")
+    private String week;
+
     @JsonProperty("season")
-    private int seasonYear;
+    private String season;
 
-    @JsonProperty("league_id")
-    private String leagueId;
-
-    @JsonProperty("draft_id")
-    private String draftId;
-
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("display_week")
+    private String displayWeek;
 
 }

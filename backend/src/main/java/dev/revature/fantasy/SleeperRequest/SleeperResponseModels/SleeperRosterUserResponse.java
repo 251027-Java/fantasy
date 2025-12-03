@@ -1,5 +1,8 @@
 package dev.revature.fantasy.SleeperRequest.SleeperResponseModels;
 
+import java.util.List;
+
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -13,19 +16,23 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @NoArgsConstructor
 @AllArgsConstructor
-public class SleeperLeagueResponse {
-    @JsonProperty("total_rosters")
-    private int numTeams;
-    @JsonProperty("season")
-    private int seasonYear;
+public class SleeperRosterUserResponse {
+    @JsonProperty("owner_id")
+    private String userId;
 
     @JsonProperty("league_id")
     private String leagueId;
 
-    @JsonProperty("draft_id")
-    private String draftId;
+    @JsonProperty("roster_id")
+    private int rosterId;
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("players")
+    private List<String> roster;
+
+    @JsonProperty("starters")
+    private List<String> starters;
+
+    @JsonProperty("settings")
+    private UserSettings settings;
 
 }

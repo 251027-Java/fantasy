@@ -1,7 +1,11 @@
 package dev.revature.fantasy.Service;
 
+import java.net.http.HttpResponse;
+
+import dev.revature.fantasy.Exceptions.HttpConnectionException;
 import dev.revature.fantasy.ResponseModels.LoginResponse;
 import dev.revature.fantasy.ResponseModels.StatsResponse;
+import dev.revature.fantasy.SleeperRequest.ResponseFormatter;
 import dev.revature.fantasy.SleeperRequest.SleeperRequestHandler;
 
 public class FantasyStatsService {
@@ -16,8 +20,10 @@ public class FantasyStatsService {
     // - persist to database
     // - return response to as json to endpoint
 
-    public static LoginResponse login(String username) {
-        var user = SleeperRequestHandler.getUserFromUsername(username);
+    public static LoginResponse login(String usernameStr) throws HttpConnectionException{
+        var usernameResponse = ResponseFormatter.getUserIdFromUsername(usernameStr);
+        var user = ResponseFormatter.getLeaguesFromUserId(usernameResponse.getUserId());
+        // convert league responses to database format
         return null;
     }
 

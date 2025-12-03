@@ -33,3 +33,14 @@
 --- include a wireframe for the frontend
 --- include the ERD for your database
 --- include endpoint documentation for your API
+
+
+pipeline for login
+- make sleeper request with username
+- make sleeper request with obtained userId
+- make sleeper request with userId to get leagues
+- convert response to db format (dto)
+- persist to database
+- return response to as json to endpoint
+
+TODO: add foreign key relationships in table

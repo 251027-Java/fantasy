@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import dev.revature.fantasy.Logger.GlobalLogger;
-import dev.revature.fantasy.SleeperRequest.SleeperRequestHandler;
-import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.PlayerResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperPlayerResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperRosterUserResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperLeagueResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperMatchupResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperNFLStateResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperUserResponse;
+import dev.revature.fantasy.SleeperRequest.SleeperResponseModels.SleeperUsernameResponse;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
@@ -16,20 +21,20 @@ import tools.jackson.databind.ObjectMapper;
  * RequestFormatter is a class used to format the responses from sleeper into
  * POJO
  */
-public class RequestFormatter {
+public class ResponseFormatter {
 
     private static final ObjectMapper om = new ObjectMapper();
 
-    public static List<PlayerResponse> getPlayers() {
+    public static List<SleeperPlayerResponse> getPlayers() {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getPlayers();
             GlobalLogger.debug("Players retrieved from sleeper");
             if (response.statusCode() == 200) {
 
-                Map<String, PlayerResponse> map = om.readValue(response.body(),
-                        new TypeReference<Map<String, PlayerResponse>>() {
+                Map<String, SleeperPlayerResponse> map = om.readValue(response.body(),
+                        new TypeReference<Map<String, SleeperPlayerResponse>>() {
                         });
-                List<PlayerResponse> resp = new ArrayList<>(map.values());
+                List<SleeperPlayerResponse> resp = new ArrayList<>(map.values());
 
                 return resp;
             }
@@ -46,7 +51,7 @@ public class RequestFormatter {
      * @param userId the user_id of leagues to look for
      * @return list of leagues
      */
-    public static List<SleeperLeagueResponse> getLeaguesFromUserId(long userId) {
+    public static List<SleeperLeagueResponse> getLeaguesFromUserId(String userId) {
         // get the current year from time clock
         int year = LocalDate.now().getYear();
 
@@ -64,17 +69,31 @@ public class RequestFormatter {
         return List.of();
     }
 
+    public static SleeperUsernameResponse getUserIdFromUsername(String username) {
+        try {
+            HttpResponse<String> response = SleeperRequestHandler.getUserFromUsername(username);
+            if (response.statusCode() == 200) {
+                SleeperUsernameResponse resp = om.readValue(response.body(), SleeperUsernameResponse.class);
+                return resp;
+            }
+        } catch (Exception e) {
+            GlobalLogger.error(String.format("Could not get user from username '%s'", username), e);
+        }
+        System.out.println("No user found");
+        return null;
+    }
+
     /**
      * Get users from a sleeper league based on leagueId
      * 
      * @param leagueId the id of the league
      * @return a list of users
      */
-    public static List<UserResponse> getUsersFromLeague(long leagueId) {
+    public static List<SleeperUserResponse> getUsersFromLeague(long leagueId) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getUsersFromLeague(leagueId);
             if (response.statusCode() == 200) {
-                List<UserResponse> resp = om.readValue(response.body(), new TypeReference<List<UserResponse>>() {
+                List<SleeperUserResponse> resp = om.readValue(response.body(), new TypeReference<List<SleeperUserResponse>>() {
                 });
                 return resp;
             }
@@ -85,12 +104,12 @@ public class RequestFormatter {
         return List.of();
     }
 
-    public static List<RosterUserResponse> getRostersFromLeagueId(long leagueId) {
+    public static List<SleeperRosterUserResponse> getRostersFromLeagueId(long leagueId) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getRostersFromLeague(leagueId);
             if (response.statusCode() == 200) {
-                List<RosterUserResponse> resp = om.readValue(response.body(),
-                        new TypeReference<List<RosterUserResponse>>() {
+                List<SleeperRosterUserResponse> resp = om.readValue(response.body(),
+                        new TypeReference<List<SleeperRosterUserResponse>>() {
                         });
                 return resp;
             }
@@ -101,13 +120,13 @@ public class RequestFormatter {
         return List.of();
     }
 
-    public static List<MatchupResponse> getMatchupsFromLeagueIdAndWeek(long leagueId, int weekNum) {
+    public static List<SleeperMatchupResponse> getMatchupsFromLeagueIdAndWeek(long leagueId, int weekNum) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(leagueId, weekNum);
             if (response.statusCode() == 200) {
-                List<MatchupResponse> resp = om.readValue(
+                List<SleeperMatchupResponse> resp = om.readValue(
                         response.body(),
-                        new TypeReference<List<MatchupResponse>>() {});
+                        new TypeReference<List<SleeperMatchupResponse>>() {});
                 return resp;
             }
         } catch (Exception e) {
@@ -121,11 +140,11 @@ public class RequestFormatter {
         return List.of();
     }
 
-    public static NFLStateResponse getNFLState() {
+    public static SleeperNFLStateResponse getNFLState() {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getNFLState();
             if (response.statusCode() == 200) {
-                NFLStateResponse resp = om.readValue(response.body(), NFLStateResponse.class);
+                SleeperNFLStateResponse resp = om.readValue(response.body(), SleeperNFLStateResponse.class);
                 return resp;
             }
         } catch (Exception e) {

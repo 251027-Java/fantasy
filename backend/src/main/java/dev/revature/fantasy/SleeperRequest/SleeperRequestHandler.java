@@ -87,13 +87,13 @@ public class SleeperRequestHandler {
      *                                     sending or receiving or if the request is
      *                                     interrupted
      */
-    public static HttpResponse<String> getLeaguesFromUserIDAndSeason(long user_id, int seasonYear)
+    public static HttpResponse<String> getLeaguesFromUserIDAndSeason(String userId, int seasonYear)
             throws HttpConnectionException {
         HttpClient client = HttpClient.newHttpClient();
 
         // build an HttpRequest
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(baseUrl + "/user/" + user_id + "/leagues/nfl/" + seasonYear))
+                .uri(URI.create(baseUrl + "/user/" + userId + "/leagues/nfl/" + seasonYear))
                 .GET()
                 .build();
 
@@ -106,7 +106,7 @@ public class SleeperRequestHandler {
             GlobalLogger.error(
                     String.format(
                             "Could not get user '%s' leagues from season '%s'",
-                            user_id,
+                            userId,
                             seasonYear),
                     e);
             throw new HttpConnectionException("Error getting leagues from sleeper api");
