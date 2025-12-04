@@ -64,9 +64,7 @@ _db-init filepath:
 
 # create the container and set up the database
 [group('db')]
-db-create: _db-create
-
-# TODO how to set up database without running the spring boot app?
+db-create: _db-create (_db-init ddl_file)
 
 # destroy the database container
 [group('db')]
