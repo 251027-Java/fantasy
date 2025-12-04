@@ -91,6 +91,9 @@
                             <artifactId>lombok</artifactId>
                         </path>
                     </annotationProcessorPaths>
+                    <excludes>
+                        <exclude>scripts/**/*</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

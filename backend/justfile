@@ -2,6 +2,8 @@ maven := './mvnw'
 jar_loc := 'target/fantasy-0.0.1.jar'
 db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+classpath := '.gen-classpath'
+ddl_file := 'scripts/init.sql'
 
 alias refresh := compile
 
@@ -63,6 +65,7 @@ _db-init filepath:
 # create the container and set up the database
 [group('db')]
 db-create: _db-create
+
 # TODO how to set up database without running the spring boot app?
 
 # destroy the database container
@@ -99,3 +102,13 @@ test:
 [group('test')]
 view-coverage cmd='start':
     {{ cmd }} "target/site/jacoco/index.html"
+
+_gen-classpath:
+    {{ maven }} dependency:build-classpath -Dmdep.outputFile={{ classpath }}
+
+# generate a DDL script from JPA entities
+[group('db')]
+ddl filepath=ddl_file: _gen-classpath
+    rm -f {{ filepath }}
+    java -cp target/classes:`cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ filepath }}
+    docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
