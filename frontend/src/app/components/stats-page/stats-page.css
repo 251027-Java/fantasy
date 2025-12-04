@@ -1,0 +1,8 @@
+:host {
+  display: block; /* Important: Ensures the host element behaves as a block-level element to fill available space */
+  background-color: #E0E0E0;
+}
+
+.topcorner{
+  margin: 10px 20px 0;
+}

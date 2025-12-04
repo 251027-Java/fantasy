@@ -1,21 +1,21 @@
-<div>
-    <table>
-        <thead>
+<div style="width:90%; margin: 1% auto;" class="border-separate border-spacing-0 border border-black rounded-md overflow-hidden">
+    <table class="min-w-full table-fixed">
+        <thead class="bg-blue-200">
             <tr>
-                <th>Name</th>
+                <th class="px-4 py-3 border border-gray-300 bg-blue-800 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300" [ngClass]="nameWidth">Name</th>
                 @for (pair of headers; track pair[0]) {
-                    <th>{{pair[1]}}</th>
+                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300" [ngClass]="statWidth">{{pair[1]}}</th>
                 }
             </tr>
         </thead>
 
         @if (getLuckStats().stats.length > 0) {
-            <tbody>
+            <tbody class="bg-blue-50">
                 @for (member of getLuckStats().stats; track member.name) {
                     <tr>
-                        <td>{{member.name}}</td>
+                        <td class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center" [ngClass]="nameWidth">{{member.name}}</td>
                         @for (pair of headers; track pair[0]) {
-                            <td>{{member.scores[pair[0]]}}</td>
+                            <td class="py-2 border border-gray-200 text-center" [ngClass]="statWidth">{{member.scores[pair[0]]}}</td>
                         }
                     </tr>
                 }
@@ -24,6 +24,8 @@
     </table>
 
     @if (getLuckStats().stats.length == 0) {
-        <p>There are no scores to show!</p>
+        <div class="h-72 bg-[radial-gradient(circle_at_top_right,_#f0f7ff,_#e4f0ff,_#ebf5ff)] flex items-center justify-center">
+            <p class="text-4xl text-center font-semibold text-blue-900">There are no scores to show!</p>
+        </div>
     }
 </div>

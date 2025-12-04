@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 // biome-ignore lint/style/useImportType: idk what this warning is
 import { Score, StatsResponse } from '../../interface/StatsResponse';
+import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'app-luck-scores',
-	imports: [],
+	imports: [CommonModule],
 	templateUrl: './luck-scores.html',
 	styleUrl: './luck-scores.css',
 })
@@ -29,50 +30,37 @@ export class LuckScores {
 		["ties", "Ties"]
 	] as const
 
+	nameWidth: string = "";
+	statWidth: string = "";
+
 	constructor(){
-		this.luckStats = {stats:[
-			{
-				name: "a",
+		this.luckStats = {stats:[]}
+		this.generateDummyData(12);
+
+		const numStats:number = this.headers.length
+		this.nameWidth = `w-2/${numStats + 2}`
+		this.statWidth = `w-1/${numStats + 2}`
+	}
+
+	private generateDummyData(num: number): void{
+		const numScores: number = 9;
+		for (let i=0; i<num; i++){
+			let nm: string = ""
+			for (let j=0; j<15; j++) nm += String.fromCharCode(97+i);
+			this.luckStats.stats.push({
+				name: nm,
 				scores: {
-					totalLuck: 0,
-					medLuck: 1,
-					apLuck: 2,
-					apWins: 3,
-					apLosses: 4,
-					apTies: 5,
-					wins: 6,
-					losses: 7,
-					ties: 8
+					totalLuck: numScores*i,
+					medLuck: numScores*i+1,
+					apLuck: numScores*i+2,
+					apWins: numScores*i+3,
+					apLosses: numScores*i+4,
+					apTies: numScores*i+5,
+					wins: numScores*i+6,
+					losses: numScores*i+7,
+					ties: numScores*i+8
 				}
-			},
-			{
-				name: "b",
-				scores: {
-					totalLuck: 9,
-					medLuck: 10,
-					apLuck: 11,
-					apWins: 12,
-					apLosses: 13,
-					apTies: 14,
-					wins: 15,
-					losses: 16,
-					ties: 17
-				}
-			},
-			{
-				name: "c",
-				scores: {
-					totalLuck: 18,
-					medLuck: 19,
-					apLuck: 20,
-					apWins: 21,
-					apLosses: 22,
-					apTies: 23,
-					wins: 24,
-					losses: 25,
-					ties: 26
-				}
-			}
-		]}
+			})
+		}
 	}
 }

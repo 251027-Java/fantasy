@@ -10,6 +10,7 @@ interface Tab {
   name: string;
   label: string;
   component: Type<any>;
+  isActive: boolean;
 }
 
 @Component({
@@ -20,18 +21,26 @@ interface Tab {
 })
 export class StatsPage {
   tabs: Tab[] = [
-    { name: 'Luck Scores', label: 'Luck', component: LuckScores },
-    { name: 'Test Scores', label: 'Test', component: TestScores }
+    { name: 'How lucky were you?', label: 'Luck Scores', component: LuckScores, isActive: false },
+    { name: 'Testing...', label: 'Test Scores', component: TestScores, isActive: false }
   ];
   activeTab: Tab = this.tabs[0];
   displayedComponentTitle: string = "";
+
+  currentLeague: string = "Zen Dragons";
 
   constructor(){
     this.selectTab(this.tabs[0])
   }
 
   selectTab(tab: Tab) {
+    this.activeTab.isActive = false;
     this.activeTab = tab;
     this.displayedComponentTitle = tab.name;
+    tab.isActive = true;
+  }
+
+  backToLeagues() {
+
   }
 }
