@@ -2,31 +2,35 @@ package dev.revature.fantasy.repo;
 
 import dev.revature.fantasy.model.RosterUser;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// You would need to ensure RosterUserRepo extends RosterUserRepoCustom
-// and RosterUserRepoCustom defines the batchIdempotentSave method.
+/**
+ * RosterUserRepoImpl is a custom implementation of the RosterUserRepo interface.
+ * It provides functionality for batch upserting RosterUser entities into the database.
+ */
 @Repository
 public class RosterUserRepoImpl implements RosterUserRepoCustom {
     
     private final JdbcTemplate jdbcTemplate;
+    private final RowMapper<RosterUser> rosterUserRowMapper;
 
     public RosterUserRepoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.rosterUserRowMapper = new RosterUserRowMapper();
     }
 
     @Override
     @Transactional
     public List<RosterUser> batchUpsert(List<RosterUser> rosterUsers) {
         
-        // --- NATIVE SQL INSERT ... ON CONFLICT (UPSERT) ---
-        // Idempotency relies on the unique constraint of (roster_id, league_id).
-        // If a row exists, we update all the statistic columns.
-        
+        // upsert native SQL
         final String sql = """
             INSERT INTO roster_user (roster_id, user_id_num, league_id, wins, ties, losses, 
                                      fpts_decimal, fpts_against_decimal, fpts_against, fpts)
@@ -41,18 +45,14 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
                 fpts_against_decimal = EXCLUDED.fpts_against_decimal, 
                 fpts_against = EXCLUDED.fpts_against, 
                 fpts = EXCLUDED.fpts
-            RETURNING *
             """;
         
-        // 1. Prepare the batch arguments
         List<Object[]> batchArgs = rosterUsers.stream()
             .map(user -> new Object[] {
-                // PK/Conflict Fields
                 user.getRosterId(),
                 user.getUserId(), 
                 user.getLeagueId(),
                 
-                // Data Fields (Stats)
                 user.getWins(),
                 user.getTies(),
                 user.getLosses(),
@@ -65,7 +65,48 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
 
         jdbcTemplate.batchUpdate(sql, batchArgs);
 
-        //TODO: make sure to return the updated RosterUserIds
-        return rosterUsers; 
+        // perform query to get updated entities with database generated keys
+        String identifiers = rosterUsers.stream()
+            .map(u -> "(%d, '%s')".formatted(u.getRosterId(), u.getLeagueId()))
+            .collect(Collectors.joining(","));
+
+        final String selectSql = String.format("""
+            SELECT roster_user_id, roster_id, user_id_num, league_id, wins, ties, losses,
+                   fpts_decimal, fpts_against_decimal, fpts_against, fpts 
+            FROM roster_user
+            WHERE (roster_id, league_id) IN (%s)
+            """, identifiers);
+
+        List<RosterUser> updatedEntities = jdbcTemplate.query(selectSql, rosterUserRowMapper);
+
+        return updatedEntities;
     }
+
+    
+    private static class RosterUserRowMapper implements RowMapper<RosterUser> {
+        @Override
+        public RosterUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+            RosterUser user = new RosterUser();
+            
+            // 1. Auto-Generated Primary Key
+            user.setRosterUserId(rs.getLong("roster_user_id"));
+            
+            // 2. Business Keys
+            user.setRosterId(rs.getInt("roster_id"));
+            user.setLeagueId(rs.getString("league_id"));
+            user.setUserId(rs.getString("user_id_num"));
+            
+            // 3. Stat Fields
+            user.setWins(rs.getInt("wins"));
+            user.setTies(rs.getInt("ties"));
+            user.setLosses(rs.getInt("losses"));
+            user.setFptsDecimal(rs.getInt("fpts_decimal"));
+            user.setFptsAgainstDecimal(rs.getInt("fpts_against_decimal"));
+            user.setFptsAgainst(rs.getInt("fpts_against"));
+            user.setFpts(rs.getInt("fpts"));
+            
+            return user;
+        }
+    }
+
 }

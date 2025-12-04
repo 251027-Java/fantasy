@@ -23,7 +23,7 @@ public class MainController {
 
     @GetMapping("/login/{username}")
     public LoginDto getUserInfo(@PathVariable String username) throws HttpConnectionException, InvalidUsernameException {
-        // TODO: send 406 status code if there are no leagues
+        // TODO: send 406 status code if there are no leagues for the user
         return this.fantasyStatsService.login(username)
         .orElseThrow(() -> new InvalidUsernameException("Invalid username: " + username));
     }

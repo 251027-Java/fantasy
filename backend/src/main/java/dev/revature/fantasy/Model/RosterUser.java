@@ -9,9 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "roster_user")
+@Table(
+    name = "roster_user",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"roster_id", "league_id"})}
+)
 @Getter
-@Setter
+@Setter 
 @AllArgsConstructor
 @NoArgsConstructor
 public class RosterUser {

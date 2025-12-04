@@ -3,9 +3,11 @@ package dev.revature.fantasy.repo;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import dev.revature.fantasy.model.League;
 
+@Repository 
 public class LeagueRepoImpl implements LeagueRepoCustom {
     private final JdbcTemplate jdbcTemplate;
 

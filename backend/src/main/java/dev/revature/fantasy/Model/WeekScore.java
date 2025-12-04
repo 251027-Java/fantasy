@@ -22,8 +22,5 @@ public class WeekScore {
 
     @Column(name = "league_id")
     private String leagueId;
-
-    
-
     
 }

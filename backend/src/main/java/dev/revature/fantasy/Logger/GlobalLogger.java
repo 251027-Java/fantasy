@@ -3,6 +3,10 @@ package dev.revature.fantasy.logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+/**
+ * Class to delegate to a global logger
+ */
 public class GlobalLogger {
     private static Logger actualLogger; // e.g., an instance of java.util.logging.Logger or org.slf4j.Logger
     //TODO: use config file to setup logger

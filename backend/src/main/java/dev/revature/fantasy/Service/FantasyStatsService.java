@@ -42,21 +42,12 @@ public class FantasyStatsService {
         this.rosterUserService = rosterUserService;
     }
 
-    // run the login endpoint 
-    //     pipeline for login
-    // - make sleeper request with username
-    // - convert response 
-    // - make sleeper request with obtained userId
-    // - make sleeper request with userId to get leagues
-    // - convert response to db format (dto)
-    // - persist to database
-    // - return response to as json to endpoint
 
     /**
      * Run the login endpoint logic, attempting to get the leagues
      * from a sleeper username
      * @param usernameStr the sleeper username
-     * @return the login response
+     * @return the login response, empty if the username is invalid
      * @throws HttpConnectionException when one of the sleeper requests fails
      */
     public Optional<LoginDto> login(String usernameStr) throws HttpConnectionException, InvalidUsernameException {
@@ -85,10 +76,17 @@ public class FantasyStatsService {
         return Optional.of(loginResponse);
     }
 
-    // run the compute stats endpoint
+    /**
+     * Run the compute luck stats endpoint logic
+     * @param leagueId the sleeper league id to get the stats for
+     * @return the league stats dto, not sure when this would/should be empty
+     */
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
         // make sleeper request with leagueId to get users
         List<SleeperUserResponse> sleeperUsers = ResponseFormatter.getUsersFromLeague(leagueId);
+        if (sleeperUsers.size() == 0) {
+            return Optional.empty();
+        }
         // convert user responses to database format
         List<User> databaseUsers = DatabaseFormatterService.formatUsers(sleeperUsers);
 
@@ -99,8 +97,8 @@ public class FantasyStatsService {
         List<SleeperRosterUserResponse> sleeperRosterUsers = ResponseFormatter.getRostersFromLeagueId(leagueId);
         List<RosterUserDto> rosterUserDtos = DatabaseFormatterService.formatRosterUsers(sleeperRosterUsers);
 
-        // persist to database
-        List<RosterUser> rosterUsers = this.rosterUserService.saveUsers(rosterUserDtos);
+        // persist to database, need to upsert incase a users' stats (wins, etc) changed
+        List<RosterUser> rosterUsers = this.rosterUserService.upsertUsers(rosterUserDtos);
 
         // TODO: implement a way to have league specific timestamps when data was persisted
         // to 'cache' result
@@ -137,7 +135,6 @@ public class FantasyStatsService {
         LeagueStatsDto leagueStatsDto = this.statsComputationService.toDto(luckData, rosterUserIdToName);
 
         return Optional.of(leagueStatsDto);
-
     }
     
 }

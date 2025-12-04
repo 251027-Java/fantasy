@@ -11,6 +11,10 @@ import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.*;
 import dev.revature.fantasy.sleeperRequest.sleeperResponseModels.*;
 
+/**
+ * Converts sleeper responses to database models. There is coupling with 
+ * RosterUserService atm to get the user id in format matchups .
+ */
 @Service
 public class DatabaseFormatterService {
     private final RosterUserService rosterUserService;
@@ -18,6 +22,11 @@ public class DatabaseFormatterService {
         this.rosterUserService = rosterUserService;
     }
 
+    /**
+     * Converts sleeper league responses to database league models
+     * @param sleeperLeagues the sleeper league responses
+     * @return the list of leagues to be inserted to the database
+     */
     public static List<League> formatLeagueInfo(List<SleeperLeagueResponse> sleeperLeagues) { 
         List<League> leagues = new ArrayList<>();
 
@@ -27,6 +36,11 @@ public class DatabaseFormatterService {
         return leagues;
     }
 
+    /**
+     * Converts sleeper user responses to database user models
+     * @param sleeperUsers the sleeper user responses
+     * @return the list of users to be inserted to the database
+     */
     public static List<User> formatUsers(List<SleeperUserResponse> sleeperUsers) { 
         List<User> users = new ArrayList<>(); 
         for (SleeperUserResponse user : sleeperUsers) {
@@ -35,6 +49,11 @@ public class DatabaseFormatterService {
         return users;
     }
 
+    /**
+     * Converts sleeper user responses to database user models
+     * @param sleeperRosterUsers the sleeper user responses
+     * @return the list of users to be inserted to the database
+     */
     public static List<RosterUserDto> formatRosterUsers(
         List<SleeperRosterUserResponse> sleeperRosterUsers
     ) { 
@@ -60,6 +79,11 @@ public class DatabaseFormatterService {
         return rosterUsers;
     } 
 
+    /**
+     * Converts sleeper matchup responses to database matchup models
+     * @param sleeperMatchups the sleeper matchup responses
+     * @return the list of matchups to be inserted to the database
+     */
     public List<WeekScore> formatMatchups(List<SleeperMatchupResponse> sleeperMatchups, String leagueId, int week) {
         List<WeekScore> weekScores = new ArrayList<>();
         for (SleeperMatchupResponse matchup : sleeperMatchups) {

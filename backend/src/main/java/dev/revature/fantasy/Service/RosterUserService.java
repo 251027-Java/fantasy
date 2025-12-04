@@ -35,7 +35,7 @@ public class RosterUserService {
         return repo.findByRosterIdAndLeagueId(rosterId, leagueId);
     }
 
-    public List<RosterUser> saveUsers(List<RosterUserDto> rosterUserDtos) {
+    public List<RosterUser> upsertUsers(List<RosterUserDto> rosterUserDtos) {
 
         List<RosterUser> rosterUsers = rosterUserDtos.stream().map(
             (rosterUserDto) -> {
