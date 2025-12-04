@@ -23,10 +23,10 @@ export class LuckScores {
 		["medLuck", "Median Luck"],
 		["apLuck", "All Play Luck"],
 		["apWins", "AP Wins"],
-		["apLosses", "AP Losses"],
+		["apLoses", "AP Losses"],
 		["apTies", "AP Ties"],
 		["wins", "Wins"],
-		["losses", "Losses"],
+		["loses", "Losses"],
 		["ties", "Ties"]
 	] as const
 
@@ -54,10 +54,10 @@ export class LuckScores {
 					medLuck: numScores*i+1,
 					apLuck: numScores*i+2,
 					apWins: numScores*i+3,
-					apLosses: numScores*i+4,
+					apLoses: numScores*i+4,
 					apTies: numScores*i+5,
 					wins: numScores*i+6,
-					losses: numScores*i+7,
+					loses: numScores*i+7,
 					ties: numScores*i+8
 				}
 			})
