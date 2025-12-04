@@ -30,8 +30,8 @@ export class LuckScores {
 		["ties", "Ties"]
 	] as const
 
-	nameWidth: string = "";
-	statWidth: string = "";
+	readonly nameWidth: string = "";
+	readonly statWidth: string = "";
 
 	constructor(){
 		this.luckStats = {stats:[]}
