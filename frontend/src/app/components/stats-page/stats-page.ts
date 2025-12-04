@@ -27,7 +27,7 @@ export class StatsPage {
   activeTab: Tab = this.tabs[0];
   displayedComponentTitle: string = "";
 
-  currentLeague: string = "Zen Dragons";
+  currentLeague: string = "";
 
   constructor(){
     this.selectTab(this.tabs[0])
