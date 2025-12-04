@@ -10,13 +10,7 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './luck-scores.css',
 })
 export class LuckScores {
-	private luckStats: StatsResponse;
-	public sendLuckStats(leagueLuckStats: StatsResponse):void{
-		this.luckStats = leagueLuckStats;
-	}
-	public getLuckStats(): StatsResponse{
-		return this.luckStats;
-	}
+	luckStats: StatsResponse;
 
 	readonly headers: [(keyof Score), string][] = [
 		["totalLuck", "Total Luck"],
@@ -30,16 +24,9 @@ export class LuckScores {
 		["ties", "Ties"]
 	] as const
 
-	readonly nameWidth: string = "";
-	readonly statWidth: string = "";
-
 	constructor(){
 		this.luckStats = {stats:[]}
 		this.generateDummyData(12);
-
-		const numStats:number = this.headers.length
-		this.nameWidth = `w-2/${numStats + 2}`
-		this.statWidth = `w-1/${numStats + 2}`
 	}
 
 	private generateDummyData(num: number): void{
