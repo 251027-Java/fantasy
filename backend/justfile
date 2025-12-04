@@ -39,6 +39,11 @@ default: clean verify
 run: clean
     {{ maven }} spring-boot:run
 
+# launch the application with production configuration
+[group('run')]
+prod: clean
+    {{ maven }} spring-boot:run -Dspring-boot.run.profiles=prod
+
 # launch the jar
 [group('run')]
 runj:
