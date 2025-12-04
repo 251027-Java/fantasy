@@ -64,7 +64,9 @@ just refresh # an alias for compile
 
 ## Database management
 
-A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection string if necessary: `postgresql://postgres:secret@localhost:5432/postgres`.
+A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection string if necessary: `postgresql://postgres:secret@localhost:5432/postgres`. 
+
+To view the DDL initialization of the database, view the file, `scripts/init.sql`. See [DDL generation](#ddl-generation) for more information on this file.
 
 ### Creation
 
@@ -78,6 +80,16 @@ Create and start a database with imported data:
 
 ```sh
 just db-create-with <filepath>
+```
+
+### DDL generation
+
+The tables within the database are defined using JPA entities. To verify integrity and structure of the database, a DDL script containing the table definitions and constraints can be generated and used when setting up the database, especially for a production environment.
+
+The following command will generate the DDL script at `scripts/init.sql`:
+
+```sh
+just ddl
 ```
 
 ### Exportation
