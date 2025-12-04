@@ -71,6 +71,12 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>3.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.tool</groupId>
+            <artifactId>hibernate-tools-orm</artifactId>
+            <version>7.1.11.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
