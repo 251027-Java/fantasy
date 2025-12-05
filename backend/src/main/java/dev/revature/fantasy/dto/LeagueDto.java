@@ -7,6 +7,7 @@ import lombok.NonNull;
 public class LeagueDto {
     @NonNull
     private String leagueId;
+
     @NonNull
     private String leagueName;
 }
