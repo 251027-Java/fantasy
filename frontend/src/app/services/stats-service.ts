@@ -4,7 +4,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { StatsResponse } from '../interface/stats-response';
+import { Score, StatsResponse } from '../interface/stats-response';
+import { luckStatColumn } from '../components/luck-scores/luck-scores';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,18 @@ export class StatsService {
 
   getColumnWidthClassString(numStatColumnWidths: number): string{
     return this.columnWidthClassStrings[numStatColumnWidths - 1];
+  }
+
+  sortLuckStats(column: luckStatColumn, sortAsc: boolean) {
+    if (column === ('name' as luckStatColumn)) {
+      this.luckStatsResponse().stats.sort((a, b) => a.name.localeCompare(b.name) * (sortAsc ? 1 : -1));
+    }
+
+    this.luckStatsResponse().stats.sort((a, b) => {
+      if (a.scores[column as keyof Score] < b.scores[column as keyof Score]) return sortAsc ? -1 : 1;
+      if (a.scores[column as keyof Score] > b.scores[column as keyof Score]) return sortAsc ? 1 : -1;
+      return 0;
+    });
   }
 
 }
