@@ -97,7 +97,7 @@ db-export filepath='fantasy.data':
 [group('db')]
 db-create-with filepath: _db-create (_db-init filepath)
 
-# runs tests
+# runs tests and generates coverage
 [group('test')]
 test:
     {{ maven }} test
@@ -105,7 +105,7 @@ test:
 
 # view coverage
 [group('test')]
-view-coverage cmd='start':
+coverage cmd='start':
     {{ cmd }} "target/site/jacoco/index.html"
 
 _gen-classpath:
