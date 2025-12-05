@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/style/useImportType: idk */
 /** biome-ignore-all assist/source/organizeImports: whatever */
 import { Component } from '@angular/core';
-import { Score } from '../../interface/StatsResponse';
+import { Score } from '../../interface/stats-response';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 
