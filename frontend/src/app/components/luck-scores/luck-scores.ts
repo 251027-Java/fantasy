@@ -26,7 +26,7 @@ export class LuckScores {
 
 	constructor(){
 		this.luckStats = {stats:[]}
-		this.generateDummyData(12);
+		this.generateDummyData(15);
 	}
 
 	private generateDummyData(num: number): void{
