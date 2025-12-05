@@ -19,6 +19,8 @@ export class StatsService {
   currentLeagueId: string = "1252005113573150720";
   currentLeagueName: string = "Rice League";
 
+  private columnWidthClassStrings: string[] = ["w-1/3", "w-1/4", "w-1/5", "w-1/6", "w-1/7", "w-1/8", "w-1/9", "w-1/10", "w-1/11", "w-1/12", "w-1/12"]
+
   getLeagueLuckStats():void{
     let resp: Observable<StatsResponse> = this.http.get<StatsResponse>(`api/league/${this.currentLeagueId}/stats`)
     resp = resp.pipe(
@@ -49,6 +51,10 @@ export class StatsService {
       this.luckStatsResponse.set(data)
     })
 
+  }  
+
+  getColumnWidthClassString(numStatColumnWidths: number): string{
+    return this.columnWidthClassStrings[numStatColumnWidths - 1];
   }
 
 }

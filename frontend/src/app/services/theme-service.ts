@@ -91,5 +91,4 @@ export class ThemeService {
       loadingTableClass: "text-violet-900",
     },
   } as const;
-
 }
