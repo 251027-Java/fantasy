@@ -6,7 +6,7 @@ import { HlmCarousel, HlmCarouselContent, HlmCarouselItem } from "@spartan-ng/he
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { CardData } from '../../interface/CardData';
+import { CardData } from '../../interface/card-data';
 
 
 @Component({

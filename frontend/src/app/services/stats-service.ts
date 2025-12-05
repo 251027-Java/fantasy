@@ -4,7 +4,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { StatsResponse } from '../interface/StatsResponse';
+import { StatsResponse } from '../interface/stats-response';
 
 @Injectable({
   providedIn: 'root'
