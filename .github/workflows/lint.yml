@@ -1,0 +1,35 @@
+name: lint
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Lint
+        working-directory: frontend
+        run: biome ci .
+
+  lint-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install just
+        uses: taiki-e/install-action@just
+
+      - name: Lint
+        working-directory: backend
+        run: just check
