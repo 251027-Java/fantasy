@@ -4,9 +4,11 @@
 import { Component, Type } from '@angular/core';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
-import { NgComponentOutlet } from '@angular/common';
+import { NgComponentOutlet, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { StatsService } from '../../services/stats-service';
+import { ThemeColor } from '../../interface/theme';
+import { ThemeService } from '../../services/theme-service';
 
 interface Tab {
   namePrebold: string;
@@ -19,11 +21,13 @@ interface Tab {
 
 @Component({
   selector: 'app-stats-page',
-  imports: [NgComponentOutlet],
+  imports: [NgComponentOutlet, NgClass],
   templateUrl: './stats-page.html',
   styleUrl: './stats-page.css',
 })
 export class StatsPage {
+  themeService: ThemeService;
+
   tabs: Tab[] = [
     { namePrebold: 'How ', nameBold: 'lucky', namePostbold: ' were you?', label: 'Luck Scores', component: LuckScores, isActive: false },
     { namePrebold: '', nameBold: 'Testing', namePostbold: '...', label: 'Test Scores', component: TestScores, isActive: false }
@@ -35,7 +39,9 @@ export class StatsPage {
 
   currentLeagueName: string = "";
 
-  constructor(private router:Router, private statsService: StatsService){}
+  constructor(private router: Router, private statsService: StatsService, themeServ: ThemeService){
+    this.themeService = themeServ
+  }
 
   selectTab(tab: Tab) {
     this.activeTab.isActive = false;
