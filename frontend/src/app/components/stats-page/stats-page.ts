@@ -1,10 +1,12 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any is fine */
-// biome-ignore lint/style/useImportType: idk
+/** biome-ignore-all lint/style/useImportType: idk */
 // biome-ignore assist/source/organizeImports: whatever
 import { Component, Type } from '@angular/core';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
 import { NgComponentOutlet } from '@angular/common';
+import { Router } from '@angular/router';
+import { StatsService } from '../../services/stats-service';
 
 interface Tab {
   namePrebold: string;
@@ -31,11 +33,9 @@ export class StatsPage {
   displayedComponentTitleBold: string = "";
   displayedComponentTitlePostbold: string = "";
 
-  currentLeague: string = "";
+  currentLeagueName: string = "";
 
-  constructor(){
-    this.selectTab(this.tabs[0])
-  }
+  constructor(private router:Router, private statsService: StatsService){}
 
   selectTab(tab: Tab) {
     this.activeTab.isActive = false;
@@ -47,6 +47,13 @@ export class StatsPage {
   }
 
   backToLeagues() {
+    this.router.navigateByUrl("/league")
+  }
 
+  ngOnInit(){
+    this.currentLeagueName = this.statsService.currentLeagueName;
+
+    this.statsService.getLeagueLuckStats();
+    this.selectTab(this.tabs[0])
   }
 }

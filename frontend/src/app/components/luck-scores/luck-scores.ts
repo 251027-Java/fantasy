@@ -1,7 +1,9 @@
+/** biome-ignore-all lint/style/useImportType: idk */
+/** biome-ignore-all assist/source/organizeImports: whatever */
 import { Component } from '@angular/core';
-// biome-ignore lint/style/useImportType: idk what this warning is
 import { Score, StatsResponse } from '../../interface/StatsResponse';
 import { CommonModule } from '@angular/common';
+import { StatsService } from '../../services/stats-service';
 
 @Component({
 	selector: 'app-luck-scores',
@@ -24,9 +26,14 @@ export class LuckScores {
 		["ties", "Ties"]
 	] as const
 
-	constructor(){
+	constructor(private statsService: StatsService){
 		this.luckStats = {stats:[]}
-		this.generateDummyData(12);
+		this.generateDummyData(0);
+	}
+
+	ngOnInit(){
+		this.luckStats = this.statsService.luckStatsResponse
+		//console.log(this.luckStats)
 	}
 
 	private generateDummyData(num: number): void{
