@@ -1,0 +1,24 @@
+package dev.revature.fantasy.sleeperrequest.sleeperresponsemodel;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
+
+@Data
+@Builder
+@Jacksonized
+@NoArgsConstructor
+@AllArgsConstructor
+public class SleeperNFLStateResponse {
+    @JsonProperty("week")
+    private String week;
+
+    @JsonProperty("season")
+    private String season;
+
+    @JsonProperty("display_week")
+    private String displayWeek;
+}
