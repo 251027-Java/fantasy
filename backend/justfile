@@ -4,6 +4,8 @@ db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
 classpath := '.gen-classpath'
 ddl_file := 'scripts/init.sql'
+java_sep := if os_family() == 'windows' { ';' } else { ':' }
+package_name := 'dev.revature.fantasy'
 
 alias refresh := compile
 
@@ -108,10 +110,10 @@ view-coverage cmd='start':
 
 _gen-classpath:
     {{ maven }} dependency:build-classpath -Dmdep.outputFile={{ classpath }}
+    @echo "{{ java_sep }}target/classes" >> {{ classpath }}
 
 # generate a DDL script from JPA entities
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
-    rm -f {{ filepath }}
-    java -cp target/classes:`cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ filepath }}
+    java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
     docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
