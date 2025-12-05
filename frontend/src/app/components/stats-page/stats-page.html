@@ -1,6 +1,6 @@
 <div class="min-h-screen statsbackground" style="padding: 0 0 0.5%;">
     <div class="flex justify-between items-center">
-        <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
+        <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
             &lt;&lt; Leagues
         </button>
         <p class="topcorner text-black font-medium bg-white border-black border px-2 py-1">
@@ -16,15 +16,15 @@
         <div class="flex gap-10 justify-center">
             @for (tab of tabs; track tab.label) {
                 @if (tab.isActive){
-                    <button (click)="selectTab(tab)" class="w-36 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="w-36 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
                 } @else {
-                    <button (click)="selectTab(tab)" class="w-36 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border border-gray-300 bg-white text-gray-800 hover:bg-gray-100">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 cursor-pointer">{{tab.label}}</button>
                 }
             }
         </div>
         <div class="flex gap-4 justify-center">
             @for (themeColor of themeService.getThemeColors(); track themeColor) {
-                <button (click)="themeService.setStatsTheme(themeColor)" class="w-12 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white" [ngClass]="themeService.getThemeClassString(themeColor, 'selectThemeButtonClasses')"></button>
+                <button (click)="themeService.setStatsTheme(themeColor)" class="w-12 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getThemeClassString(themeColor, 'selectThemeButtonClasses')"></button>
             }
         </div>
     </div>

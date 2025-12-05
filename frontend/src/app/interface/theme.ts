@@ -8,6 +8,7 @@ export interface Theme {
     bodyTableClass: string;    
     headerNameClass: string;
     loadingTableClass: string;
+    loadingTableBackgroundClass: string;
 }
 
 export type ThemeColor = "red" | "orange" | "yellow" | "green" | "blue" | "violet"

@@ -2,9 +2,27 @@
     <table class="min-w-full table-fixed">
         <thead [ngClass]="themeService.getCurrentThemeClassString('headerTableClass')">
             <tr>
-                <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')">Name</th>
+                <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')" (click)="toggleSort('name')">
+                    <div class="flex items-center justify-center">
+                        <span>Name</span>
+                        <span class="ml-1 flex flex-col text-xs leading-2 select-none">
+                            @for (arrow of getSortArrows('name'); track arrow) {
+                                <span>{{arrow}}</span>
+                            }
+                        </span>
+                    </div>
+                </th>
                 @for (pair of headers; track pair[0]) {
-                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300" [ngClass]="statsService.getColumnWidthClassString(headers.length)">{{pair[1]}}</th>
+                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="statsService.getColumnWidthClassString(headers.length)" (click)="toggleSort(pair[0])">
+                        <div class="flex items-center justify-center">
+                            <span>{{pair[1]}}</span>
+                            <span class="ml-1 flex flex-col text-xs leading-2 select-none">
+                                @for (arrow of getSortArrows(pair[0]); track arrow) {
+                                    <span>{{arrow}}</span>
+                                }
+                            </span>
+                        </div>
+                    </th>
                 }
             </tr>
         </thead>
@@ -24,7 +42,7 @@
     </table>
 
     @if (statsService.luckStatsResponse().stats.length == 0) {
-        <div class="h-72 bg-[radial-gradient(circle_at_top_right,_#f0f7ff,_#e4f0ff,_#ebf5ff)] flex items-center justify-center">
+        <div class="h-72 flex items-center justify-center" [ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
             <p class="text-4xl text-center font-semibold" [ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">Loading Scores...</p>
         </div>
     }
