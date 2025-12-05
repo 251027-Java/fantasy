@@ -1,11 +1,10 @@
 package dev.revature.fantasy.controller;
 
 import dev.revature.fantasy.dto.*;
-import dev.revature.fantasy.exceptions.HttpConnectionException;
-import dev.revature.fantasy.exceptions.InvalidLeagueIdException;
-import dev.revature.fantasy.exceptions.InvalidUsernameException;
+import dev.revature.fantasy.exception.HttpConnectionException;
+import dev.revature.fantasy.exception.InvalidLeagueIdException;
+import dev.revature.fantasy.exception.InvalidUsernameException;
 import dev.revature.fantasy.service.FantasyStatsService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +19,21 @@ public class MainController {
         this.fantasyStatsService = fantasyStatsService;
     }
 
-
     @GetMapping("/login/{username}")
-    public LoginDto getUserInfo(@PathVariable String username) throws HttpConnectionException, InvalidUsernameException {
+    public LoginDto getUserInfo(@PathVariable String username)
+            throws HttpConnectionException, InvalidUsernameException {
         // TODO: send 406 status code if there are no leagues for the user
-        return this.fantasyStatsService.login(username)
-        .orElseThrow(() -> new InvalidUsernameException("Invalid username: " + username));
+        return this.fantasyStatsService
+                .login(username)
+                .orElseThrow(() -> new InvalidUsernameException("Invalid username: " + username));
     }
 
     @GetMapping("/league/{id}/stats")
-    public LeagueStatsDto getLeagueStats(@PathVariable String id) throws HttpConnectionException, InvalidLeagueIdException {
-        return this.fantasyStatsService.computeStats(id)
-        .orElseThrow(() -> new InvalidLeagueIdException("Invalid league id: " + id));
+    public LeagueStatsDto getLeagueStats(@PathVariable String id)
+            throws HttpConnectionException, InvalidLeagueIdException {
+        return this.fantasyStatsService
+                .computeStats(id)
+                .orElseThrow(() -> new InvalidLeagueIdException("Invalid league id: " + id));
     }
 
     // exception handler for http connection exceptions
