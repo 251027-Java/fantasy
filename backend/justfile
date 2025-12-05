@@ -4,6 +4,8 @@ db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
 classpath := '.gen-classpath'
 ddl_file := 'scripts/init.sql'
+java_sep := if os_family() == 'windows' { ';' } else { ':' }
+package_name := 'dev.revature.fantasy'
 
 alias refresh := compile
 
@@ -38,6 +40,11 @@ default: clean verify
 [group('run')]
 run: clean
     {{ maven }} spring-boot:run
+
+# launch the application with production configuration
+[group('run')]
+prod: clean
+    {{ maven }} spring-boot:run -Dspring-boot.run.profiles=prod
 
 # launch the jar
 [group('run')]
@@ -90,7 +97,7 @@ db-export filepath='fantasy.data':
 [group('db')]
 db-create-with filepath: _db-create (_db-init filepath)
 
-# runs tests
+# runs tests and generates coverage
 [group('test')]
 test:
     {{ maven }} test
@@ -98,15 +105,15 @@ test:
 
 # view coverage
 [group('test')]
-view-coverage cmd='start':
+coverage cmd='start':
     {{ cmd }} "target/site/jacoco/index.html"
 
 _gen-classpath:
     {{ maven }} dependency:build-classpath -Dmdep.outputFile={{ classpath }}
+    @echo "{{ java_sep }}target/classes" >> {{ classpath }}
 
 # generate a DDL script from JPA entities
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
-    rm -f {{ filepath }}
-    java -cp target/classes:`cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ filepath }}
+    java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
     docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}

@@ -39,7 +39,7 @@ If you want to learn more about what you can do with our backend, feel free to r
 
 Ensure the database is running prior to running the program. See [Database management](#database-management) for more information on working with databases in this project.
 
-Once the database has started, use the following command to start the backend:
+Once the database has started, use the following command to start a development server:
 
 ```sh
 just run
@@ -60,6 +60,12 @@ To trigger hot reload during development:
 ```sh
 just compile
 just refresh # an alias for compile
+```
+
+To launch a production server:
+
+```sh
+just prod
 ```
 
 ## Database management
