@@ -7,7 +7,9 @@ import { TestScores } from '../test-scores/test-scores';
 import { NgComponentOutlet } from '@angular/common';
 
 interface Tab {
-  name: string;
+  namePrebold: string;
+  nameBold: string;
+  namePostbold: string;
   label: string;
   component: Type<any>;
   isActive: boolean;
@@ -21,11 +23,13 @@ interface Tab {
 })
 export class StatsPage {
   tabs: Tab[] = [
-    { name: 'How lucky were you?', label: 'Luck Scores', component: LuckScores, isActive: false },
-    { name: 'Testing...', label: 'Test Scores', component: TestScores, isActive: false }
+    { namePrebold: 'How ', nameBold: 'lucky', namePostbold: ' were you?', label: 'Luck Scores', component: LuckScores, isActive: false },
+    { namePrebold: '', nameBold: 'Testing', namePostbold: '...', label: 'Test Scores', component: TestScores, isActive: false }
   ];
   activeTab: Tab = this.tabs[0];
-  displayedComponentTitle: string = "";
+  displayedComponentTitlePrebold: string = "";
+  displayedComponentTitleBold: string = "";
+  displayedComponentTitlePostbold: string = "";
 
   currentLeague: string = "";
 
@@ -36,7 +40,9 @@ export class StatsPage {
   selectTab(tab: Tab) {
     this.activeTab.isActive = false;
     this.activeTab = tab;
-    this.displayedComponentTitle = tab.name;
+    this.displayedComponentTitlePrebold = tab.namePrebold;
+    this.displayedComponentTitleBold = tab.nameBold;
+    this.displayedComponentTitlePostbold = tab.namePostbold;
     tab.isActive = true;
   }
 
