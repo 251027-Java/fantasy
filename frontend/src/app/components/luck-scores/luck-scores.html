@@ -9,9 +9,9 @@
             </tr>
         </thead>
 
-        @if (luckStats.stats.length > 0) {
+        @if (statsServ.luckStatsResponse().stats.length > 0) {
             <tbody class="bg-blue-50">
-                @for (member of luckStats.stats; track member.name) {
+                @for (member of statsServ.luckStatsResponse().stats; track member.name) {
                     <tr>
                         <td class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center">{{member.name}}</td>
                         @for (pair of headers; track pair[0]) {
@@ -23,9 +23,9 @@
         }
     </table>
 
-    @if (luckStats.stats.length == 0) {
+    @if (statsServ.luckStatsResponse().stats.length == 0) {
         <div class="h-72 bg-[radial-gradient(circle_at_top_right,_#f0f7ff,_#e4f0ff,_#ebf5ff)] flex items-center justify-center">
-            <p class="text-4xl text-center font-semibold text-blue-900">There are no scores to show!</p>
+            <p class="text-4xl text-center font-semibold text-blue-900">Loading Scores...</p>
         </div>
     }
 </div>

@@ -1,7 +1,8 @@
 /** biome-ignore-all lint/style/useImportType: idk */
+/** biome-ignore-all assist/source/organizeImports: whatever */
 /** biome-ignore-all lint/suspicious/noExplicitAny: any is fine */
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { StatsResponse } from '../interface/StatsResponse';
 
@@ -9,11 +10,11 @@ import { StatsResponse } from '../interface/StatsResponse';
   providedIn: 'root'
 })
 export class StatsService {
+  readonly numDecimalPlaces: number = 10
 
-  //Inject HttpClient so we can make HTTP requests
   constructor(private http:HttpClient) {}
 
-  luckStatsResponse: StatsResponse = {stats:[]};
+  luckStatsResponse: WritableSignal<StatsResponse> = signal({stats:[]});
 
   currentLeagueId: string = "1252005113573150720";
   currentLeagueName: string = "Rice League";
@@ -21,29 +22,31 @@ export class StatsService {
   getLeagueLuckStats():void{
     let resp: Observable<StatsResponse> = this.http.get<StatsResponse>(`api/league/${this.currentLeagueId}/stats`)
     resp = resp.pipe(
-      map<any, StatsResponse>(data => {console.log("hi");return {stats:[]}/*return JSON.parse(data)*/}/*({stats:[
-        {
-          name:"g",
-          scores:{
-            totalLuck: 1,
-            medLuck: number,
-            apLuck: number,
-            apWins: number,
-            apLoses: number,
-            apTies: number,
-            wins: number,
-            loses: number,
-            ties: number
-          }
+      map<any, StatsResponse>(data => {
+        const resp: StatsResponse = {stats:[]}
+        for (const stat of data.stats){
+          resp.stats.push({
+            name: stat.userName,
+            scores: {
+              totalLuck: Number(stat.score.totalLuck.toFixed(this.numDecimalPlaces)),
+              medLuck: Number(stat.score.medLuck.toFixed(this.numDecimalPlaces)),
+              apLuck: Number(stat.score.apLuck.toFixed(this.numDecimalPlaces)),
+              apWins: stat.score.apWins,
+              apLoses: stat.score.apLoses,
+              apTies: stat.score.apTies,
+              wins: stat.score.wins,
+              loses: stat.score.loses,
+              ties: stat.score.ties
+            }
+          })
         }
-      ]})*/)
-    )
 
-    //console.log(resp)
+        return resp;
+      })
+    )
     
     resp.subscribe(data => {
-      console.log(data)
-      //this.luckStatsResponse.stats = data.stats;
+      this.luckStatsResponse.set(data)
     })
 
   }
