@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 
-type luckStatColumn = keyof Score | "name";
+type luckStatColumn = keyof Score | "name" | "none";
 
 @Component({
 	selector: 'app-luck-scores',
@@ -18,7 +18,7 @@ export class LuckScores {
 	statsService: StatsService;
 	themeService: ThemeService;
 
-	sortColumn: luckStatColumn = "name";
+	sortColumn: luckStatColumn = "none";
   	sortAsc: boolean = true;
 
 	readonly headers: [(keyof Score), string][] = [
