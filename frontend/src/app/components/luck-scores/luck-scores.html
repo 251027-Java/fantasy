@@ -42,7 +42,7 @@
     </table>
 
     @if (statsService.luckStatsResponse().stats.length == 0) {
-        <div class="h-72 bg-[radial-gradient(circle_at_top_right,_#f0f7ff,_#e4f0ff,_#ebf5ff)] flex items-center justify-center">
+        <div class="h-72 flex items-center justify-center" [ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
             <p class="text-4xl text-center font-semibold" [ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">Loading Scores...</p>
         </div>
     }

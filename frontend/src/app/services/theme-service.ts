@@ -34,6 +34,7 @@ export class ThemeService {
       bodyTableClass: "bg-red-50",   
       headerNameClass: "bg-red-800",
       loadingTableClass: "text-red-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#fff5f6,_#ffefef,_#fff7f8)]",
     },
     "orange": {
       selectThemeButtonClasses: "border-orange-700 bg-orange-500 hover:bg-orange-700",
@@ -45,6 +46,7 @@ export class ThemeService {
       bodyTableClass: "bg-orange-50",   
       headerNameClass: "bg-orange-800",
       loadingTableClass: "text-orange-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#fff8f0,_#fff3e6,_#fff9f3)]",
     },
     "yellow": {
       selectThemeButtonClasses: "border-yellow-700 bg-yellow-400 hover:bg-yellow-600",
@@ -56,6 +58,7 @@ export class ThemeService {
       bodyTableClass: "bg-yellow-50",   
       headerNameClass: "bg-yellow-800",
       loadingTableClass: "text-yellow-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#fffeef,_#fffce6,_#fffef3)]",
     },
     "green": {
       selectThemeButtonClasses: "border-green-700 bg-green-500 hover:bg-green-700",
@@ -67,6 +70,7 @@ export class ThemeService {
       bodyTableClass: "bg-green-50",   
       headerNameClass: "bg-green-800",
       loadingTableClass: "text-green-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#f2fff8,_#eafff2,_#f4fff9)]",
     },
     "blue": {
       selectThemeButtonClasses: "border-blue-700 bg-blue-600 hover:bg-blue-800",
@@ -78,6 +82,7 @@ export class ThemeService {
       bodyTableClass: "bg-blue-50",   
       headerNameClass: "bg-blue-800",
       loadingTableClass: "text-blue-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#f0f7ff,_#e4f0ff,_#ebf5ff)]",
     },
     "violet": {
       selectThemeButtonClasses: "border-violet-700 bg-violet-500 hover:bg-violet-700",
@@ -89,6 +94,7 @@ export class ThemeService {
       bodyTableClass: "bg-violet-50",   
       headerNameClass: "bg-violet-800",
       loadingTableClass: "text-violet-900",
+      loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#faf3ff,_#f5eaff,_#fbf5ff)]",
     },
   } as const;
 }
