@@ -4,7 +4,7 @@
             <tr>
                 <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')">Name</th>
                 @for (pair of headers; track pair[0]) {
-                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300 w-1/12">{{pair[1]}}</th>
+                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300" [ngClass]="statsService.getColumnWidthClassString(headers.length)">{{pair[1]}}</th>
                 }
             </tr>
         </thead>
@@ -15,7 +15,7 @@
                     <tr>
                         <td class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center">{{member.name}}</td>
                         @for (pair of headers; track pair[0]) {
-                            <td class="py-2 border border-gray-200 text-center w-1/12">{{member.scores[pair[0]]}}</td>
+                            <td class="py-2 border border-gray-200 text-center" [ngClass]="statsService.getColumnWidthClassString(headers.length)">{{member.scores[pair[0]]}}</td>
                         }
                     </tr>
                 }
