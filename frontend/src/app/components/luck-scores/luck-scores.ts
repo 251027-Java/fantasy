@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 
+type luckStatColumn = keyof Score | "name";
+
 @Component({
 	selector: 'app-luck-scores',
 	imports: [CommonModule],
@@ -15,6 +17,9 @@ import { ThemeService } from '../../services/theme-service';
 export class LuckScores {
 	statsService: StatsService;
 	themeService: ThemeService;
+
+	sortColumn: luckStatColumn = "name";
+  	sortAsc: boolean = true;
 
 	readonly headers: [(keyof Score), string][] = [
 		["totalLuck", "Total Luck"],
@@ -31,5 +36,21 @@ export class LuckScores {
 	constructor(statsServ: StatsService, themeServ: ThemeService){
 		this.statsService = statsServ
 		this.themeService = themeServ
+	}
+
+	toggleSort(column: luckStatColumn) {
+		if (this.sortColumn === column) {
+			this.sortAsc = !this.sortAsc;
+		} else {
+			this.sortColumn = column;
+			this.sortAsc = true;
+		}
+	}
+
+	getSortArrows(column: luckStatColumn): string[] {
+		if (this.sortColumn === column) {
+			return this.sortAsc ? ['▴'] : ['▾'];
+		}
+		return ['▴', '▾'];
 	}
 }
