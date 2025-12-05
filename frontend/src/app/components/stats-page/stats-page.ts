@@ -7,7 +7,6 @@ import { TestScores } from '../test-scores/test-scores';
 import { NgComponentOutlet, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { StatsService } from '../../services/stats-service';
-import { ThemeColor } from '../../interface/theme';
 import { ThemeService } from '../../services/theme-service';
 
 interface Tab {
