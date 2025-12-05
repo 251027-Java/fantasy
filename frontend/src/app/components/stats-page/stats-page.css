@@ -8,3 +8,12 @@
     url('/footballs.jpg');
   background-repeat: repeat;
 }
+
+.statsbackground > * {
+  margin-bottom: 0;
+}
+
+table {
+  border-collapse: collapse; /* you already have border-separate, but double-check */
+  margin-bottom: 0;
+}
