@@ -5,9 +5,9 @@ import { Component, Type } from '@angular/core';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
 import { NgComponentOutlet, NgClass } from '@angular/common';
-import { Router } from '@angular/router';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
+import { Router } from '@angular/router';
 
 interface Tab {
   namePrebold: string;
@@ -39,7 +39,7 @@ export class StatsPage {
   currentLeagueName: string = "";
 
   constructor(private router: Router, private statsService: StatsService, themeServ: ThemeService){
-    this.themeService = themeServ
+    this.themeService = themeServ;
   }
 
   selectTab(tab: Tab) {
@@ -59,6 +59,6 @@ export class StatsPage {
     this.currentLeagueName = this.statsService.currentLeagueName;
 
     this.statsService.getLeagueLuckStats();
-    this.selectTab(this.tabs[0])
+    this.selectTab(this.tabs[0]);
   }
 }
