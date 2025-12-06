@@ -32,7 +32,7 @@ import { AsyncPipe } from '@angular/common';
 export class League implements OnInit {
 
 // Determines number of items you'll see wtihin carousel
-
+//
 constructor(private router:Router, private loginServe: LoginService, private statsService: StatsService, private cdRef: ChangeDetectorRef  ) {}
 
 public cardList:CardData [] = [];
