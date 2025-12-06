@@ -6,7 +6,7 @@
 
     @for (card of cardList; track card.id) {
 
-        <section class="flex-shrink-0 w-80 rounded-xl shadow-lg bg-white border border-gray-200" hlmCard>
+        <section class="shrink-0 w-80 rounded-xl shadow-lg bg-white border border-gray-200" hlmCard>
             
             <div hlmCardHeader>
                 <h3 hlmCardTitle>{{ card.title }}</h3>
@@ -21,7 +21,7 @@
 
             <div hlmCardFooter>
                 <!-- Can add (click)="selectCard(card.id) if wished -->
-                <button hlmBtn class="w-full">
+                <button hlmBtn (click)="viewLeague(card)" class="w-full">
                     {{ card.buttonText }}
                 </button>
             </div>
