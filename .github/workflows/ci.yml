@@ -82,7 +82,7 @@ jobs:
       - name: Tests
         run: just test
 
-  test-ddl:
+  check-ddl:
     runs-on: ubuntu-latest
 
     defaults:
@@ -102,8 +102,7 @@ jobs:
           cache: maven
       - uses: taiki-e/install-action@just
 
-      - name: Check if DDL is up to date
+      - name: Check DDL
         run: |
-          echo $CI
           just ddl $GENERATED
           diff -u $GENERATED $TARGET
