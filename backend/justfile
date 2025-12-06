@@ -1,7 +1,6 @@
 ci := env('CI', 'false')
 maven_ci_args := if '{{ ci }}' == 'true' { '-B' } else { '' }
 docker_run_ci_args := if '{{ ci }}' == 'true' { '-u `id -u`:`id -g`' } else { '' }
-
 maven := './mvnw ' + maven_ci_args
 jar_loc := 'target/fantasy-0.0.1.jar'
 db_container := 'fantasy-db'
@@ -119,4 +118,5 @@ _gen-classpath:
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
     java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
-    docker run --rm {{ docker_run_ci_args }} -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
+
+#    docker run --rm {{ docker_run_ci_args }} -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}

@@ -1,0 +1,36 @@
+name: Cache Maven
+
+# change this once on main branch to workflow_dispatch
+on: pull_request
+
+env:
+  CI: true
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - uses: taiki-e/install-action@just
+
+      - name: Cache test dependencies
+        continue-on-error: true
+        run: just test
+
+      - name: Cache lint dependencies
+        continue-on-error: true
+        run: just check
+
+      - name: Cache ddl check dependencies
+        continue-on-error: true
+        run: just compile _gen-classpath
