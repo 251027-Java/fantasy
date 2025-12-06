@@ -1,6 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: any is fine */
-/** biome-ignore-all lint/style/useImportType: idk */
-// biome-ignore assist/source/organizeImports: whatever
 import { Component, Type } from '@angular/core';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';

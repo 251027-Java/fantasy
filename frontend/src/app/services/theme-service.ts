@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/style/useImportType: idk */
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Theme, ThemeColor } from '../interface/theme';
 

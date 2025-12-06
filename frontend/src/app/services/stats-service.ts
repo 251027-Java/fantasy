@@ -1,6 +1,3 @@
-/** biome-ignore-all lint/style/useImportType: idk */
-/** biome-ignore-all assist/source/organizeImports: whatever */
-/** biome-ignore-all lint/suspicious/noExplicitAny: any is fine */
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
