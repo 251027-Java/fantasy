@@ -134,9 +134,9 @@ jobs:
       - run: |
           if [ "${{ matrix.task }}" = "lint" ]; then
             just check
-          elif [ "${{ matrix.task }}" = "test"]; then
+          elif [ "${{ matrix.task }}" = "test" ]; then
             just test
-          elif [ "${{ matrix.task }}" = "test"]; then
+          elif [ "${{ matrix.task }}" = "ddl" ]; then
             just ddl $GENERATED
             diff -u $GENERATED $TARGET
           fi
