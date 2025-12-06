@@ -120,7 +120,7 @@ ddl filepath=ddl_file: compile _gen-classpath
 
 _ddl-ci filepath=ddl_file: compile _gen-classpath
     java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
-    docker run --rm -u `id -u`:`id -g` -v `pwd`:/work backplane/pgformatter -i {{ filepath }}
+    docker run --rm -u `id -u`:`id -g` -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
 
 temp:
     @echo {{ asd }}
