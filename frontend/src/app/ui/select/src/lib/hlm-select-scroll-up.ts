@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	input,
+} from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronUp } from '@ng-icons/lucide';
 import { HlmIcon } from '@spartan-ng/helm/icon';
@@ -20,6 +25,9 @@ import type { ClassValue } from 'clsx';
 export class HlmSelectScrollUp {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected readonly _computedClass = computed(() =>
-		hlm('flex cursor-default items-center justify-center py-1', this.userClass()),
+		hlm(
+			'flex cursor-default items-center justify-center py-1',
+			this.userClass(),
+		),
 	);
 }

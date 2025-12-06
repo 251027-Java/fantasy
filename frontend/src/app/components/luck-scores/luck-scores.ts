@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 
-export type luckStatColumn = keyof Score | "name" | "none";
+export type luckStatColumn = keyof Score | 'name' | 'none';
 
 @Component({
 	selector: 'app-luck-scores',
@@ -18,24 +18,24 @@ export class LuckScores {
 	statsService: StatsService;
 	themeService: ThemeService;
 
-	sortColumn: luckStatColumn = "none";
-  	sortAsc: boolean = true;
+	sortColumn: luckStatColumn = 'none';
+	sortAsc: boolean = true;
 
-	readonly headers: [(keyof Score), string][] = [
-		["totalLuck", "Total Luck"],
-		["medLuck", "Median Luck"],
-		["apLuck", "All Play Luck"],
-		["apWins", "AP Wins"],
-		["apLoses", "AP Losses"],
-		["apTies", "AP Ties"],
-		["wins", "Wins"],
-		["loses", "Losses"],
-		["ties", "Ties"]
-	] as const
+	readonly headers: [keyof Score, string][] = [
+		['totalLuck', 'Total Luck'],
+		['medLuck', 'Median Luck'],
+		['apLuck', 'All Play Luck'],
+		['apWins', 'AP Wins'],
+		['apLoses', 'AP Losses'],
+		['apTies', 'AP Ties'],
+		['wins', 'Wins'],
+		['loses', 'Losses'],
+		['ties', 'Ties'],
+	] as const;
 
-	constructor(statsServ: StatsService, themeServ: ThemeService){
-		this.statsService = statsServ
-		this.themeService = themeServ
+	constructor(statsServ: StatsService, themeServ: ThemeService) {
+		this.statsService = statsServ;
+		this.themeService = themeServ;
 	}
 
 	toggleSort(column: luckStatColumn) {
