@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, untracked } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	effect,
+	inject,
+	input,
+	untracked,
+} from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowRight } from '@ng-icons/lucide';
 import { HlmButton, provideBrnButtonConfig } from '@spartan-ng/helm/button';
@@ -10,7 +18,10 @@ import { HlmCarousel } from './hlm-carousel';
 @Component({
 	selector: 'button[hlm-carousel-next], button[hlmCarouselNext]',
 	imports: [NgIcon, HlmIcon],
-	providers: [provideIcons({ lucideArrowRight }), provideBrnButtonConfig({ variant: 'outline', size: 'icon' })],
+	providers: [
+		provideIcons({ lucideArrowRight }),
+		provideBrnButtonConfig({ variant: 'outline', size: 'icon' }),
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	hostDirectives: [{ directive: HlmButton, inputs: ['variant', 'size'] }],
 	host: {

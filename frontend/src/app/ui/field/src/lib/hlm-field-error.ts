@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	input,
+} from '@angular/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 
@@ -36,5 +41,7 @@ export class HlmFieldError {
 		return [...new Map(errors.map((err) => [err?.message, err])).values()];
 	});
 
-	protected readonly _computedClass = computed(() => hlm('text-destructive text-sm font-normal', this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm('text-destructive text-sm font-normal', this.userClass()),
+	);
 }

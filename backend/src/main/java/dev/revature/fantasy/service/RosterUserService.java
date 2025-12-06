@@ -28,6 +28,10 @@ public class RosterUserService {
         return repo.findByUserIdAndLeagueId(userId, leagueId);
     }
 
+    public List<RosterUser> getAllRosterUsersByLeagueId(String leagueId) {
+        return repo.findRosterUsersByLeagueId(leagueId);
+    }
+
     public Optional<RosterUser> getRosterUserByRosterIdAndLeagueId(Integer rosterId, String leagueId) {
         return repo.findByRosterIdAndLeagueId(rosterId, leagueId);
     }

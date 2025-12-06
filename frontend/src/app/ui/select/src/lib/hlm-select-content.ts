@@ -1,6 +1,9 @@
 import type { BooleanInput } from '@angular/cdk/coercion';
-import { Directive, booleanAttribute, computed, input } from '@angular/core';
-import { injectExposedSideProvider, injectExposesStateProvider } from '@spartan-ng/brain/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
+import {
+	injectExposedSideProvider,
+	injectExposesStateProvider,
+} from '@spartan-ng/brain/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 
@@ -17,8 +20,12 @@ export class HlmSelectContent {
 	public readonly stickyLabels = input<boolean, BooleanInput>(false, {
 		transform: booleanAttribute,
 	});
-	protected readonly _stateProvider = injectExposesStateProvider({ optional: true });
-	protected readonly _sideProvider = injectExposedSideProvider({ optional: true });
+	protected readonly _stateProvider = injectExposesStateProvider({
+		optional: true,
+	});
+	protected readonly _sideProvider = injectExposedSideProvider({
+		optional: true,
+	});
 
 	protected readonly _computedClass = computed(() =>
 		hlm(

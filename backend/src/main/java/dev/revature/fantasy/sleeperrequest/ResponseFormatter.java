@@ -68,6 +68,8 @@ public class ResponseFormatter {
         return List.of();
     }
 
+    // Returns a JSON object for the userId from a given username. Object model
+    // within SleeperUsernameResponse.java
     public static SleeperUsernameResponse getUserIdFromUsername(String username) {
         try {
             HttpResponse<String> response = SleeperRequestHandler.getUserFromUsername(username);

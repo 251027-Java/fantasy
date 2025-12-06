@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
 import { Score } from '../../interface/stats-response';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
+import { ThemeService } from '../../services/theme-service';
+
+export type luckStatColumn = keyof Score | 'name' | 'none';
 
 @Component({
 	selector: 'app-luck-scores',
@@ -12,21 +15,44 @@ import { StatsService } from '../../services/stats-service';
 	styleUrl: './luck-scores.css',
 })
 export class LuckScores {
-	statsServ: StatsService;
+	statsService: StatsService;
+	themeService: ThemeService;
 
-	readonly headers: [(keyof Score), string][] = [
-		["totalLuck", "Total Luck"],
-		["medLuck", "Median Luck"],
-		["apLuck", "All Play Luck"],
-		["apWins", "AP Wins"],
-		["apLoses", "AP Losses"],
-		["apTies", "AP Ties"],
-		["wins", "Wins"],
-		["loses", "Losses"],
-		["ties", "Ties"]
-	] as const
+	sortColumn: luckStatColumn = 'none';
+	sortAsc: boolean = true;
 
-	constructor(statsService: StatsService){
-		this.statsServ = statsService
+	readonly headers: [keyof Score, string][] = [
+		['totalLuck', 'Total Luck'],
+		['medLuck', 'Median Luck'],
+		['apLuck', 'All Play Luck'],
+		['apWins', 'AP Wins'],
+		['apLoses', 'AP Losses'],
+		['apTies', 'AP Ties'],
+		['wins', 'Wins'],
+		['loses', 'Losses'],
+		['ties', 'Ties'],
+	] as const;
+
+	constructor(statsServ: StatsService, themeServ: ThemeService) {
+		this.statsService = statsServ;
+		this.themeService = themeServ;
+	}
+
+	toggleSort(column: luckStatColumn) {
+		if (this.sortColumn === column) {
+			this.sortAsc = !this.sortAsc;
+		} else {
+			this.sortColumn = column;
+			this.sortAsc = true;
+		}
+
+		this.statsService.sortLuckStats(column, this.sortAsc);
+	}
+
+	getSortArrows(column: luckStatColumn): string[] {
+		if (this.sortColumn === column) {
+			return this.sortAsc ? ['▴'] : ['▾'];
+		}
+		return ['▴', '▾'];
 	}
 }

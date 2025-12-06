@@ -1,7 +1,7 @@
-import { Directive, computed, input, signal } from '@angular/core';
+import { computed, Directive, input, signal } from '@angular/core';
 import { BrnButton } from '@spartan-ng/brain/button';
 import { hlm } from '@spartan-ng/helm/utils';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { ClassValue } from 'clsx';
 import { injectBrnButtonConfig } from './hlm-button.token';
 
@@ -15,8 +15,10 @@ export const buttonVariants = cva(
 					'bg-destructive hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-white',
 				outline:
 					'bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs',
-				secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-				ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+				secondary:
+					'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+				ghost:
+					'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
 				link: 'text-primary underline-offset-4 hover:underline',
 			},
 			size: {
@@ -54,10 +56,16 @@ export class HlmButton {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 
 	protected readonly _computedClass = computed(() =>
-		hlm(buttonVariants({ variant: this.variant(), size: this.size() }), this.userClass(), this._additionalClasses()),
+		hlm(
+			buttonVariants({ variant: this.variant(), size: this.size() }),
+			this.userClass(),
+			this._additionalClasses(),
+		),
 	);
 
-	public readonly variant = input<ButtonVariants['variant']>(this._config.variant);
+	public readonly variant = input<ButtonVariants['variant']>(
+		this._config.variant,
+	);
 
 	public readonly size = input<ButtonVariants['size']>(this._config.size);
 

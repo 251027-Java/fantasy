@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LeagueService {
@@ -19,5 +20,15 @@ public class LeagueService {
     public List<League> idempotentSave(List<League> leagues) {
         this.leagueRepo.batchIdempotentSave(leagues);
         return leagues;
+    }
+
+    /**
+     * Returns the size of the league, or -1 if not found in database
+     * @param leagueId the league id
+     * @return the number of players in the league
+     */
+    public int getSizeOfLeague(String leagueId) {
+        Optional<League> league = this.leagueRepo.findById(leagueId);
+        return league.isPresent() ? league.get().getNumRosters() : -1;
     }
 }

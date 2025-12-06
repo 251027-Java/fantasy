@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	input,
+} from '@angular/core';
 import { HlmSeparator } from '@spartan-ng/helm/separator';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
@@ -25,6 +30,9 @@ export class HlmFieldSeparator {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 
 	protected readonly _computedClass = computed(() =>
-		hlm('relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2', this.userClass()),
+		hlm(
+			'relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2',
+			this.userClass(),
+		),
 	);
 }
