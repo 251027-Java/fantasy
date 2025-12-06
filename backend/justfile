@@ -115,4 +115,5 @@ _gen-classpath:
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
     java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
+    chmod +w {{ filepath }}
     docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}

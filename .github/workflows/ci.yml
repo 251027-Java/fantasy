@@ -105,5 +105,4 @@ jobs:
       - name: Generate DDL file and compare to current
         run: |
           just ddl $GENERATED
-          chmod +w $GENERATED
           diff -u $GENERATED $TARGET
