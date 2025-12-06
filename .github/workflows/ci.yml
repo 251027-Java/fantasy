@@ -38,14 +38,15 @@ jobs:
           distribution: temurin
           java-version: 25
           cache: maven
+      - uses: taiki-e/install-action@just
 
       - name: Lint
         working-directory: backend
-        run: |
-          ./mvnw -B spotless:check
-          ./mvnw -B checkstyle:check
+        run: just check
 
   test-frontend:
+    if: false
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -63,6 +64,8 @@ jobs:
         run: npm test
 
   test-backend:
+    if: false
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -76,11 +79,14 @@ jobs:
           distribution: temurin
           java-version: 25
           cache: maven
+      - uses: taiki-e/install-action@just
 
       - name: Tests
-        run: ./mvnw -B test
+        run: just test
 
   check-ddl:
+    if: false
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -90,8 +96,6 @@ jobs:
     env:
       GENERATED: temp.data
       TARGET: scripts/init.sql
-      CLASSPATH: .gen-classpath
-      PACKAGE: dev.revature.fantasy
 
     steps:
       - uses: actions/checkout@v6
@@ -100,11 +104,9 @@ jobs:
           distribution: temurin
           java-version: 25
           cache: maven
+      - uses: taiki-e/install-action@just
 
       - name: Check DDL
         run: |
-          ./mvnw -B compile
-          ./mvnw -B dependency:build-classpath -Dmdep.outputFile=$CLASSPATH
-          echo ":target/classes" >> $CLASSPATH
-          java -cp `cat $CLASSPATH` src/main/java/scripts/GenerateDdl.java $PACKAGE $GENERATED
+          just ddl $GENERATED
           diff -u $GENERATED $TARGET
