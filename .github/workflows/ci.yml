@@ -1,20 +1,13 @@
 name: CI
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
-
-permissions:
-  contents: read
-
-env:
-  # should be true by default, but sometimes not detected by just
-  CI: true
 
 jobs:
   lint-frontend:
