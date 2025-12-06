@@ -115,5 +115,6 @@ _gen-classpath:
 # generate a DDL script from JPA entities
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
+    @echo {{ docker_run_ci }}
     java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
     docker run --rm {{ docker_run_ci }} -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
