@@ -97,4 +97,8 @@ export class ThemeService {
       loadingTableBackgroundClass: "bg-[radial-gradient(circle_at_top_right,_#faf3ff,_#f5eaff,_#fbf5ff)]",
     },
   } as const;
+
+  reset(){
+    this.statsTheme.set("blue");
+  }
 }
