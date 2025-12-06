@@ -1,0 +1,76 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install biome
+        uses: biomejs/setup-biome@v2
+
+      - name: Lint
+        run: biome ci .
+
+  lint-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install just
+        uses: taiki-e/install-action@just
+
+      - name: Lint
+        working-directory: backend
+        run: just check
+
+  test-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+      - run: npm ci
+
+      - name: Tests
+        run: npm test
+
+  test-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install just
+        uses: taiki-e/install-action@just
+
+      - name: Tests
+        run: just test
