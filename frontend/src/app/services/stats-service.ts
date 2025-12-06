@@ -13,21 +13,32 @@ import { luckStatColumn } from '../components/luck-scores/luck-scores';
 export class StatsService {
   readonly numDecimalPlaces: number = 10
 
+  // Inject HttpClient for making HTTP requests
   constructor(private http:HttpClient) {}
 
   luckStatsResponse: WritableSignal<StatsResponse> = signal({stats:[]});
 
+  // Current league info is hardcoded for now 
   currentLeagueId: string = "1252005113573150720";
   currentLeagueName: string = "Rice League";
 
   private columnWidthClassStrings: string[] = ["w-1/3", "w-1/4", "w-1/5", "w-1/6", "w-1/7", "w-1/8", "w-1/9", "w-1/10", "w-1/11", "w-1/12", "w-1/12"]
 
+  // Get's the league luck stats from the getLeagueStats function endpoint in the backend
   getLeagueLuckStats():void{
+
+    // Recieve an observable after a get request to the spring backend. Map LeagueStatsDTO to stats-response interface
     let resp: Observable<StatsResponse> = this.http.get<StatsResponse>(`api/league/${this.currentLeagueId}/stats`)
+    
+    // Pipe the data to map it to the StatsResponse interface
     resp = resp.pipe(
       map<any, StatsResponse>(data => {
+
+        // Map the received data to the StatsResponse interface
         const resp: StatsResponse = {stats:[]}
         for (const stat of data.stats){
+
+          // Push each stat into the stats array with proper formatting
           resp.stats.push({
             name: stat.userName,
             scores: {
@@ -44,15 +55,17 @@ export class StatsService {
           })
         }
 
+        // Return the resp object containing the mapped stats
         return resp;
       })
     )
     
+    // Subscribe to the observable and set the luckStatsResponse signal with the received data
     resp.subscribe(data => {
       this.luckStatsResponse.set(data)
     })
 
-  }  
+  }
 
   getColumnWidthClassString(numStatColumnWidths: number): string{
     return this.columnWidthClassStrings[numStatColumnWidths - 1];
@@ -68,6 +81,23 @@ export class StatsService {
       if (a.scores[column as keyof Score] > b.scores[column as keyof Score]) return sortAsc ? 1 : -1;
       return 0;
     });
+  }
+
+  // Adding setters and getters to stats-service to store current league info
+  setCurrentLeagueId(leagueId: string): void {
+    this.currentLeagueId = leagueId;
+  }
+
+  getCurrentLeagueId(): string {
+    return this.currentLeagueId;
+  }
+
+  setCurrentLeagueName(leagueName: string): void {
+    this.currentLeagueName = leagueName;
+  }
+
+  getCurrentLeagueName(): string {
+    return this.currentLeagueName;
   }
 
 }
