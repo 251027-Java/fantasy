@@ -102,7 +102,7 @@ jobs:
           cache: maven
       - uses: taiki-e/install-action@just
 
-      - name: Generate DDL file and compare to current
+      - name: Check if DDL is up to date
         run: |
           echo $CI
           just ddl $GENERATED

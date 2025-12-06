@@ -6,7 +6,7 @@ classpath := '.gen-classpath'
 ddl_file := 'scripts/init.sql'
 java_sep := if os_family() == 'windows' { ';' } else { ':' }
 package_name := 'dev.revature.fantasy'
-docker_run_ci := if '${CI}' == 'true' { '-u `id -u`:`id -g`' } else { '' }
+docker_run_ci := if env('CI') == 'true' { '-u `id -u`:`id -g`' } else { '' }
 
 alias refresh := compile
 
