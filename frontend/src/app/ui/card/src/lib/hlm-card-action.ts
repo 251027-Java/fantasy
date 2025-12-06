@@ -1,4 +1,4 @@
-import { Directive, computed, input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 
@@ -11,6 +11,9 @@ import type { ClassValue } from 'clsx';
 export class HlmCardAction {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected readonly _computedClass = computed(() =>
-		hlm('col-start-2 row-span-2 row-start-1 self-start justify-self-end', this.userClass()),
+		hlm(
+			'col-start-2 row-span-2 row-start-1 self-start justify-self-end',
+			this.userClass(),
+		),
 	);
 }

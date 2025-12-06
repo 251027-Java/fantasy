@@ -13,6 +13,9 @@ export class HlmFieldContent {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 
 	protected readonly _computedClass = computed(() =>
-		hlm('group/field-content flex flex-1 flex-col gap-1.5 leading-snug', this.userClass()),
+		hlm(
+			'group/field-content flex flex-1 flex-col gap-1.5 leading-snug',
+			this.userClass(),
+		),
 	);
 }

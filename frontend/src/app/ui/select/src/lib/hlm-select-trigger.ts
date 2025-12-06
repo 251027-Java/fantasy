@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, contentChild, inject, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	contentChild,
+	inject,
+	input,
+} from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { BrnSelect, BrnSelectTrigger } from '@spartan-ng/brain/select';
@@ -48,6 +55,9 @@ export class HlmSelectTrigger {
 	public readonly size = input<'default' | 'sm'>('default');
 
 	protected readonly _computedClass = computed(() =>
-		hlm(selectTriggerVariants({ error: this._brnSelect?.errorState() }), this.userClass()),
+		hlm(
+			selectTriggerVariants({ error: this._brnSelect?.errorState() }),
+			this.userClass(),
+		),
 	);
 }

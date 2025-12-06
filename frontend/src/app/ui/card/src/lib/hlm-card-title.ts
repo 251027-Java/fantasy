@@ -1,4 +1,4 @@
-import { Directive, computed, input } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 
@@ -10,5 +10,7 @@ import type { ClassValue } from 'clsx';
 })
 export class HlmCardTitle {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
-	protected readonly _computedClass = computed(() => hlm('leading-none font-semibold', this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm('leading-none font-semibold', this.userClass()),
+	);
 }
