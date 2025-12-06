@@ -1,5 +1,5 @@
 ci := env('CI', 'false')
-maven_ci_args := if '{{ ci }}' == 'true' { '-B' } else { '' }
+maven_ci_args := if ci == 'true' { '-B' } else { '' }
 
 # docker_run_ci_args := if '{{ ci }}' == 'true' { '-u `id -u`:`id -g`' } else { '' }
 
