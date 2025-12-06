@@ -6,6 +6,7 @@ classpath := '.gen-classpath'
 ddl_file := 'scripts/init.sql'
 java_sep := if os_family() == 'windows' { ';' } else { ':' }
 package_name := 'dev.revature.fantasy'
+asd := if '${OS}' == 'Windows_NT' { 'is windows' } else { 'not windows' }
 
 alias refresh := compile
 
@@ -115,5 +116,11 @@ _gen-classpath:
 [group('db')]
 ddl filepath=ddl_file: compile _gen-classpath
     java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
-    chmod +w {{ filepath }}
     docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
+
+#_ddl-ci filepath=ddl_file: compile _gen-classpath
+#    java -cp `cat {{ classpath }}` src/main/java/scripts/GenerateDdl.java {{ package_name }} {{ filepath }}
+#    docker run --rm -v /`pwd`:/work backplane/pgformatter -i {{ filepath }}
+
+temp:
+    @echo {{ asd }}
