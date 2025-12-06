@@ -104,5 +104,5 @@ jobs:
 
       - name: Generate DDL file and compare to current
         run: |
-          just _ddl-ci $GENERATED
+          just ddl $GENERATED
           diff -u $GENERATED $TARGET
