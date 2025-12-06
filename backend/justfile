@@ -101,7 +101,6 @@ db-create-with filepath: _db-create (_db-init filepath)
 [group('test')]
 test:
     {{ maven }} test
-    {{ maven }} jacoco:report
 
 # view coverage
 [group('test')]
