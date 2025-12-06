@@ -78,3 +78,24 @@ jobs:
 
       - name: Tests
         run: just test
+
+  test-ddl:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - uses: taiki-e/install-action@just
+
+      - name: Generate ddl file and compare to current
+        run: |
+          just ddl temp.data
+          diff -u temp.data scripts/init.sql
