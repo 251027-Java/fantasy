@@ -131,7 +131,8 @@ jobs:
           cache: maven
       - uses: taiki-e/install-action@just
 
-      - run: |
+      - name: Running
+        run: |
           if [ "${{ matrix.task }}" = "lint" ]; then
             just check
           elif [ "${{ matrix.task }}" = "test" ]; then
