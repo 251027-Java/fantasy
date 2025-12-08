@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WeekScoreRepo extends JpaRepository<WeekScore, WeekScoreId>, WeekScoreRepoCustom {
+public interface WeekScoreRepo extends JpaRepository<WeekScore, WeekScoreId> {
     public List<WeekScore> findWeekScoresByLeagueId(String leagueId);
 
     public List<WeekScore> findWeekScoresByIdWeekNumAndLeagueId(int week, String leagueId);

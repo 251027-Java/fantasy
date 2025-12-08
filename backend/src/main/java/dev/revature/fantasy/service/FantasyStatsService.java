@@ -41,6 +41,7 @@ public class FantasyStatsService {
      * Run the login endpoint logic, attempting to get the leagues
      * from a sleeper username
      * 
+     * 
      * @param usernameStr the sleeper username
      * @return the login response, empty if the username is invalid
      * @throws HttpConnectionException when one of the sleeper requests fails

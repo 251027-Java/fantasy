@@ -1,10 +1,10 @@
 import {
 	ChangeDetectionStrategy,
 	Component,
-	type InputSignal,
-	type Signal,
 	computed,
+	type InputSignal,
 	input,
+	type Signal,
 	signal,
 	viewChild,
 } from '@angular/core';
@@ -42,15 +42,22 @@ import {
 	`,
 })
 export class HlmCarousel {
-	protected readonly _emblaCarousel = viewChild.required(EmblaCarouselDirective);
+	protected readonly _emblaCarousel = viewChild.required(
+		EmblaCarouselDirective,
+	);
 
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
-	protected readonly _computedClass = computed(() => hlm('relative', this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm('relative', this.userClass()),
+	);
 
 	public readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
-	public readonly options: InputSignal<Omit<EmblaOptionsType, 'axis'> | undefined> =
-		input<Omit<EmblaOptionsType, 'axis'>>();
-	public readonly plugins: InputSignal<EmblaPluginType[]> = input<EmblaPluginType[]>([]);
+	public readonly options: InputSignal<
+		Omit<EmblaOptionsType, 'axis'> | undefined
+	> = input<Omit<EmblaOptionsType, 'axis'>>();
+	public readonly plugins: InputSignal<EmblaPluginType[]> = input<
+		EmblaPluginType[]
+	>([]);
 
 	protected readonly _emblaOptions: Signal<EmblaOptionsType> = computed(() => ({
 		...this.options(),

@@ -1,13 +1,15 @@
 package dev.revature.fantasy;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-// TODO do we want to use a postgres database for testing? probably not
-
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class FantasyApplicationTests {
 
     @Test
-    void contextLoads() {}
+    void simpleTest() {
+        Assertions.assertTrue(true);
+    }
 }

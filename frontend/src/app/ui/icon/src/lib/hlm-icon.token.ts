@@ -1,4 +1,4 @@
-import { InjectionToken, type ValueProvider, inject } from '@angular/core';
+import { InjectionToken, inject, type ValueProvider } from '@angular/core';
 import type { IconSize } from './hlm-icon';
 
 export interface HlmIconConfig {
@@ -11,8 +11,13 @@ const defaultConfig: HlmIconConfig = {
 
 const HlmIconConfigToken = new InjectionToken<HlmIconConfig>('HlmIconConfig');
 
-export function provideHlmIconConfig(config: Partial<HlmIconConfig>): ValueProvider {
-	return { provide: HlmIconConfigToken, useValue: { ...defaultConfig, ...config } };
+export function provideHlmIconConfig(
+	config: Partial<HlmIconConfig>,
+): ValueProvider {
+	return {
+		provide: HlmIconConfigToken,
+		useValue: { ...defaultConfig, ...config },
+	};
 }
 
 export function injectHlmIconConfig(): HlmIconConfig {

@@ -1,10 +1,15 @@
-.topcorner{
-  margin: 10px 20px 0;
+.topcorner {
+	margin: 10px 20px 0;
 }
 
-.statsbackground{
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.97), rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
-    url('/footballs.jpg');
-  background-repeat: repeat;
+.statsbackground {
+	background-image:
+		linear-gradient(
+			rgba(255, 255, 255, 0.97),
+			rgba(255, 255, 255, 0.95),
+			rgba(255, 255, 255, 0.85),
+			rgba(255, 255, 255, 0.85),
+			rgba(255, 255, 255, 0.85)
+		), url("/footballs.jpg");
+	background-repeat: repeat;
 }

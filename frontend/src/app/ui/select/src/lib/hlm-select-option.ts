@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	inject,
+	input,
+} from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
 import { BrnSelectOption } from '@spartan-ng/brain/select';
@@ -11,7 +17,9 @@ import type { ClassValue } from 'clsx';
 	imports: [NgIcon, HlmIcon],
 	providers: [provideIcons({ lucideCheck })],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	hostDirectives: [{ directive: BrnSelectOption, inputs: ['disabled', 'value'] }],
+	hostDirectives: [
+		{ directive: BrnSelectOption, inputs: ['disabled', 'value'] },
+	],
 	host: {
 		'[class]': '_computedClass()',
 	},
