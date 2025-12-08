@@ -4,8 +4,8 @@ import {
 	type DoCheck,
 	effect,
 	forwardRef,
-	inject,
 	Injector,
+	inject,
 	input,
 	linkedSignal,
 	signal,
@@ -54,20 +54,31 @@ export class HlmInput implements BrnFormFieldControl, DoCheck {
 
 	private readonly _defaultErrorStateMatcher = inject(ErrorStateMatcher);
 	private readonly _parentForm = inject(NgForm, { optional: true });
-	private readonly _parentFormGroup = inject(FormGroupDirective, { optional: true });
+	private readonly _parentFormGroup = inject(FormGroupDirective, {
+		optional: true,
+	});
 
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected readonly _computedClass = computed(() =>
-		hlm(inputVariants({ error: this._state().error }), this.userClass(), this._additionalClasses()),
+		hlm(
+			inputVariants({ error: this._state().error }),
+			this.userClass(),
+			this._additionalClasses(),
+		),
 	);
 
 	public readonly error = input<InputVariants['error']>('auto');
 
 	protected readonly _state = linkedSignal(() => ({ error: this.error() }));
 
-	public readonly ngControl: NgControl | null = this._injector.get(NgControl, null);
+	public readonly ngControl: NgControl | null = this._injector.get(
+		NgControl,
+		null,
+	);
 
-	public readonly errorState = computed(() => this._errorStateTracker.errorState());
+	public readonly errorState = computed(() =>
+		this._errorStateTracker.errorState(),
+	);
 
 	constructor() {
 		this._errorStateTracker = new ErrorStateTracker(
@@ -81,8 +92,11 @@ export class HlmInput implements BrnFormFieldControl, DoCheck {
 			const error = this._errorStateTracker.errorState();
 			untracked(() => {
 				if (this.ngControl) {
-					const shouldShowError = error && this.ngControl.invalid && (this.ngControl.touched || this.ngControl.dirty);
-					this._errorStateTracker.errorState.set(shouldShowError ? true : false);
+					const shouldShowError =
+						error &&
+						this.ngControl.invalid &&
+						(this.ngControl.touched || this.ngControl.dirty);
+					this._errorStateTracker.errorState.set(!!shouldShowError);
 					this.setError(shouldShowError ? true : 'auto');
 				}
 			});

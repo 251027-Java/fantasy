@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	inject,
+	input,
+} from '@angular/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 import { HlmCarousel } from './hlm-carousel';
@@ -18,6 +24,10 @@ export class HlmCarouselContent {
 
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected readonly _computedClass = computed(() =>
-		hlm('flex', this._orientation() === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', this.userClass()),
+		hlm(
+			'flex',
+			this._orientation() === 'horizontal' ? '-ml-4' : '-mt-4 flex-col',
+			this.userClass(),
+		),
 	);
 }

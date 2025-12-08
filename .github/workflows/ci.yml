@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint-frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: biomejs/setup-biome@v2
+
+      - name: Lint
+        run: biome ci .
+
+  lint-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - uses: taiki-e/install-action@just
+
+      - name: Lint
+        working-directory: backend
+        run: just check
+
+  test-frontend:
+    if: false
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+      - run: npm ci
+
+      - name: Tests
+        run: npm test
+
+  test-backend:
+    if: false
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - uses: taiki-e/install-action@just
+
+      - name: Tests
+        run: just test
+
+  check-ddl:
+    if: false
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    env:
+      GENERATED: temp.data
+      TARGET: scripts/init.sql
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+      - uses: taiki-e/install-action@just
+
+      - name: Check DDL
+        run: |
+          just ddl $GENERATED
+          diff -u $GENERATED $TARGET

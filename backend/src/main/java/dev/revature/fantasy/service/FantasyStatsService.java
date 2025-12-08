@@ -40,12 +40,20 @@ public class FantasyStatsService {
     /**
      * Run the login endpoint logic, attempting to get the leagues
      * from a sleeper username
+     *
      * @param usernameStr the sleeper username
      * @return the login response, empty if the username is invalid
      * @throws HttpConnectionException when one of the sleeper requests fails
      */
+
+    // Returns a LoginDto object after getting the leagues from a given username.
+    // Nothing returned if username is invalid
+    // Uses returned SleeperUsernameResponse to get userId, then uses that to get
+    // leagues associated with that userId along with users name
     public Optional<LoginDto> login(String usernameStr) throws HttpConnectionException, InvalidUsernameException {
 
+        // Recieve an HTTP response from sleeper for the given username as a
+        // SleeperUsernameResponse object (JSON userID)
         SleeperUsernameResponse usernameResponse = ResponseFormatter.getUserIdFromUsername(usernameStr);
         // if username not found
         if (usernameResponse == null) {
@@ -71,8 +79,10 @@ public class FantasyStatsService {
     }
 
     /**
-     * Run the compute luck stats endpoint logic. Requires that the leagueId be valid
+     * Run the compute luck stats endpoint logic. Requires that the leagueId be
+     * valid
      * and already in the database.
+     *
      * @param leagueId the sleeper league id to get the stats for
      * @return the league stats dto, not sure when this would/should be empty
      */
@@ -152,7 +162,8 @@ public class FantasyStatsService {
      * Does the stats computation and returns the stats dto for stats endpoint
      * response. Requires that the parameters are compatible, ie that the weekScores
      * reference the same rosterUsers.
-     * @param weekScores the weekscores for the league
+     *
+     * @param weekScores  the weekscores for the league
      * @param rosterUsers the rosters for the league
      */
     private Optional<LeagueStatsDto> weekScoresToStatsDto(

@@ -15,6 +15,9 @@ export class HlmFieldLegend {
 	public readonly variant = input<'label' | 'legend'>('legend');
 
 	protected readonly _computedClass = computed(() =>
-		hlm('mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base', this.userClass()),
+		hlm(
+			'mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base',
+			this.userClass(),
+		),
 	);
 }
