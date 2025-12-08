@@ -84,6 +84,7 @@ public class FantasyStatsService {
      * valid
      * and already in the database.
      * 
+     *
      * @param leagueId the sleeper league id to get the stats for
      * @return the league stats dto, not sure when this would/should be empty
      */
@@ -164,6 +165,7 @@ public class FantasyStatsService {
      * response. Requires that the parameters are compatible, ie that the weekScores
      * reference the same rosterUsers.
      * 
+     *
      * @param weekScores  the weekscores for the league
      * @param rosterUsers the rosters for the league
      */
