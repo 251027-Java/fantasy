@@ -38,6 +38,6 @@ public class WeekScoreService {
      * @param weekScores the week scores to upsert
      */
     public void upsertWeekScores(List<WeekScore> weekScores) {
-        this.repo.batchUpsert(weekScores);
+        repo.saveAll(weekScores);
     }
 }

@@ -8,12 +8,16 @@ export const hlmSeparatorClass =
 
 @Directive({
 	selector: '[hlmSeparator],hlm-separator',
-	hostDirectives: [{ directive: BrnSeparator, inputs: ['orientation', 'decorative'] }],
+	hostDirectives: [
+		{ directive: BrnSeparator, inputs: ['orientation', 'decorative'] },
+	],
 	host: {
 		'[class]': '_computedClass()',
 	},
 })
 export class HlmSeparator {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
-	protected readonly _computedClass = computed(() => hlm(hlmSeparatorClass, this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm(hlmSeparatorClass, this.userClass()),
+	);
 }

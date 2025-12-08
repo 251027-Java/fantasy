@@ -33,13 +33,19 @@ import { HlmError } from './hlm-error';
 })
 export class HlmFormField {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
-	protected readonly _computedClass = computed(() => hlm('block space-y-2', this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm('block space-y-2', this.userClass()),
+	);
 	public readonly control = contentChild(BrnFormFieldControl);
 
 	public readonly errorChildren = contentChildren(HlmError);
 
 	protected readonly _hasDisplayedMessage = computed<'error' | 'hint'>(() =>
-		this.errorChildren() && this.errorChildren().length > 0 && this.control()?.errorState() ? 'error' : 'hint',
+		this.errorChildren() &&
+		this.errorChildren().length > 0 &&
+		this.control()?.errorState()
+			? 'error'
+			: 'hint',
 	);
 
 	constructor() {

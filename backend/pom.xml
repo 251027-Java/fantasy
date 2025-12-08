@@ -170,12 +170,14 @@
                         </goals>
                     </execution>
                     <execution>
+                        <phase>test</phase>
                         <id>default-report</id>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                     <execution>
+                        <phase>test</phase>
                         <id>default-check</id>
                         <goals>
                             <goal>check</goal>
