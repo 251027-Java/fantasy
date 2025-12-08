@@ -56,8 +56,7 @@ export class League implements OnInit {
 
 	viewLeague(card: CardData): void {
 		console.log('Viewing league with id:', card.id);
-		this.statsService.currentLeagueId = String(card.id);
-		this.statsService.currentLeagueName = card.title;
+		this.statsService.setLeague(String(card.id), card.title);
 		this.router.navigateByUrl('stats');
 	}
 }

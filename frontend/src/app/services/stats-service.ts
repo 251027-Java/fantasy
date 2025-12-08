@@ -16,8 +16,8 @@ export class StatsService {
 	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });
 
 	// Current league info is hardcoded for now
-	currentLeagueId: string = '1252005113573150720';
-	currentLeagueName: string = 'Rice League';
+	private currentLeagueId: string = '1252005113573150720';
+	private currentLeagueName: string = 'Rice League';
 
 	private readonly columnWidthClassStrings: Record<number, string> = {
 		1: 'w-1/3',
@@ -99,18 +99,16 @@ export class StatsService {
 	}
 
 	// Adding setters and getters to stats-service to store current league info
-	setCurrentLeagueId(leagueId: string): void {
-		this.currentLeagueId = leagueId;
+	setLeague(newLeagueId: string, newLeagueName: string){
+		if (newLeagueId !== this.currentLeagueId){
+			this.currentLeagueId = newLeagueId;
+			this.currentLeagueName = newLeagueName;
+			this.luckStatsResponse.set({ stats: [] });
+		}
 	}
-
 	getCurrentLeagueId(): string {
 		return this.currentLeagueId;
 	}
-
-	setCurrentLeagueName(leagueName: string): void {
-		this.currentLeagueName = leagueName;
-	}
-
 	getCurrentLeagueName(): string {
 		return this.currentLeagueName;
 	}
