@@ -18,7 +18,7 @@ public class LeagueService {
 
     @Transactional
     public List<League> idempotentSave(List<League> leagues) {
-        this.leagueRepo.batchIdempotentSave(leagues);
+        leagueRepo.saveAll(leagues);
         return leagues;
     }
 
