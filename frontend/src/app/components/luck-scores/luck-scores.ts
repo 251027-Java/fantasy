@@ -38,10 +38,9 @@ export class LuckScores {
 		this.themeService = themeServ;
 	}
 
-	getHeader(key: keyof any): string{
-		return this.headers.get(key as keyof Score) || "";
+	getHeader(key: keyof any): string {
+		return this.headers.get(key as keyof Score) || '';
 	}
-
 
 	toggleSort(column: luckStatColumn) {
 		if (this.sortColumn === column) {
@@ -63,16 +62,20 @@ export class LuckScores {
 
 	getWidth(): number {
 		if (this.statsService.getNumMembersVisible() === 0) return 90;
-		return 7.5 * Math.min(12, this.statsService.getNumDataColumnsVisible('Luck') + 3);
+		return (
+			7.5 * Math.min(12, this.statsService.getNumDataColumnsVisible('Luck') + 3)
+		);
 	}
 
 	onMemberFilterChange(event: Event, member: string) {
 		const input = event.target as HTMLInputElement;
-		if (input !== undefined) this.statsService.setMemberIsVisible(member, input.checked);
+		if (input !== undefined)
+			this.statsService.setMemberIsVisible(member, input.checked);
 	}
 	onColumnFilterChange(event: Event, column: keyof Score) {
 		const input = event.target as HTMLInputElement;
-		if (input !== undefined) this.statsService.setColumnIsVisible("Luck", column, input.checked);
+		if (input !== undefined)
+			this.statsService.setColumnIsVisible('Luck', column, input.checked);
 	}
 
 	keepInsertionOrder = () => 0;

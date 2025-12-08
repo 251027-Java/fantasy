@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
 
-export type StatsType = "Luck";
+export type StatsType = 'Luck';
 
 @Injectable({
 	providedIn: 'root',
@@ -20,7 +20,10 @@ export class StatsService {
 
 	// filters for what is displayed
 	filteredLeagueMembers: Map<string, boolean> = new Map<string, boolean>();
-	filteredStats: Map<StatsType, Map<keyof any, boolean>> = new Map<StatsType, Map<keyof any, boolean>>();
+	filteredStats: Map<StatsType, Map<keyof any, boolean>> = new Map<
+		StatsType,
+		Map<keyof any, boolean>
+	>();
 
 	// Current league info is hardcoded for now
 	// TODO: initialize these strings to "" for the final product
@@ -42,7 +45,7 @@ export class StatsService {
 	} as const;
 
 	// gets all the stats from the league
-	getLeagueStats(): void{
+	getLeagueStats(): void {
 		this.getLeagueLuckStats();
 	}
 
@@ -93,10 +96,20 @@ export class StatsService {
 			/* set the filters (all initialized to all true) */
 
 			// filter for members of the league
-			this.luckStatsResponse().stats.forEach((member) => { this.filteredLeagueMembers.set(member.name, true); });
+			this.luckStatsResponse().stats.forEach((member) => {
+				this.filteredLeagueMembers.set(member.name, true);
+			});
 
 			// filter for luck stats
-			this.filteredStats.set("Luck", new Map<keyof Score, boolean>(Object.keys(this.luckStatsResponse().stats[0].scores).map(k => [k as keyof Score, true])));
+			this.filteredStats.set(
+				'Luck',
+				new Map<keyof Score, boolean>(
+					Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
+						k as keyof Score,
+						true,
+					]),
+				),
+			);
 		});
 	}
 
@@ -105,9 +118,10 @@ export class StatsService {
 	}
 	getNumDataColumnsVisible(statsType: StatsType): number {
 		let numColumns = 0;
-		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statsType);
-		if (map !== undefined){
-			for (const columnVisibility of map.values()){
+		const map: Map<keyof any, boolean> | undefined =
+			this.filteredStats.get(statsType);
+		if (map !== undefined) {
+			for (const columnVisibility of map.values()) {
 				if (columnVisibility) numColumns += 1;
 			}
 		}
@@ -115,25 +129,30 @@ export class StatsService {
 	}
 	getNumMembersVisible(): number {
 		let numColumns = 0;
-		for (const memberVisibility of this.filteredLeagueMembers.values()){
+		for (const memberVisibility of this.filteredLeagueMembers.values()) {
 			if (memberVisibility) numColumns += 1;
 		}
 		return numColumns;
 	}
 
-	
 	setMemberIsVisible(member: string, isVisible: boolean): void {
 		this.filteredLeagueMembers.set(member, isVisible);
 	}
-	setColumnIsVisible(statType: StatsType, columnName: keyof any, isVisible: boolean): void {
-		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statType);
+	setColumnIsVisible(
+		statType: StatsType,
+		columnName: keyof any,
+		isVisible: boolean,
+	): void {
+		const map: Map<keyof any, boolean> | undefined =
+			this.filteredStats.get(statType);
 		if (map !== undefined) map.set(columnName, isVisible);
 	}
-	getMemberIsVisible(member: string): boolean{
+	getMemberIsVisible(member: string): boolean {
 		return this.filteredLeagueMembers.get(member) || false;
 	}
-	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean{
-		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statType);
+	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean {
+		const map: Map<keyof any, boolean> | undefined =
+			this.filteredStats.get(statType);
 		if (map !== undefined) return map.get(columnName) || false;
 		return false;
 	}
@@ -155,8 +174,8 @@ export class StatsService {
 	}
 
 	// Adding setters and getters to stats-service to store current league info
-	setLeague(newLeagueId: string, newLeagueName: string){
-		if (newLeagueId !== this.currentLeagueId){
+	setLeague(newLeagueId: string, newLeagueName: string) {
+		if (newLeagueId !== this.currentLeagueId) {
 			this.reset();
 
 			this.currentLeagueId = newLeagueId;
@@ -172,15 +191,15 @@ export class StatsService {
 		return this.currentLeagueName;
 	}
 
-	reset(): void{
-		this.currentLeagueId = "";
-		this.currentLeagueName = "";
+	reset(): void {
+		this.currentLeagueId = '';
+		this.currentLeagueName = '';
 
 		//reset all stats for a new league
 		this.luckStatsResponse.set({ stats: [] });
 
 		//reset all filters
-		this.filteredLeagueMembers = new Map<string, boolean>;
+		this.filteredLeagueMembers = new Map<string, boolean>();
 		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
 	}
 }
