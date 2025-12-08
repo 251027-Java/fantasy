@@ -108,6 +108,8 @@ export class StatsService {
 		if (newLeagueId !== this.currentLeagueId){
 			this.currentLeagueId = newLeagueId;
 			this.currentLeagueName = newLeagueName;
+
+			//reset all stats for a new league
 			this.luckStatsResponse.set({ stats: [] });
 		}
 	}
