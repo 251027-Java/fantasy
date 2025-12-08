@@ -17,7 +17,7 @@ public class UserService {
 
     @Transactional
     public List<User> idempotentSave(List<User> users) {
-        this.repo.batchIdempotentSave(users);
+        repo.saveAll(users);
         return users;
     }
 }
