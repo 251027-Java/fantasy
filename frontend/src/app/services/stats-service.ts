@@ -8,7 +8,7 @@ import { Score, StatsResponse } from '../interface/stats-response';
 	providedIn: 'root',
 })
 export class StatsService {
-	readonly numDecimalPlaces: number = 10;
+	readonly numDecimalPlaces: number = 8;
 
 	// Inject HttpClient for making HTTP requests
 	constructor(private http: HttpClient) {}
@@ -33,8 +33,13 @@ export class StatsService {
 		11: 'w-1/12',
 	} as const;
 
-	// Get's the league luck stats from the getLeagueStats function endpoint in the backend
-	getLeagueLuckStats(): void {
+	// gets all the stats from the league
+	getLeagueStats(): void{
+		this.getLeagueLuckStats();
+	}
+
+	// Gets the league luck stats from the getLeagueStats function endpoint in the backend
+	private getLeagueLuckStats(): void {
 		// Recieve an observable after a get request to the spring backend. Map LeagueStatsDTO to stats-response interface
 		let resp: Observable<StatsResponse> = this.http.get<StatsResponse>(
 			`api/league/${this.currentLeagueId}/stats`,
