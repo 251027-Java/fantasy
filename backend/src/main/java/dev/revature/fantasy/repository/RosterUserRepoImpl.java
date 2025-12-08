@@ -48,7 +48,7 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
             """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        int[] ret = jdbcTemplate.batchUpdate(
+        jdbcTemplate.batchUpdate(
                 con -> con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS),
                 new BatchPreparedStatementSetter() {
                     @Override
