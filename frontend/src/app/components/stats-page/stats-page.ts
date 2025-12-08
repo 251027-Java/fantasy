@@ -6,7 +6,7 @@ import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
-import { HlmToaster } from "@spartan-ng/helm/sonner";
+import { HlmToaster } from '@spartan-ng/helm/sonner';
 
 interface Tab {
 	namePrebold: string;

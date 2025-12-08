@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, booleanAttribute, computed, input, numberAttribute } from '@angular/core';
+import {
+	booleanAttribute,
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	input,
+	numberAttribute,
+} from '@angular/core';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';
 import { NgxSonnerToaster, type ToasterProps } from 'ngx-sonner';
@@ -27,25 +34,43 @@ import { NgxSonnerToaster, type ToasterProps } from 'ngx-sonner';
 	`,
 })
 export class HlmToaster {
-	public readonly invert = input<ToasterProps['invert'], boolean | string>(false, {
-		transform: booleanAttribute,
-	});
+	public readonly invert = input<ToasterProps['invert'], boolean | string>(
+		false,
+		{
+			transform: booleanAttribute,
+		},
+	);
 	public readonly theme = input<ToasterProps['theme']>('light');
 	public readonly position = input<ToasterProps['position']>('bottom-right');
 	public readonly hotKey = input<ToasterProps['hotkey']>(['altKey', 'KeyT']);
-	public readonly richColors = input<ToasterProps['richColors'], boolean | string>(false, {
+	public readonly richColors = input<
+		ToasterProps['richColors'],
+		boolean | string
+	>(false, {
 		transform: booleanAttribute,
 	});
-	public readonly expand = input<ToasterProps['expand'], boolean | string>(false, {
-		transform: booleanAttribute,
-	});
-	public readonly duration = input<ToasterProps['duration'], number | string>(4000, {
+	public readonly expand = input<ToasterProps['expand'], boolean | string>(
+		false,
+		{
+			transform: booleanAttribute,
+		},
+	);
+	public readonly duration = input<ToasterProps['duration'], number | string>(
+		4000,
+		{
+			transform: numberAttribute,
+		},
+	);
+	public readonly visibleToasts = input<
+		ToasterProps['visibleToasts'],
+		number | string
+	>(3, {
 		transform: numberAttribute,
 	});
-	public readonly visibleToasts = input<ToasterProps['visibleToasts'], number | string>(3, {
-		transform: numberAttribute,
-	});
-	public readonly closeButton = input<ToasterProps['closeButton'], boolean | string>(false, {
+	public readonly closeButton = input<
+		ToasterProps['closeButton'],
+		boolean | string
+	>(false, {
 		transform: booleanAttribute,
 	});
 	public readonly toastOptions = input<ToasterProps['toastOptions']>({});
@@ -62,5 +87,7 @@ export class HlmToaster {
 		{ alias: 'style' },
 	);
 
-	protected readonly _computedClass = computed(() => hlm('toaster group', this.userClass()));
+	protected readonly _computedClass = computed(() =>
+		hlm('toaster group', this.userClass()),
+	);
 }

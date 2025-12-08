@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
-import { toast } from 'ngx-sonner';
 
 export type StatsType = 'Luck';
 
@@ -96,7 +96,7 @@ export class StatsService {
 					duration: Infinity,
 				});
 				return of({ stats: [] } as StatsResponse);
-			})
+			}),
 		);
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
@@ -148,7 +148,7 @@ export class StatsService {
 
 	getStatsLoaded(statType: StatsType): boolean {
 		switch (statType) {
-			case "Luck":
+			case 'Luck':
 				return this.luckStatsResponse().stats.length > 0;
 			default:
 				return false;
@@ -172,7 +172,7 @@ export class StatsService {
 	}
 	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean {
 		if (!this.getStatsLoaded(statType)) return true;
-		
+
 		const map: Map<keyof any, boolean> | undefined =
 			this.filteredStats.get(statType);
 		if (map !== undefined) return map.get(columnName) || false;

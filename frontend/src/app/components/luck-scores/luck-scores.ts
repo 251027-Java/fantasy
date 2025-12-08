@@ -43,12 +43,12 @@ export class LuckScores {
 	}
 
 	getNumDataColumnsVisible(): number {
-		if (!this.statsService.getStatsLoaded("Luck")) return this.headers.size;
+		if (!this.statsService.getStatsLoaded('Luck')) return this.headers.size;
 		return this.statsService.getNumDataColumnsVisible('Luck');
 	}
 
 	toggleSort(column: luckStatColumn): void {
-		if (!this.statsService.getStatsLoaded("Luck")) return;
+		if (!this.statsService.getStatsLoaded('Luck')) return;
 
 		if (this.sortColumn === column) {
 			this.sortAsc = !this.sortAsc;

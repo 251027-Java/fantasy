@@ -11,10 +11,9 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
+import { LoginResponse } from '../../interface/login-response';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
-import { LoginResponse } from '../../interface/login-response';
-
 
 @Component({
 	selector: 'app-login',
@@ -31,7 +30,6 @@ import { LoginResponse } from '../../interface/login-response';
 	styleUrl: './login.css',
 })
 export class Login implements OnInit {
-  
 	public loginControl = new FormGroup({
 		user: new FormControl('', [Validators.required]),
 	});
@@ -47,31 +45,30 @@ export class Login implements OnInit {
 		});
 	}
 
+	Login(): void {
+		if (this.loginControl.valid) {
+			// Perform login logic here
 
-  Login(): void {
+			this.loginServe.usernameSet(this.loginControl.value.user ?? '');
 
-    if (this.loginControl.valid) {
-      // Perform login logic here
-
-      this.loginServe.usernameSet(this.loginControl.value.user ?? '');
-
-      // Perform a check to see if the user exists in the backend
-      console.log('Logging in with:', this.loginControl.value.user);
-      //this.loginServe.loginUser(this.loginControl.value.user!);
-      this.loginServe.getLeagues().subscribe({
-        next: (response) => {
-          this.loginServe.LeagueResponse.set(response);
-          console.log("Login successful");
-          console.log("These are the leagues: " + JSON.stringify(response.leagues));
-          this.router.navigateByUrl('league');
-        },
-        error: (err: string) => {
-          console.log("Login failed: " + err);
-        }
-      });
-
-    } else {
-      console.log('Login form is invalid');
-    }
-  }
+			// Perform a check to see if the user exists in the backend
+			console.log('Logging in with:', this.loginControl.value.user);
+			//this.loginServe.loginUser(this.loginControl.value.user!);
+			this.loginServe.getLeagues().subscribe({
+				next: (response) => {
+					this.loginServe.LeagueResponse.set(response);
+					console.log('Login successful');
+					console.log(
+						'These are the leagues: ' + JSON.stringify(response.leagues),
+					);
+					this.router.navigateByUrl('league');
+				},
+				error: (err: string) => {
+					console.log('Login failed: ' + err);
+				},
+			});
+		} else {
+			console.log('Login form is invalid');
+		}
+	}
 }
