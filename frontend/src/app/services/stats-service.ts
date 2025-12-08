@@ -135,6 +135,15 @@ export class StatsService {
 		return numColumns;
 	}
 
+	getStatsLoaded(statType: StatsType): boolean {
+		switch (statType) {
+			case "Luck":
+				return this.luckStatsResponse().stats.length > 0;
+			default:
+				return false;
+		}
+	}
+
 	setMemberIsVisible(member: string, isVisible: boolean): void {
 		this.filteredLeagueMembers.set(member, isVisible);
 	}
@@ -151,6 +160,8 @@ export class StatsService {
 		return this.filteredLeagueMembers.get(member) || false;
 	}
 	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean {
+		if (!this.getStatsLoaded(statType)) return true;
+		
 		const map: Map<keyof any, boolean> | undefined =
 			this.filteredStats.get(statType);
 		if (map !== undefined) return map.get(columnName) || false;

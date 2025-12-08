@@ -6,7 +6,6 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
-import { Router } from '@angular/router';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { LoginResponse } from '../../interface/login-response';
@@ -18,7 +17,6 @@ import { AsyncPipe } from '@angular/common';
   imports: [
     HlmFormFieldImports,
     HlmSelectImports,
-    HlmInput,
     HlmSelectImports,
     BrnSelectImports,
     HlmButtonImports,
