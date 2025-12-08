@@ -1,59 +1,56 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { LoginResponse } from '../interface/login-response';
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class LoginService {
-  
+	private username: string = 'leeeem';
 
-  private username: string = "leeeem";
+	// Inject HttpClient for making HTTP requests
+	constructor(private http: HttpClient) {}
 
-  // Inject HttpClient for making HTTP requests
-  constructor(private http: HttpClient) {}
+	LeagueResponse: WritableSignal<LoginResponse> = signal({
+		userId: '',
+		leagues: [],
+	});
 
-  LeagueResponse: WritableSignal<LoginResponse> = signal({userId:"", leagues:[]});
+	// Returns the list of leagues from the LoginDTO endpoint: (endpoint found in mainController in backend)
+	getLeagues(): Observable<LoginResponse> {
+		// Gain Login response
+		try {
+			let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(
+				`api/login/${this.username}`,
+			);
 
-    // Returns the list of leagues from the LoginDTO endpoint: (endpoint found in mainController in backend)
-    getLeagues(): Observable<LoginResponse>{
-      
-      
-      // Gain Login response
-      try{
-        let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(`api/login/${this.username}`);
+			resp = resp.pipe(
+				map<any, LoginResponse>((data) => {
+					// Map the received data to the Leagues interface
+					const processedResp: LoginResponse = { userId: '', leagues: [] };
+					for (const league of data.leagues) {
+						// Push each league into the leagues array with proper formatting
+						processedResp.leagues.push({
+							id: league.leagueId,
+							name: league.leagueName,
+						});
+					}
+					//console.log("Raw data1 (JSON string):", JSON.stringify(processedResp, null, 2));
 
-            resp = resp.pipe(
-                map<any, LoginResponse>(data => {
-          
-                  // Map the received data to the Leagues interface
-                  const processedResp: LoginResponse = {userId:"", leagues:[]}
-                  for (const league of data.leagues){
-          
-                    // Push each league into the leagues array with proper formatting
-                    processedResp.leagues.push({
-                      id: league.leagueId,
-                      name: league.leagueName,
-                    })
-                  }
-            //console.log("Raw data1 (JSON string):", JSON.stringify(processedResp, null, 2));
+					return processedResp;
+				}),
+			);
 
-                  return processedResp;
-        }));
-        
-        return resp;
+			return resp;
+		} catch (InvalidUsernameException) {
+			console.log('Invalid Username Exception caught in LoginService');
+		}
 
+		throw new Error('Error in getting leagues in LoginService');
+	}
 
-      }catch(InvalidUsernameException){
-        console.log("Invalid Username Exception caught in LoginService");
-      }
-      
-      throw new Error("Error in getting leagues in LoginService");
-      
-  }
-
-   usernameSet(username: string){
-    this.username = username;
-  }
+	usernameSet(username: string) {
+		this.username = username;
+	}
 }

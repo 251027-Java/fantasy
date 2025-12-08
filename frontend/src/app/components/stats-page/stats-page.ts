@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: <whatever> */
 import { NgClass, NgComponentOutlet } from '@angular/common';
 import { Component, Type } from '@angular/core';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
+import { HlmToaster } from '@spartan-ng/helm/sonner';
 
 interface Tab {
 	namePrebold: string;
@@ -17,7 +19,7 @@ interface Tab {
 
 @Component({
 	selector: 'app-stats-page',
-	imports: [NgComponentOutlet, NgClass],
+	imports: [NgComponentOutlet, NgClass, HlmToaster],
 	templateUrl: './stats-page.html',
 	styleUrl: './stats-page.css',
 })
@@ -73,7 +75,7 @@ export class StatsPage {
 	ngOnInit() {
 		this.currentLeagueName = this.statsService.getCurrentLeagueName();
 
-		this.statsService.getLeagueStats(); /* TODO: delete this line for the final product */
+		this.statsService.getLeagueStats();
 		this.selectTab(this.tabs[0]);
 	}
 }

@@ -42,7 +42,14 @@ export class LuckScores {
 		return this.headers.get(key as keyof Score) || '';
 	}
 
-	toggleSort(column: luckStatColumn) {
+	getNumDataColumnsVisible(): number {
+		if (!this.statsService.getStatsLoaded('Luck')) return this.headers.size;
+		return this.statsService.getNumDataColumnsVisible('Luck');
+	}
+
+	toggleSort(column: luckStatColumn): void {
+		if (!this.statsService.getStatsLoaded('Luck')) return;
+
 		if (this.sortColumn === column) {
 			this.sortAsc = !this.sortAsc;
 		} else {
@@ -79,4 +86,7 @@ export class LuckScores {
 	}
 
 	keepInsertionOrder = () => 0;
+	caseInsensitiveSort = (a: any, b: any) => {
+		return a.key.toLowerCase().localeCompare(b.key.toLowerCase());
+	};
 }
