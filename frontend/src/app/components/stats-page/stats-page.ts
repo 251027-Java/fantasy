@@ -71,9 +71,9 @@ export class StatsPage {
 	}
 
 	ngOnInit() {
-		this.currentLeagueName = this.statsService.currentLeagueName;
+		this.currentLeagueName = this.statsService.getCurrentLeagueName();
 
-		this.statsService.getLeagueLuckStats();
+		this.statsService.getLeagueStats(); /* TODO: delete this line for the final product */
 		this.selectTab(this.tabs[0]);
 	}
 }

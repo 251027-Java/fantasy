@@ -21,7 +21,7 @@ export class LuckScores {
 	sortColumn: luckStatColumn = 'none';
 	sortAsc: boolean = true;
 
-	readonly headers: [keyof Score, string][] = [
+	readonly headers: Map<keyof Score, string> = new Map<keyof Score, string>([
 		['totalLuck', 'Total Luck'],
 		['medLuck', 'Median Luck'],
 		['apLuck', 'All Play Luck'],
@@ -31,11 +31,15 @@ export class LuckScores {
 		['wins', 'Wins'],
 		['loses', 'Losses'],
 		['ties', 'Ties'],
-	] as const;
+	]);
 
 	constructor(statsServ: StatsService, themeServ: ThemeService) {
 		this.statsService = statsServ;
 		this.themeService = themeServ;
+	}
+
+	getHeader(key: keyof any): string {
+		return this.headers.get(key as keyof Score) || '';
 	}
 
 	toggleSort(column: luckStatColumn) {
@@ -55,4 +59,24 @@ export class LuckScores {
 		}
 		return ['▴', '▾'];
 	}
+
+	getWidth(): number {
+		if (this.statsService.getNumMembersVisible() === 0) return 90;
+		return (
+			7.5 * Math.min(12, this.statsService.getNumDataColumnsVisible('Luck') + 3)
+		);
+	}
+
+	onMemberFilterChange(event: Event, member: string) {
+		const input = event.target as HTMLInputElement;
+		if (input !== undefined)
+			this.statsService.setMemberIsVisible(member, input.checked);
+	}
+	onColumnFilterChange(event: Event, column: keyof Score) {
+		const input = event.target as HTMLInputElement;
+		if (input !== undefined)
+			this.statsService.setColumnIsVisible('Luck', column, input.checked);
+	}
+
+	keepInsertionOrder = () => 0;
 }
