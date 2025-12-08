@@ -19,19 +19,19 @@ export class StatsService {
 	currentLeagueId: string = '1252005113573150720';
 	currentLeagueName: string = 'Rice League';
 
-	private columnWidthClassStrings: string[] = [
-		'w-1/3',
-		'w-1/4',
-		'w-1/5',
-		'w-1/6',
-		'w-1/7',
-		'w-1/8',
-		'w-1/9',
-		'w-1/10',
-		'w-1/11',
-		'w-1/12',
-		'w-1/12',
-	];
+	private readonly columnWidthClassStrings: Record<number, string> = {
+		1: 'w-1/3',
+		2: 'w-1/4',
+		3: 'w-1/5',
+		4: 'w-1/6',
+		5: 'w-1/7',
+		6: 'w-1/8',
+		7: 'w-1/9',
+		8: 'w-1/10',
+		9: 'w-1/11',
+		10: 'w-1/12',
+		11: 'w-1/12',
+	} as const;
 
 	// Get's the league luck stats from the getLeagueStats function endpoint in the backend
 	getLeagueLuckStats(): void {
@@ -79,7 +79,7 @@ export class StatsService {
 	}
 
 	getColumnWidthClassString(numStatColumnWidths: number): string {
-		return this.columnWidthClassStrings[numStatColumnWidths - 1];
+		return this.columnWidthClassStrings[numStatColumnWidths];
 	}
 
 	sortLuckStats(column: luckStatColumn, sortAsc: boolean) {

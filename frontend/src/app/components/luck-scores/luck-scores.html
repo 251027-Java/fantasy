@@ -1,6 +1,6 @@
 <div style="width:90%; margin: 0.5% auto 0;" class="border-separate border-spacing-0 border border-black rounded-md overflow-hidden">
     <table class="min-w-full table-fixed">
-        <thead [ngClass]="themeService.getCurrentThemeClassString('headerTableClass')">
+        <thead>
             <tr>
                 <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')" (click)="toggleSort('name')">
                     <div class="flex items-center justify-center">
@@ -13,7 +13,7 @@
                     </div>
                 </th>
                 @for (pair of headers; track pair[0]) {
-                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="statsService.getColumnWidthClassString(headers.length)" (click)="toggleSort(pair[0])">
+                    <th class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="[statsService.getColumnWidthClassString(headers.length), themeService.getCurrentThemeClassString('headerTableClass')]" (click)="toggleSort(pair[0])">
                         <div class="flex items-center justify-center">
                             <span>{{pair[1]}}</span>
                             <span class="ml-1 flex flex-col text-xs leading-2 select-none">
