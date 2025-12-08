@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
+import { toast } from 'ngx-sonner';
 
 export type StatsType = 'Luck';
 
@@ -86,6 +87,16 @@ export class StatsService {
 				// Return the resp object containing the mapped stats
 				return resp;
 			}),
+			catchError(() => {
+				toast('Error loading stats for this league.', {
+					action: {
+						label: 'Close',
+						onClick: () => {},
+					},
+					duration: Infinity,
+				});
+				return of({ stats: [] } as StatsResponse);
+			})
 		);
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
@@ -192,7 +203,7 @@ export class StatsService {
 			this.currentLeagueId = newLeagueId;
 			this.currentLeagueName = newLeagueName;
 
-			this.getLeagueStats();
+			//this.getLeagueStats();
 		}
 	}
 	getCurrentLeagueId(): string {

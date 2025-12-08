@@ -10,6 +10,7 @@ import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { LoginResponse } from '../../interface/login-response';
 import { AsyncPipe } from '@angular/common';
+import { HlmInput } from '@spartan-ng/helm/input';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { AsyncPipe } from '@angular/common';
   imports: [
     HlmFormFieldImports,
     HlmSelectImports,
+    HlmInput,
     HlmSelectImports,
     BrnSelectImports,
     HlmButtonImports,
