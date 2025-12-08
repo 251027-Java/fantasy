@@ -18,28 +18,42 @@ export class LoginService {
 
     // Returns the list of leagues from the LoginDTO endpoint: (endpoint found in mainController in backend)
     getLeagues(): Observable<LoginResponse>{
+      
+      
       // Gain Login response
-      let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(`api/login/${this.username}`);
-      // (Figure out the way you want to structure the data for the cards. There is no need to map it like in LoginResponse)
+      try{
+        let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(`api/login/${this.username}`);
 
-      resp = resp.pipe(
-            map<any, LoginResponse>(data => {
-      
-              // Map the received data to the Leagues interface
-              const processedResp: LoginResponse = {userId:"", leagues:[]}
-              for (const league of data.leagues){
-      
-                // Push each league into the leagues array with proper formatting
-                processedResp.leagues.push({
-                  id: league.leagueId,
-                  name: league.leagueName,
-                })
-              }
-        console.log("Raw data1 (JSON string):", JSON.stringify(processedResp, null, 2));
+            resp = resp.pipe(
+                map<any, LoginResponse>(data => {
+          
+                  // Map the received data to the Leagues interface
+                  const processedResp: LoginResponse = {userId:"", leagues:[]}
+                  for (const league of data.leagues){
+          
+                    // Push each league into the leagues array with proper formatting
+                    processedResp.leagues.push({
+                      id: league.leagueId,
+                      name: league.leagueName,
+                    })
+                  }
+            //console.log("Raw data1 (JSON string):", JSON.stringify(processedResp, null, 2));
 
-              return processedResp;
-    }));
-    
-    return resp;
+                  return processedResp;
+        }));
+        
+        return resp;
+
+
+      }catch(InvalidUsernameException){
+        console.log("Invalid Username Exception caught in LoginService");
+      }
+      
+      throw new Error("Error in getting leagues in LoginService");
+      
+  }
+
+   usernameSet(username: string){
+    this.username = username;
   }
 }
