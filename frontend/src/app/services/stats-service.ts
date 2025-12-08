@@ -4,6 +4,8 @@ import { map, Observable } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
 
+export type StatsType = "Luck";
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -13,9 +15,15 @@ export class StatsService {
 	// Inject HttpClient for making HTTP requests
 	constructor(private http: HttpClient) {}
 
+	// holds the stats
 	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });
 
+	// filters for what is displayed
+	filteredLeagueMembers: Map<string, boolean> = new Map<string, boolean>();
+	filteredStats: Map<StatsType, Map<keyof any, boolean>> = new Map<StatsType, Map<keyof any, boolean>>();
+
 	// Current league info is hardcoded for now
+	// TODO: initialize these strings to "" for the final product
 	private currentLeagueId: string = '1252005113573150720';
 	private currentLeagueName: string = 'Rice League';
 
@@ -79,12 +87,55 @@ export class StatsService {
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
 		resp.subscribe((data) => {
+			// set the data
 			this.luckStatsResponse.set(data);
+
+			/* set the filters (all initialized to all true) */
+
+			// filter for members of the league
+			this.luckStatsResponse().stats.forEach((member) => { this.filteredLeagueMembers.set(member.name, true); });
+
+			// filter for luck stats
+			this.filteredStats.set("Luck", new Map<keyof Score, boolean>(Object.keys(this.luckStatsResponse().stats[0].scores).map(k => [k as keyof Score, true])));
 		});
 	}
 
-	getColumnWidthClassString(numStatColumnWidths: number): string {
+	getDataColumnWidthClassString(numStatColumnWidths: number): string {
 		return this.columnWidthClassStrings[numStatColumnWidths];
+	}
+	getNumDataColumnsVisible(statsType: StatsType): number {
+		let numColumns = 0;
+		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statsType);
+		if (map !== undefined){
+			for (const columnVisibility of map.values()){
+				if (columnVisibility) numColumns += 1;
+			}
+		}
+		return numColumns;
+	}
+	getNumMembersVisible(): number {
+		let numColumns = 0;
+		for (const memberVisibility of this.filteredLeagueMembers.values()){
+			if (memberVisibility) numColumns += 1;
+		}
+		return numColumns;
+	}
+
+	
+	setMemberIsVisible(member: string, isVisible: boolean): void {
+		this.filteredLeagueMembers.set(member, isVisible);
+	}
+	setColumnIsVisible(statType: StatsType, columnName: keyof any, isVisible: boolean): void {
+		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statType);
+		if (map !== undefined) map.set(columnName, isVisible);
+	}
+	getMemberIsVisible(member: string): boolean{
+		return this.filteredLeagueMembers.get(member) || false;
+	}
+	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean{
+		const map: Map<keyof any, boolean> | undefined = this.filteredStats.get(statType);
+		if (map !== undefined) return map.get(columnName) || false;
+		return false;
 	}
 
 	sortLuckStats(column: luckStatColumn, sortAsc: boolean) {
@@ -106,11 +157,12 @@ export class StatsService {
 	// Adding setters and getters to stats-service to store current league info
 	setLeague(newLeagueId: string, newLeagueName: string){
 		if (newLeagueId !== this.currentLeagueId){
+			this.reset();
+
 			this.currentLeagueId = newLeagueId;
 			this.currentLeagueName = newLeagueName;
 
-			//reset all stats for a new league
-			this.luckStatsResponse.set({ stats: [] });
+			this.getLeagueStats();
 		}
 	}
 	getCurrentLeagueId(): string {
@@ -118,5 +170,17 @@ export class StatsService {
 	}
 	getCurrentLeagueName(): string {
 		return this.currentLeagueName;
+	}
+
+	reset(): void{
+		this.currentLeagueId = "";
+		this.currentLeagueName = "";
+
+		//reset all stats for a new league
+		this.luckStatsResponse.set({ stats: [] });
+
+		//reset all filters
+		this.filteredLeagueMembers = new Map<string, boolean>;
+		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
 	}
 }
