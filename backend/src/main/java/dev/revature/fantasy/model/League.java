@@ -1,38 +1,29 @@
 package dev.revature.fantasy.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "league")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class League {
 
     @Id
-    @Column(name = "league_id")
-    private String leagueId;
+    private String id;
 
     @Column(name = "num_rosters")
     private int numRosters;
 
-    @Column(name = "league_name", length = 50)
-    private String leagueName;
+    @Column(length = 50)
+    private String name;
 
     @Column(name = "season")
     private int seasonYear;
-
-    @Override
-    public String toString() {
-        return "League{" + "leagueId="
-                + leagueId + ", numRosters="
-                + numRosters + ", name='"
-                + leagueName + '\'' + ", season="
-                + seasonYear + '}';
-    }
 }

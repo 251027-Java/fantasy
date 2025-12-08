@@ -2,38 +2,27 @@ package dev.revature.fantasy.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
-import java.io.Serializable;
-import java.util.Objects;
+import java.util.Optional;
 
 @Embeddable
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WeekScoreId implements Serializable {
-    @Column(name = "roster_user_id")
-    private Long rosterUserId;
+public class WeekScoreId {
+    @ManyToOne
+    @JoinColumn(name = "roster_user_id", foreignKey = @ForeignKey(name = "fk_roster_user_id"))
+    @ToString.Exclude
+    private RosterUser rosterUser;
 
     @Column(name = "week_num")
     private Integer weekNum;
 
-    @Override
-    public String toString() {
-        return "WeekScoreId{" + "rosterUserId='" + rosterUserId + '\'' + ", weekNum=" + weekNum + '}';
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof WeekScoreId weekScoreId) {
-            return this.rosterUserId.equals(weekScoreId.rosterUserId) && this.weekNum.equals(weekScoreId.weekNum);
-        }
-        return false;
-    }
-
-    public int hashCode() {
-        return Objects.hash(this.rosterUserId, this.weekNum);
+    @ToString.Include
+    private Long rosterUserId() {
+        return Optional.ofNullable(rosterUser).map(RosterUser::getId).orElse(null);
     }
 }

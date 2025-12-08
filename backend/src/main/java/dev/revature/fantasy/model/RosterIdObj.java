@@ -2,19 +2,22 @@ package dev.revature.fantasy.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Optional;
 
 @Embeddable
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RosterIdObj {
 
-    @Column(name = "roster_user_id")
-    private long rosterUserId;
+    @ManyToOne
+    @JoinColumn(name = "roster_user_id", foreignKey = @ForeignKey(name = "fk_roster_user_id"))
+    @ToString.Exclude
+    private RosterUser rosterUser;
 
     @Column(name = "player_id")
     private String playerId;
@@ -22,10 +25,8 @@ public class RosterIdObj {
     @Column(name = "week_num")
     private int weekNum;
 
-    public String toString() {
-        return "RosterIdObj{" + "rosterUserId="
-                + rosterUserId + ", playerId='"
-                + playerId + '\'' + ", weekNum="
-                + weekNum + '}';
+    @ToString.Include
+    private Long rosterUserId() {
+        return Optional.ofNullable(rosterUser).map(RosterUser::getId).orElse(null);
     }
 }
