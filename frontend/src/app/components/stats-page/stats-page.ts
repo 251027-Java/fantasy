@@ -1,19 +1,10 @@
 import { NgClass, NgComponentOutlet } from '@angular/common';
 import { Component, Type } from '@angular/core';
-<<<<<<< HEAD
-import { LuckScores } from '../luck-scores/luck-scores';
-import { TestScores } from '../test-scores/test-scores';
-import { NgComponentOutlet, NgClass } from '@angular/common';
-import { StatsService } from '../../services/stats-service';
-import { ThemeService } from '../../services/theme-service';
-import { Router } from '@angular/router';
-=======
 import { Router } from '@angular/router';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
->>>>>>> a0d621a3fbd918c0a66d15a2f5c908260cea8ef7
 
 interface Tab {
 	namePrebold: string;
@@ -58,11 +49,6 @@ export class StatsPage {
 
 	currentLeagueName: string = '';
 
-<<<<<<< HEAD
-  constructor(private router: Router, private statsService: StatsService, themeServ: ThemeService){
-    this.themeService = themeServ;
-  }
-=======
 	constructor(
 		private router: Router,
 		private statsService: StatsService,
@@ -70,7 +56,6 @@ export class StatsPage {
 	) {
 		this.themeService = themeServ;
 	}
->>>>>>> a0d621a3fbd918c0a66d15a2f5c908260cea8ef7
 
 	selectTab(tab: Tab) {
 		this.activeTab.isActive = false;
@@ -88,14 +73,7 @@ export class StatsPage {
 	ngOnInit() {
 		this.currentLeagueName = this.statsService.getCurrentLeagueName();
 
-<<<<<<< HEAD
-    this.statsService.getLeagueLuckStats();
-    this.selectTab(this.tabs[0]);
-  }
-}
-=======
 		this.statsService.getLeagueStats(); /* TODO: delete this line for the final product */
 		this.selectTab(this.tabs[0]);
 	}
 }
->>>>>>> a0d621a3fbd918c0a66d15a2f5c908260cea8ef7
