@@ -32,7 +32,7 @@ public class LeagueService {
         return league.isPresent() ? league.get().getNumRosters() : -1;
     }
 
-    public League getReference(String id) {
+    public League lazyFetch(String id) {
         return leagueRepo.getReferenceById(id);
     }
 }

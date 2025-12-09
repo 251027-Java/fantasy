@@ -90,9 +90,6 @@ public class FantasyStatsService {
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
         // TODO: check if there are weekscores already in database for this league
         // and that there are the correct amount of weeks, and
-
-        League league = leagueService.getReference(leagueId);
-
         // get the nfl state info from sleeper
         SleeperNFLStateResponse nflState = ResponseFormatter.getNFLState();
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
@@ -142,6 +139,8 @@ public class FantasyStatsService {
         // starting from the first week we don't have
         weekScores.clear();
         List<WeekScore> weekScoresToPersist = new ArrayList<>();
+        League league = leagueService.lazyFetch(leagueId);
+
         for (int week = numWeeksFound + 1; week <= numWeeksToCompute; week++) {
             var matchups = ResponseFormatter.getMatchupsFromLeagueIdAndWeek(leagueId, week);
             // convertTo WeekScores for computation
