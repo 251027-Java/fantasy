@@ -36,7 +36,11 @@ export class LuckScores {
 		['ties', 'Ties'],
 	]);
 
-	constructor(statsServ: StatsService, themeServ: ThemeService, private ngZone: NgZone) {
+	constructor(
+		statsServ: StatsService,
+		themeServ: ThemeService,
+		private ngZone: NgZone,
+	) {
 		this.statsService = statsServ;
 		this.themeService = themeServ;
 	}
@@ -81,7 +85,7 @@ export class LuckScores {
 		const input = event.target as HTMLInputElement;
 		if (input !== undefined) {
 			const doc = document.documentElement;
-  			const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
+			const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
 
 			this.statsService.setMemberIsVisible(member, input.checked);
 
