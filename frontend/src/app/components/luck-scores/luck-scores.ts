@@ -5,7 +5,6 @@ import { Score } from '../../interface/stats-response';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
-import { take } from 'rxjs';
 
 export type luckStatColumn = keyof Score | 'name' | 'none';
 
@@ -83,23 +82,23 @@ export class LuckScores {
 
 	onMemberFilterChange(event: Event, member: string) {
 		const input = event.target as HTMLInputElement;
-		if (input !== undefined) {
-			const doc = document.documentElement;
-			const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
+		if (!input) return;
 
-			this.statsService.setMemberIsVisible(member, input.checked);
+		const doc = document.documentElement;
+		const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
 
-			//helps a bit with scrolling issues when checking/unchecking, but doesn't fully solve the issues
-			this.ngZone.onStable.pipe(take(1)).subscribe(() => {
-				const observer = new ResizeObserver(() => {
-					doc.scrollTop = doc.scrollHeight - doc.clientHeight - offset;
+		this.statsService.setMemberIsVisible(member, input.checked);
 
-					observer.disconnect();
-				});
+		const style = doc.style.cssText;
+		doc.style.overflow = 'hidden';
 
-				observer.observe(doc);
+		this.ngZone.runOutsideAngular(() => {
+			requestAnimationFrame(() => {
+				doc.scrollTop = doc.scrollHeight - doc.clientHeight - offset;
+
+				doc.style.cssText = style;
 			});
-		}
+		});
 	}
 	onColumnFilterChange(event: Event, column: keyof Score) {
 		const input = event.target as HTMLInputElement;
