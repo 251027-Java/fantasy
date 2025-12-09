@@ -2,10 +2,17 @@ ci := env('CI', 'false')
 maven_ci_args := if ci == 'true' { '-B' } else { '' }
 maven := './mvnw ' + maven_ci_args
 jar_loc := 'target/fantasy-0.0.1.jar'
-db_container := 'fantasy-db'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
-ddl_file := 'scripts/init.sql'
+ddl_file := 'scripts/schema.sql'
 package_name := 'dev.revature.fantasy'
+
+# database related
+
+db_container := 'fantasy-db'
+db_username := 'postgres'
+db_password := 'secret'
+db_name_dev := 'dev'
+db_name_prod := 'prod'
 
 alias refresh := compile
 
@@ -61,17 +68,17 @@ debug: clean
 compile:
     {{ maven }} compile
 
-_db-create:
-    docker run --name {{ db_container }} -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres
-
-_db-init filepath:
-    docker cp {{ filepath }} {{ db_container }}:/tmp/dbdata
-    @sleep 2
-    docker exec {{ db_container }} psql -U postgres -v ON_ERROR_STOP=1 -q -f tmp/dbdata
-
-# create the container and set up the database
+# create a container with empty databases
 [group('db')]
-db-create: _db-create (_db-init ddl_file)
+db-create-empty:
+    docker run --name {{ db_container }} -e POSTGRES_USER={{ db_username }} -e POSTGRES_PASSWORD={{ db_password }} -p 5432:5432 -d postgres
+    @sleep 2
+    docker exec {{ db_container }} psql -U {{ db_username }} -v ON_ERROR_STOP=1 -q -c "CREATE DATABASE {{ db_name_prod }}"
+    docker exec {{ db_container }} psql -U {{ db_username }} -v ON_ERROR_STOP=1 -q -c "CREATE DATABASE {{ db_name_dev }}"
+
+# create the container and set up the prod database with defined tables
+[group('db')]
+db-create: db-create-empty (db-import db_name_prod ddl_file)
 
 # destroy the database container
 [group('db')]
@@ -88,14 +95,17 @@ db-start:
 db-stop:
     docker stop {{ db_container }}
 
-# export the database
+# import data into a database
 [group('db')]
-db-export filepath='fantasy.data':
-    docker exec {{ db_container }} pg_dump -U postgres -F p postgres > {{ filepath }}
+db-import dbname filepath:
+    docker cp {{ filepath }} {{ db_container }}:/tmp/dbdata
+    @sleep 2
+    docker exec {{ db_container }} psql -U {{ db_username }} -d {{ dbname }} -v ON_ERROR_STOP=1 -q -f tmp/dbdata
 
-# create container with a given data file
+# export a database
 [group('db')]
-db-create-with filepath: _db-create (_db-init filepath)
+db-export dbname:
+    docker exec {{ db_container }} pg_dump -U {{ db_username }} -F p {{ dbname }} > {{ dbname }}.data
 
 # runs tests and generates coverage
 [group('test')]
