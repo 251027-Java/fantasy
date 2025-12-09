@@ -1,17 +1,17 @@
 package dev.revature.fantasy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Embeddable
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class WeekScoreId {
@@ -27,5 +27,17 @@ public class WeekScoreId {
     @ToString.Include
     private Long rosterUserId() {
         return Optional.ofNullable(rosterUser).map(RosterUser::getId).orElse(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        WeekScoreId that = (WeekScoreId) o;
+        return Objects.equals(rosterUserId(), that.rosterUserId()) && Objects.equals(weekNum, that.weekNum);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rosterUserId(), weekNum);
     }
 }

@@ -7,7 +7,9 @@ import lombok.*;
 
 @Entity
 @Table(name = "system_metadata")
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemMetadata {

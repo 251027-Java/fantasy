@@ -1,10 +1,7 @@
 package dev.revature.fantasy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -14,7 +11,9 @@ import java.util.Optional;
 @Table(
         name = "roster_user",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"roster_id", "league_id"})})
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class RosterUser {
