@@ -39,7 +39,6 @@
         week_num integer not null,
         score float(53),
         roster_user_id bigint not null,
-        league_id varchar(255) not null,
         primary key (roster_user_id, week_num)
     );
 
@@ -59,10 +58,4 @@
        add constraint fk_roster_user_id 
        foreign key (roster_user_id) 
        references roster_user 
-       on delete cascade;
-
-    alter table if exists week_score 
-       add constraint fk_league_id 
-       foreign key (league_id) 
-       references league 
        on delete cascade;

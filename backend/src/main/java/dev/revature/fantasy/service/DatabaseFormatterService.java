@@ -1,8 +1,11 @@
 package dev.revature.fantasy.service;
 
-import dev.revature.fantasy.dto.*;
+import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.logger.GlobalLogger;
-import dev.revature.fantasy.model.*;
+import dev.revature.fantasy.model.League;
+import dev.revature.fantasy.model.User;
+import dev.revature.fantasy.model.WeekScore;
+import dev.revature.fantasy.model.WeekScoreId;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
 import org.springframework.stereotype.Service;
 
@@ -79,18 +82,17 @@ public class DatabaseFormatterService {
      * @param sleeperMatchups the sleeper matchup responses
      * @return the list of matchups to be inserted to the database
      */
-    public List<WeekScore> formatMatchups(List<SleeperMatchupResponse> sleeperMatchups, League league, int week) {
+    public List<WeekScore> formatMatchups(List<SleeperMatchupResponse> sleeperMatchups, String leagueId, int week) {
         List<WeekScore> weekScores = new ArrayList<>();
         for (SleeperMatchupResponse matchup : sleeperMatchups) {
-            var rosterUser =
-                    this.rosterUserService.getRosterUserByRosterIdAndLeagueId(matchup.getRosterId(), league.getId());
+            var rosterUser = this.rosterUserService.getRosterUserByRosterIdAndLeagueId(matchup.getRosterId(), leagueId);
             if (rosterUser.isEmpty()) { // should never be empty but
                 GlobalLogger.error(
-                        "roster is empty for rosterId: " + matchup.getRosterId() + " and leagueId: " + league.getId());
+                        "roster is empty for rosterId: " + matchup.getRosterId() + " and leagueId: " + leagueId);
                 continue;
             }
             WeekScoreId weekScoreId = new WeekScoreId(rosterUser.get(), week);
-            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints(), league);
+            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints());
             weekScores.add(weekScore);
         }
         return weekScores;

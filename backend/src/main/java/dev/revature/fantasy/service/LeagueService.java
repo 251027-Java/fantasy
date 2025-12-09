@@ -31,8 +31,4 @@ public class LeagueService {
         Optional<League> league = this.leagueRepo.findById(leagueId);
         return league.isPresent() ? league.get().getNumRosters() : -1;
     }
-
-    public League lazyFetch(String id) {
-        return leagueRepo.getReferenceById(id);
-    }
 }
