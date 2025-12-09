@@ -1,6 +1,8 @@
 package dev.revature.fantasy.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +19,5 @@ public class WeekScore {
     @EmbeddedId
     private WeekScoreId id;
 
-    @Column(name = "score")
     private Double score;
-
-    @Column(name = "league_id")
-    private String leagueId;
 }
