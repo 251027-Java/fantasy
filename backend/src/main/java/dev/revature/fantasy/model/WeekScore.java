@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Optional;
 
@@ -21,8 +23,9 @@ public class WeekScore {
     private Double score;
 
     @ManyToOne
-    @JoinColumn(name = "league_id", foreignKey = @ForeignKey(name = "fk_league_id"))
+    @JoinColumn(name = "league_id", foreignKey = @ForeignKey(name = "fk_league_id"), nullable = false)
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private League league;
 
     @ToString.Include

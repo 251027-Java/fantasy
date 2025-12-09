@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Optional;
 
@@ -21,17 +23,19 @@ public class RosterUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment in DB
     private Long id;
 
-    @Column(name = "roster_id")
+    @Column(name = "roster_id", nullable = false)
     private Integer rosterId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_id"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_id"), nullable = false)
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "league_id", foreignKey = @ForeignKey(name = "fk_league_id"))
+    @JoinColumn(name = "league_id", foreignKey = @ForeignKey(name = "fk_league_id"), nullable = false)
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private League league;
 
     private Integer wins;
