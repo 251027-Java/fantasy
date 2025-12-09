@@ -10,6 +10,7 @@ target/
 node_modules
 package-lock.json
 package.json
+.temp
 
 ### STS ###
 .apt_generated
