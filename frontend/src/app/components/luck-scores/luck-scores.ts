@@ -90,7 +90,6 @@ export class LuckScores {
 		this.statsService.setMemberIsVisible(member, input.checked);
 
 		const style = doc.style.cssText;
-		doc.style.overflow = 'hidden';
 
 		this.ngZone.runOutsideAngular(() => {
 			requestAnimationFrame(() => {
