@@ -70,7 +70,7 @@ public class FantasyStatsService {
 
         // convert to dto (LoginResponse)
         LeagueDto[] leagueResponses = databaseLeagues.stream()
-                .map(league -> new LeagueDto(league.getLeagueId(), league.getLeagueName()))
+                .map(league -> new LeagueDto(league.getId(), league.getName()))
                 .toArray(LeagueDto[]::new);
 
         LoginDto loginResponse = new LoginDto(usernameResponse.getUserId(), leagueResponses);
@@ -89,7 +89,9 @@ public class FantasyStatsService {
      */
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
         // TODO: check if there are weekscores already in database for this league
-        // and that there are the correct amount of weeks, and users
+        // and that there are the correct amount of weeks, and
+
+        League league = leagueService.getReference(leagueId);
 
         // get the nfl state info from sleeper
         SleeperNFLStateResponse nflState = ResponseFormatter.getNFLState();
@@ -143,7 +145,7 @@ public class FantasyStatsService {
         for (int week = numWeeksFound + 1; week <= numWeeksToCompute; week++) {
             var matchups = ResponseFormatter.getMatchupsFromLeagueIdAndWeek(leagueId, week);
             // convertTo WeekScores for computation
-            var scores = this.databaseFormatterService.formatMatchups(matchups, leagueId, week);
+            var scores = this.databaseFormatterService.formatMatchups(matchups, league, week);
 
             weekScoresToPersist.addAll(scores);
         }

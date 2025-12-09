@@ -30,12 +30,12 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
     public List<RosterUser> batchUpsert(List<RosterUser> rosterUsers) {
         String sql =
                 """
-            INSERT INTO roster_user (roster_id, user_id_num, league_id, wins, ties, losses,
+            INSERT INTO roster_user (roster_id, user_id, league_id, wins, ties, losses,
                                      fpts_decimal, fpts_against_decimal, fpts_against, fpts)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT (roster_id, league_id)
             DO UPDATE SET
-                user_id_num = EXCLUDED.user_id_num,
+                user_id = EXCLUDED.user_id,
                 wins = EXCLUDED.wins,
                 ties = EXCLUDED.ties,
                 losses = EXCLUDED.losses,
@@ -44,7 +44,7 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
                 fpts_against = EXCLUDED.fpts_against,
                 fpts = EXCLUDED.fpts
             RETURNING
-                roster_user_id
+                id
             """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -55,8 +55,8 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
                         RosterUser rosterUser = rosterUsers.get(i);
                         ps.setInt(1, rosterUser.getRosterId());
-                        ps.setString(2, rosterUser.getUserId());
-                        ps.setString(3, rosterUser.getLeagueId());
+                        ps.setString(2, rosterUser.getUser().getId());
+                        ps.setString(3, rosterUser.getLeague().getId());
                         ps.setInt(4, rosterUser.getWins());
                         ps.setInt(5, rosterUser.getTies());
                         ps.setInt(6, rosterUser.getLosses());
@@ -79,7 +79,7 @@ public class RosterUserRepoImpl implements RosterUserRepoCustom {
         for (int i = 0; i < rosterUsers.size(); i++) {
             var row = keys.get(i);
             var user = rosterUsers.get(i);
-            user.setRosterUserId((Long) row.get("roster_user_id"));
+            user.setId((Long) row.get("id"));
         }
 
         return rosterUsers;

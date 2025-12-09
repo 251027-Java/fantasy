@@ -79,17 +79,18 @@ public class DatabaseFormatterService {
      * @param sleeperMatchups the sleeper matchup responses
      * @return the list of matchups to be inserted to the database
      */
-    public List<WeekScore> formatMatchups(List<SleeperMatchupResponse> sleeperMatchups, String leagueId, int week) {
+    public List<WeekScore> formatMatchups(List<SleeperMatchupResponse> sleeperMatchups, League league, int week) {
         List<WeekScore> weekScores = new ArrayList<>();
         for (SleeperMatchupResponse matchup : sleeperMatchups) {
-            var rosterUser = this.rosterUserService.getRosterUserByRosterIdAndLeagueId(matchup.getRosterId(), leagueId);
+            var rosterUser =
+                    this.rosterUserService.getRosterUserByRosterIdAndLeagueId(matchup.getRosterId(), league.getId());
             if (rosterUser.isEmpty()) { // should never be empty but
                 GlobalLogger.error(
-                        "roster is empty for rosterId: " + matchup.getRosterId() + " and leagueId: " + leagueId);
+                        "roster is empty for rosterId: " + matchup.getRosterId() + " and leagueId: " + league.getId());
                 continue;
             }
-            WeekScoreId weekScoreId = new WeekScoreId(rosterUser.get().getRosterUserId(), week);
-            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints(), leagueId);
+            WeekScoreId weekScoreId = new WeekScoreId(rosterUser.get(), week);
+            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints(), league);
             weekScores.add(weekScore);
         }
         return weekScores;
