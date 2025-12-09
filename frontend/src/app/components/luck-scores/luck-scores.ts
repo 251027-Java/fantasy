@@ -89,13 +89,9 @@ export class LuckScores {
 
 		this.statsService.setMemberIsVisible(member, input.checked);
 
-		const style = doc.style.cssText;
-
 		this.ngZone.runOutsideAngular(() => {
 			requestAnimationFrame(() => {
 				doc.scrollTop = doc.scrollHeight - doc.clientHeight - offset;
-
-				doc.style.cssText = style;
 			});
 		});
 	}
