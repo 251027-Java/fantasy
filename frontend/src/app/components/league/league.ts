@@ -1,11 +1,14 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
+import { LoginResponse } from '../../interface/login-response';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 
@@ -14,6 +17,7 @@ import { StatsService } from '../../services/stats-service';
 	imports: [
 		HlmFormFieldImports,
 		HlmSelectImports,
+		HlmInput,
 		HlmSelectImports,
 		BrnSelectImports,
 		HlmButtonImports,

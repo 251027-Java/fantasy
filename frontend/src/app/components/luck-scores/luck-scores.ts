@@ -1,10 +1,11 @@
 /** biome-ignore-all lint/style/useImportType: idk */
 /** biome-ignore-all assist/source/organizeImports: whatever */
-import { Component } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Score } from '../../interface/stats-response';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
+import { take } from 'rxjs';
 
 export type luckStatColumn = keyof Score | 'name' | 'none';
 
@@ -21,6 +22,8 @@ export class LuckScores {
 	sortColumn: luckStatColumn = 'none';
 	sortAsc: boolean = true;
 
+	@ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+
 	readonly headers: Map<keyof Score, string> = new Map<keyof Score, string>([
 		['totalLuck', 'Total Luck'],
 		['medLuck', 'Median Luck'],
@@ -33,7 +36,11 @@ export class LuckScores {
 		['ties', 'Ties'],
 	]);
 
-	constructor(statsServ: StatsService, themeServ: ThemeService) {
+	constructor(
+		statsServ: StatsService,
+		themeServ: ThemeService,
+		private ngZone: NgZone,
+	) {
 		this.statsService = statsServ;
 		this.themeService = themeServ;
 	}
@@ -42,7 +49,14 @@ export class LuckScores {
 		return this.headers.get(key as keyof Score) || '';
 	}
 
-	toggleSort(column: luckStatColumn) {
+	getNumDataColumnsVisible(): number {
+		if (!this.statsService.getStatsLoaded('Luck')) return this.headers.size;
+		return this.statsService.getNumDataColumnsVisible('Luck');
+	}
+
+	toggleSort(column: luckStatColumn): void {
+		if (!this.statsService.getStatsLoaded('Luck')) return;
+
 		if (this.sortColumn === column) {
 			this.sortAsc = !this.sortAsc;
 		} else {
@@ -69,8 +83,23 @@ export class LuckScores {
 
 	onMemberFilterChange(event: Event, member: string) {
 		const input = event.target as HTMLInputElement;
-		if (input !== undefined)
+		if (input !== undefined) {
+			const doc = document.documentElement;
+			const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
+
 			this.statsService.setMemberIsVisible(member, input.checked);
+
+			//helps a bit with scrolling issues when checking/unchecking, but doesn't fully solve the issues
+			this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+				const observer = new ResizeObserver(() => {
+					doc.scrollTop = doc.scrollHeight - doc.clientHeight - offset;
+
+					observer.disconnect();
+				});
+
+				observer.observe(doc);
+			});
+		}
 	}
 	onColumnFilterChange(event: Event, column: keyof Score) {
 		const input = event.target as HTMLInputElement;
@@ -79,4 +108,7 @@ export class LuckScores {
 	}
 
 	keepInsertionOrder = () => 0;
+	caseInsensitiveSort = (a: any, b: any) => {
+		return a.key.toLowerCase().localeCompare(b.key.toLowerCase());
+	};
 }
