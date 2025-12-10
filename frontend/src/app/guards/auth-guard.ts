@@ -25,7 +25,8 @@ export const authGuard: CanActivateFn = (
 				// 4. User is NOT logged in: Block navigation and redirect
 				// The router.createUrlTree creates a URL object representing the login page
 				console.log('Access denied. Redirecting to login.');
-				return router.createUrlTree(['/login']);
+				// Usually allows you to access a given amount of pages, for now, just the login homepage.
+				return router.createUrlTree(['']);
 			}
 		}),
 	);
