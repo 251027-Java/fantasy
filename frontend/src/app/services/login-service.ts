@@ -43,7 +43,7 @@ export class LoginService {
 			);
 
 			return resp;
-		} catch (InvalidUsernameException) {
+		} catch (_InvalidUsernameException) {
 			console.log('Invalid Username Exception caught in LoginService');
 		}
 
