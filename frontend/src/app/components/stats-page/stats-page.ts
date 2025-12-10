@@ -15,6 +15,7 @@ interface Tab {
 	label: string;
 	component: Type<any>;
 	isActive: boolean;
+	imageBackgroundClass: string;
 }
 
 @Component({
@@ -34,6 +35,7 @@ export class StatsPage {
 			label: 'Luck Scores',
 			component: LuckScores,
 			isActive: false,
+			imageBackgroundClass: 'luckstatsbackground',
 		},
 		{
 			namePrebold: '',
@@ -42,12 +44,14 @@ export class StatsPage {
 			label: 'Test Scores',
 			component: TestScores,
 			isActive: false,
+			imageBackgroundClass: 'testbackground',
 		},
 	];
 	activeTab: Tab = this.tabs[0];
 	displayedComponentTitlePrebold: string = '';
 	displayedComponentTitleBold: string = '';
 	displayedComponentTitlePostbold: string = '';
+	imageBackgroundClass: string = '';
 
 	currentLeagueName: string = '';
 
@@ -65,6 +69,7 @@ export class StatsPage {
 		this.displayedComponentTitlePrebold = tab.namePrebold;
 		this.displayedComponentTitleBold = tab.nameBold;
 		this.displayedComponentTitlePostbold = tab.namePostbold;
+		this.imageBackgroundClass = tab.imageBackgroundClass;
 		tab.isActive = true;
 	}
 

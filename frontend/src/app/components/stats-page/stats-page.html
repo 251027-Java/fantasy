@@ -1,4 +1,4 @@
-<div class="min-h-screen statsbackground" style="padding: 0 0 0.5%;">
+<div class="min-h-screen" style="padding: 0 0 0.5%;" [ngClass]="imageBackgroundClass">
     <div class="flex justify-between items-center">
         <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
             &lt;&lt; Leagues
