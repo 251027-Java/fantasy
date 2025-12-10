@@ -3,7 +3,13 @@ import { League } from './components/league/league';
 import { Login } from './components/login/login';
 import { StatsPage } from './components/stats-page/stats-page';
 
+import { GoogleAuth } from './components/google-auth/google-auth';
+
 export const routes: Routes = [
+	{
+		path: 'auth',
+		component: GoogleAuth,
+	},
 	{
 		path: '',
 		component: Login,
