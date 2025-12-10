@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
 	FormControl,
 	FormGroup,
@@ -14,6 +14,9 @@ import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { LoginResponse } from '../../interface/login-response';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
+import { LoginResponse } from '../../interface/login-response';
+import { AuthService } from '../../services/auth';
+
 
 @Component({
 	selector: 'app-login',
@@ -37,12 +40,15 @@ export class Login implements OnInit {
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
+		private authService: AuthService,
+		private cdRef: ChangeDetectorRef
 	) {}
 
 	ngOnInit(): void {
-		this.loginControl.valueChanges.subscribe((value) => {
-			console.log('Login input changed to:', value.user);
-		});
+		// this.loginControl.valueChanges.subscribe((value) => {
+		// 	console.log('Login input changed to:', value.user);
+		// });
+		this.cdRef.detectChanges();
 	}
 
 	Login(): void {
