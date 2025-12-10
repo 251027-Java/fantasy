@@ -45,7 +45,7 @@ public class Stats {
         Map<Long, List<Double>> medianLuckScoresByWeek = new HashMap<>();
         // init the map with empty lists
         for (RosterUser user : rosterUsers) {
-            medianLuckScoresByWeek.put(user.getRosterUserId(), new ArrayList<>());
+            medianLuckScoresByWeek.put(user.getId(), new ArrayList<>());
         }
 
         Map<Long, Double> totalMedianLuckScores = new HashMap<>();
@@ -75,8 +75,8 @@ public class Stats {
                 double playerScore = ws.getScore();
                 double medianOffset = playerScore - median;
                 double luckScore = calculateLuckAdjustment(medianOffset, LUCK_CUTOFF, MEDIAN_SCALE_FACTOR);
-                long rosterUserId = ws.getId().getRosterUserId();
-                medianLuckScoresByWeek.get(ws.getId().getRosterUserId()).add(luckScore);
+                long rosterUserId = ws.getId().getRosterUser().getId();
+                medianLuckScoresByWeek.get(rosterUserId).add(luckScore);
                 double currTotalLuckScore = totalMedianLuckScores.getOrDefault(rosterUserId, 0.0);
                 totalMedianLuckScores.put(rosterUserId, currTotalLuckScore + luckScore);
             }
@@ -106,12 +106,11 @@ public class Stats {
 
         Map<Long, AllPlayData> allPlayData = new HashMap<>();
 
-        List<Long> rosterUserIds =
-                rosterUsers.stream().map(RosterUser::getRosterUserId).toList();
+        List<Long> rosterUserIds = rosterUsers.stream().map(RosterUser::getId).toList();
 
         // Initialize counters
         for (RosterUser rosterUser : rosterUsers) {
-            Long id = rosterUser.getRosterUserId();
+            Long id = rosterUser.getId();
 
             allPlayWins.put(id, 0);
             allPlayLosses.put(id, 0);
@@ -129,12 +128,13 @@ public class Stats {
                 for (WeekScore s2 : currWeekScores) {
                     if (s1.equals(s2)) continue; // skip self
 
+                    Long id = s1.getId().getRosterUser().getId();
                     if (s1.getScore() > s2.getScore()) {
-                        allPlayWins.merge(s1.getId().getRosterUserId(), 1, Integer::sum);
+                        allPlayWins.merge(id, 1, Integer::sum);
                     } else if (s1.getScore() < s2.getScore()) {
-                        allPlayLosses.merge(s1.getId().getRosterUserId(), 1, Integer::sum);
+                        allPlayLosses.merge(id, 1, Integer::sum);
                     } else {
-                        allPlayTies.merge(s1.getId().getRosterUserId(), 1, Integer::sum);
+                        allPlayTies.merge(id, 1, Integer::sum);
                     }
                 }
             }

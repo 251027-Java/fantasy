@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { toast } from 'ngx-sonner';
+import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
 
@@ -86,30 +87,38 @@ export class StatsService {
 				// Return the resp object containing the mapped stats
 				return resp;
 			}),
+			catchError(() => {
+				this.displayError();
+				return of({ stats: [] } as StatsResponse);
+			}),
 		);
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
 		resp.subscribe((data) => {
-			// set the data
-			this.luckStatsResponse.set(data);
+			try {
+				// set the data
+				this.luckStatsResponse.set(data);
 
-			/* set the filters (all initialized to all true) */
+				/* set the filters (all initialized to all true) */
 
-			// filter for members of the league
-			this.luckStatsResponse().stats.forEach((member) => {
-				this.filteredLeagueMembers.set(member.name, true);
-			});
+				// filter for members of the league
+				this.luckStatsResponse().stats.forEach((member) => {
+					this.filteredLeagueMembers.set(member.name, true);
+				});
 
-			// filter for luck stats
-			this.filteredStats.set(
-				'Luck',
-				new Map<keyof Score, boolean>(
-					Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
-						k as keyof Score,
-						true,
-					]),
-				),
-			);
+				// filter for luck stats
+				this.filteredStats.set(
+					'Luck',
+					new Map<keyof Score, boolean>(
+						Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
+							k as keyof Score,
+							true,
+						]),
+					),
+				);
+			} catch (_error) {
+				this.displayError();
+			}
 		});
 	}
 
@@ -135,6 +144,15 @@ export class StatsService {
 		return numColumns;
 	}
 
+	getStatsLoaded(statType: StatsType): boolean {
+		switch (statType) {
+			case 'Luck':
+				return this.luckStatsResponse().stats.length > 0;
+			default:
+				return false;
+		}
+	}
+
 	setMemberIsVisible(member: string, isVisible: boolean): void {
 		this.filteredLeagueMembers.set(member, isVisible);
 	}
@@ -151,6 +169,8 @@ export class StatsService {
 		return this.filteredLeagueMembers.get(member) || false;
 	}
 	getColumnIsVisible(statType: StatsType, columnName: keyof any): boolean {
+		if (!this.getStatsLoaded(statType)) return true;
+
 		const map: Map<keyof any, boolean> | undefined =
 			this.filteredStats.get(statType);
 		if (map !== undefined) return map.get(columnName) || false;
@@ -181,7 +201,7 @@ export class StatsService {
 			this.currentLeagueId = newLeagueId;
 			this.currentLeagueName = newLeagueName;
 
-			this.getLeagueStats();
+			//this.getLeagueStats();
 		}
 	}
 	getCurrentLeagueId(): string {
@@ -201,5 +221,15 @@ export class StatsService {
 		//reset all filters
 		this.filteredLeagueMembers = new Map<string, boolean>();
 		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
+	}
+
+	private displayError(): void {
+		toast('Error loading stats for this league.', {
+			action: {
+				label: 'Close',
+				onClick: () => {},
+			},
+			duration: Infinity,
+		});
 	}
 }

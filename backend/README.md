@@ -22,14 +22,14 @@ just -l
 
 ## Quick start
 
-To quickly get started, run the following commands:
+To get started, run the following commands:
 
 ```sh
 just db-create # create and start the database
 just run # start the server
 ```
 
-This will launch a PostgreSQL database in a docker container. If you'd like to connect to this database elsewhere, you can use the following connection string: `postgresql://postgres:secret@localhost:5432/postgres`.
+This will launch a PostgreSQL database in a docker container. If you'd like to connect to this database elsewhere, you can use the following connection string: `postgresql://postgres:secret@localhost:5432/dev`.
 
 In addition, the server will be launched and can be accessed at `http://localhost:8080`. While the server is running, you can access the documentation of our endpoints at `http://localhost:8080/api`.
 
@@ -47,6 +47,16 @@ just run
 
 The backend will be accessible through `http://localhost:8080`. While running, documentation of our endpoints will be located at `http://localhost:8080/api`.
 
+With a development server, the tables in the database are automatically updated to match existing entities found in the `dev.revature.fantasy` package. 
+
+### Production server
+
+Unlike a development server, the production server does not automatically generate tables. In addition, it uses a separate database with the connection string: `postgresql://postgres:secret@localhost:5432/prod`. 
+
+```sh
+just prod
+```
+
 ### Related running commands
 
 To launch with the debugger:
@@ -55,44 +65,50 @@ To launch with the debugger:
 just debug
 ```
 
-To trigger hot reload during development:
+To trigger hot reload while running:
 
 ```sh
 just compile
 just refresh # an alias for compile
 ```
 
-To launch a production server:
-
-```sh
-just prod
-```
-
 ## Database management
 
-A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection string if necessary: `postgresql://postgres:secret@localhost:5432/postgres`. 
+A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection strings if necessary: 
+- Development: `postgresql://postgres:secret@localhost:5432/dev` 
+- Production: `postgresql://postgres:secret@localhost:5432/prod` 
 
-To view the DDL initialization of the database, view the file, `scripts/init.sql`. See [DDL generation](#ddl-generation) for more information on this file.
+To view the DDL initialization of the production database, view the file, `scripts/schema.sql`. See [DDL generation](#ddl-generation) for more information on this file.
 
 ### Creation
 
-Create and start a fresh database with no initial data:
+Create and start a docker container with a dev database (no tables) and prod database (with initial tables):
 
 ```sh
 just db-create
 ```
 
-Create and start a database with imported data:
+To create and start a database with initial data, run:
 
 ```sh
-just db-create-with <filepath>
+just db-create-empty
+just db-import <dbname> <filepath>
+```
+
+#### Example
+
+Creating a new container with initial data for the `dev` database from a file called `dev.data`:
+
+```sh
+just db-create-empty
+just db-import dev dev.data
 ```
 
 ### DDL generation
 
 The tables within the database are defined using JPA entities. To verify integrity and structure of the database, a DDL script containing the table definitions and constraints can be generated and used when setting up the database, especially for a production environment.
 
-The following command will generate the DDL script at `scripts/init.sql`:
+The following command will generate the DDL script at `scripts/schema.sql`:
 
 ```sh
 just ddl
@@ -103,12 +119,20 @@ just ddl
 Export the data from the database:
 
 ```sh
-just db-export [filepath]
+just db-export <dbname>
+```
+
+#### Example
+
+Exporting data from the `prod` database:
+
+```sh
+just db-export prod
 ```
 
 ### Start
 
-Start the database:
+Start the database container:
 
 ```sh
 just db-start
@@ -116,7 +140,7 @@ just db-start
 
 ### Stop
 
-Stop the database:
+Stop the database container:
 
 ```sh
 just db-stop
@@ -124,7 +148,7 @@ just db-stop
 
 ### Destroy/delete
 
-Destroy the database:
+Destroy the database container:
 
 ```sh
 just db-destroy
@@ -140,7 +164,7 @@ just test
 
 ## Building
 
-Generate a jar located in the `target/` directory:
+Generate a jar of the server located in the `target/` directory:
 
 ```sh
 just build
