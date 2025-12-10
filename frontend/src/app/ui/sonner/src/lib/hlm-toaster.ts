@@ -2,6 +2,7 @@ import {
 	booleanAttribute,
 	ChangeDetectionStrategy,
 	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
 	computed,
 	input,
 	numberAttribute,
@@ -14,8 +15,8 @@ import { NgxSonnerToaster, type ToasterProps } from 'ngx-sonner';
 	selector: 'hlm-toaster',
 	imports: [NgxSonnerToaster],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	template: `
-		<ngx-sonner-toaster
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	template: `<ngx-sonner-toaster
 			[class]="_computedClass()"
 			[invert]="invert()"
 			[theme]="theme()"
@@ -30,8 +31,7 @@ import { NgxSonnerToaster, type ToasterProps } from 'ngx-sonner';
 			[offset]="offset()"
 			[dir]="dir()"
 			[style]="userStyle()"
-		/>
-	`,
+		/>`,
 })
 export class HlmToaster {
 	public readonly invert = input<ToasterProps['invert'], boolean | string>(

@@ -11,12 +11,8 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { LoginResponse } from '../../interface/login-response';
-import { LoginService } from '../../services/login-service';
-import { StatsService } from '../../services/stats-service';
-import { LoginResponse } from '../../interface/login-response';
 import { AuthService } from '../../services/auth';
-
+import { LoginService } from '../../services/login-service';
 
 @Component({
 	selector: 'app-login',
@@ -41,7 +37,7 @@ export class Login implements OnInit {
 		private router: Router,
 		private loginServe: LoginService,
 		private authService: AuthService,
-		private cdRef: ChangeDetectorRef
+		private cdRef: ChangeDetectorRef,
 	) {}
 
 	ngOnInit(): void {
@@ -65,12 +61,13 @@ export class Login implements OnInit {
 					this.loginServe.LeagueResponse.set(response);
 					console.log('Login successful');
 					console.log(
-						'These are the leagues: ' + JSON.stringify(response.leagues),
+						`These are the leagues: ${JSON.stringify(response.leagues)}`,
 					);
+					this.authService.Login();
 					this.router.navigateByUrl('league');
 				},
 				error: (err: string) => {
-					console.log('Login failed: ' + err);
+					console.log(`Login failed: ${err}`);
 				},
 			});
 		} else {
