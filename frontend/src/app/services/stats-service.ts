@@ -27,9 +27,8 @@ export class StatsService {
 	>();
 
 	// Current league info is hardcoded for now
-	// TODO: initialize these strings to "" for the final product
-	private currentLeagueId: string = '1252005113573150720';
-	private currentLeagueName: string = 'Rice League';
+	private currentLeagueId: string = '';
+	private currentLeagueName: string = '';
 
 	private readonly columnWidthClassStrings: Record<number, string> = {
 		1: 'w-1/3',
@@ -201,7 +200,7 @@ export class StatsService {
 			this.currentLeagueId = newLeagueId;
 			this.currentLeagueName = newLeagueName;
 
-			//this.getLeagueStats();
+			this.getLeagueStats();
 		}
 	}
 	getCurrentLeagueId(): string {
