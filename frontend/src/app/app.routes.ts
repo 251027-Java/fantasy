@@ -4,8 +4,6 @@ import { Login } from './components/login/login';
 import { StatsPage } from './components/stats-page/stats-page';
 import { authGuard } from './guards/auth-guard';
 
-
-
 export const routes: Routes = [
 	{
 		path: '',
