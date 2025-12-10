@@ -8,8 +8,8 @@ import { AuthService } from '../services/auth';
 // Adjust path as needed
 
 export const authGuard: CanActivateFn = (
-	route,
-	state,
+	_route,
+	_state,
 ): Observable<boolean | UrlTree> | boolean | UrlTree => {
 	// 1. Inject necessary services
 	const authService = inject(AuthService);
