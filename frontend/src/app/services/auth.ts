@@ -24,7 +24,7 @@ export class AuthService {
     
     if (!this.loggedInSubject.value) {
       this.loggedInSubject.next(true); 
-      console.log('--- SIMULATED LOGIN: State is now TRUE ---');
+      console.log('login: State is now TRUE');
     }
   }
 
@@ -32,7 +32,7 @@ export class AuthService {
   logout(): void {
     if (this.loggedInSubject.value) {
       this.loggedInSubject.next(false);
-      console.log('--- LOGOUT: State is now FALSE ---');
+      console.log('Logut: State is now FALSE');
     }
   }
 
