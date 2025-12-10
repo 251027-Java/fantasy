@@ -88,39 +88,37 @@ export class StatsService {
 				return resp;
 			}),
 			catchError(() => {
-				toast('Error loading stats for this league.', {
-					action: {
-						label: 'Close',
-						onClick: () => {},
-					},
-					duration: Infinity,
-				});
+				this.displayError();
 				return of({ stats: [] } as StatsResponse);
 			}),
 		);
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
 		resp.subscribe((data) => {
-			// set the data
-			this.luckStatsResponse.set(data);
+			try {
+				// set the data
+				this.luckStatsResponse.set(data);
 
-			/* set the filters (all initialized to all true) */
+				/* set the filters (all initialized to all true) */
 
-			// filter for members of the league
-			this.luckStatsResponse().stats.forEach((member) => {
-				this.filteredLeagueMembers.set(member.name, true);
-			});
+				// filter for members of the league
+				this.luckStatsResponse().stats.forEach((member) => {
+					this.filteredLeagueMembers.set(member.name, true);
+				});
 
-			// filter for luck stats
-			this.filteredStats.set(
-				'Luck',
-				new Map<keyof Score, boolean>(
-					Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
-						k as keyof Score,
-						true,
-					]),
-				),
-			);
+				// filter for luck stats
+				this.filteredStats.set(
+					'Luck',
+					new Map<keyof Score, boolean>(
+						Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
+							k as keyof Score,
+							true,
+						]),
+					),
+				);
+			} catch (_error) {
+				this.displayError();
+			}
 		});
 	}
 
@@ -223,5 +221,15 @@ export class StatsService {
 		//reset all filters
 		this.filteredLeagueMembers = new Map<string, boolean>();
 		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
+	}
+
+	private displayError(): void {
+		toast('Error loading stats for this league.', {
+			action: {
+				label: 'Close',
+				onClick: () => {},
+			},
+			duration: Infinity,
+		});
 	}
 }
