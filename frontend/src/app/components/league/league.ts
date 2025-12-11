@@ -16,7 +16,6 @@ import { StatsService } from '../../services/stats-service';
 	imports: [
 		HlmFormFieldImports,
 		HlmSelectImports,
-		HlmInput,
 		HlmSelectImports,
 		BrnSelectImports,
 		HlmButtonImports,
