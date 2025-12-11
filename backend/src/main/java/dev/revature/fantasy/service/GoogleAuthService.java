@@ -1,5 +1,6 @@
 package dev.revature.fantasy.service;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -7,42 +8,63 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.google.api.client.auth.oauth2.TokenResponse;
+import com.google.api.client.auth.oauth2.TokenResponseException;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
 import dev.revature.fantasy.dto.AuthResponseDto;
 import dev.revature.fantasy.logger.GlobalLogger;
+import dev.revature.fantasy.model.AppUser;
+import dev.revature.fantasy.repository.AppUserRepo;
 import dev.revature.fantasy.dto.AuthRequestDto;
 
 @Service
 public class GoogleAuthService implements AuthService {
     
     private final String clientId;
+    private final String clientSecret;
+    private final JwtTokenService tokenService;
+    private final AppUserRepo appUserRepo;
 
-    public GoogleAuthService(@Value("${google.client.id:MISSING}") String clientId) {
+    public GoogleAuthService(@Value("${GOOGLE_CLIENT_ID:MISSING}") String clientId,
+    @Value("${GOOGLE_CLIENT_SECRET:MISSING}") String clientSecret,
+    JwtTokenService tokenService,
+    AppUserRepo appUserRepo) {
         this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.tokenService = tokenService;
+        this.appUserRepo = appUserRepo;
         GlobalLogger.debug("Client ID: " + clientId);
+        // GlobalLogger.debug("Client Secret: " + clientSecret);
     }
 
     public Optional<AuthResponseDto> auth(AuthRequestDto authRequestDto) {
-        GoogleIdToken.Payload payload = verifyToken(authRequestDto.getToken());
+        var payload = verifyCode(authRequestDto.getCode());
 
-        if (payload == null) {
+        if (payload.isEmpty()) {
             return Optional.empty();
         }
 
-        String email = payload.getEmail();
-        String name = (String) payload.get("name");
+        String email = payload.get().getEmail();
+        String name = (String) payload.get().get("name");
 
-        AuthResponseDto response = new AuthResponseDto(email, name);
+        String token = tokenService.generateToken(email);
+
+        AppUser user = new AppUser(email, name);
+        this.appUserRepo.save(user);
+
+        AuthResponseDto response = new AuthResponseDto(email, name, token);
 
         return Optional.of(response);
     }
 
 
-    private GoogleIdToken.Payload verifyToken(String tokenString) {
+    private Optional<GoogleIdToken.Payload> verifyToken(String tokenString) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                     .setAudience(Collections.singletonList(clientId))
@@ -51,12 +73,52 @@ public class GoogleAuthService implements AuthService {
             GoogleIdToken idToken = verifier.verify(tokenString);
 
             if (idToken != null) {
-                return idToken.getPayload(); // Token is valid, return user info
+                return Optional.of(idToken.getPayload()); // Token is valid, return user info
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            GlobalLogger.error("Failed to verify google oauth code: " + e.getMessage());
         }
-        return null; // Token invalid
+        return Optional.empty(); // Token invalid
+    }
+
+    private Optional<GoogleIdToken.Payload> verifyCode(String code) {
+        try {
+            GlobalLogger.debug("Code: " + code);
+            TokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
+                new NetHttpTransport(), 
+                new GsonFactory(), 
+                clientId,
+                clientSecret,
+                code,                    
+                "http://localhost:4200"
+            )  
+                    .execute();
+            
+            GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());
+
+            // get access token from response
+            var googleResponse = (GoogleTokenResponse) tokenResponse;
+        
+            // users verified identity
+            GoogleIdToken idToken = googleResponse.parseIdToken();
+            
+        
+            if (idToken != null) {
+                return Optional.of(idToken.getPayload());
+            }
+
+            
+        } catch (TokenResponseException e) {
+        // this handles errors like 400 Bad Request, invalid_grant, invalid_code etc.
+            GlobalLogger.error("Token Exchange Error (HTTP " + e.getStatusCode() + "): " + e.getDetails().getError());
+        } catch (IOException e) {
+            // this handles network issues like connection timeouts or IO failures
+            GlobalLogger.error("IO Error during token exchange: " + e.getMessage());
+        } catch (Exception e) {
+            // catch-all for other unexpected issues
+            GlobalLogger.error("Failed to verify google oauth code: " + e.getMessage());
+        }
+        return Optional.empty(); 
     }
         
 }

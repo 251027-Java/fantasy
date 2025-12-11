@@ -41,6 +41,7 @@ export class StatsService {
 		);
 
 		// Pipe the data to map it to the StatsResponse interface
+		console.log(resp);
 		resp = resp.pipe(
 			map<any, StatsResponse>((data) => {
 				// Map the received data to the StatsResponse interface
@@ -74,6 +75,7 @@ export class StatsService {
 
 		// Subscribe to the observable and set the luckStatsResponse signal with the received data
 		resp.subscribe((data) => {
+			
 			this.luckStatsResponse.set(data);
 		});
 	}

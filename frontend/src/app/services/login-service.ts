@@ -10,7 +10,7 @@ export class LoginService {
 	private username: string = 'leeeem';
 
 	// Inject HttpClient for making HTTP requests
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
 	LeagueResponse: WritableSignal<LoginResponse> = signal({
 		userId: '',

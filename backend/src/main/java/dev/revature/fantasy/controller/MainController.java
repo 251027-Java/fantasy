@@ -50,6 +50,11 @@ public class MainController {
                     .orElseThrow(() -> new AuthException("Authentication failed"));
     }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<String> handleAuthException(AuthException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
     // exception handler for http connection exceptions
     @ExceptionHandler(HttpConnectionException.class)
     public ResponseEntity<String> handleHttpConnectionException(HttpConnectionException e) {

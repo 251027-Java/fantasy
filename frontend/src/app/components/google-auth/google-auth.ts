@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../services/login-service';
 import { AuthService } from '../../services/auth-service';
 import { environment } from '../../../environments/environment';
+import { AuthRequest, AuthResponse } from '../../interface/auth-interfaces';
 
 declare var google: any;
 
@@ -36,9 +37,9 @@ export class GoogleAuth implements AfterViewInit {
       this.codeClient = google.accounts.oauth2.initCodeClient({
         client_id: this.loadGoogleClientId(),
         scope: 'openid email profile', // Scopes required for user info
-        redirect_uri: 'http://localhost:4200/auth',
+        redirect_uri: 'http://localhost:4200',
         ux_mode: 'popup',             // Use popup mode for SPA
-        callback: (response: any) => this.handleCodeResponse(response) 
+        callback: (response: AuthRequest) => this.handleCodeResponse(response)
       });
       // need to render the button after the client is initialized
       // so that functionality is available on press
@@ -56,44 +57,50 @@ export class GoogleAuth implements AfterViewInit {
 
   // Example of a manual button rendering function
   renderManualButton() {
-    const button = document.createElement('button');
-    button.id = "google-btn";
-    button.textContent = "Sign in with Google";
-    button.onclick = () => this.signInWithGoogle();
-    document.getElementById("google-btn-container")?.appendChild(button);
+    // get button element and unhide it 
+    const button = document.getElementById("google-btn");
+    button?.classList.remove("hidden");
+
   }
 
-  handleCredentialResponse(response: any) {
-    console.log("Encoded JWT ID token: " + response.code);
-    this.authService.verifyGoogleToken(response.code).subscribe({
-      next: (resp: any) => {
-        console.log("Auth success", resp);
-        this.ngZone.run(() => {
-          this.router.navigateByUrl('');
-        });
-      },
-      error: (err: any) => console.error("Auth failed", err)
-    });
-  }
+  // handleCredentialResponse(response: any) {
+  //   console.log("Encoded JWT ID token: " + response.code);
+  //   this.authService.verifyGoogleToken(response.code).subscribe({
+  //     next: (resp: any) => {
+  //       console.log("Auth success", resp);
+  //       this.ngZone.run(() => {
+  //         this.router.navigateByUrl('');
+  //       });
+  //     },
+  //     error: (err: any) => console.error("Auth failed", err)
+  //   });
+  // }
 
-  // NOTE: Renamed from handleCredentialResponse to reflect receiving a Code
-  handleCodeResponse(response: any) {
+  // the above but actually verfying it comes from our backend
+  handleCodeResponse(response: AuthRequest) {
     // Check for the code property
     if (response.code) {
       console.log("Authorization Code received: " + response.code);
-      
+
       // Send the code to your backend service for the secure exchange
       this.authService.verifyGoogleCode(response.code).subscribe({
-        next: (resp: any) => {
+        next: (resp: AuthResponse) => {
           // ... success logic
+          // TODO: give the user a token
+          sessionStorage.setItem('token', resp.jwtToken);
+
+
+          console.log(resp, "Code exchange successful");
+          console.log('token', sessionStorage.getItem('token'));
+          // redirect to the login page
+          this.router.navigateByUrl('login');
         },
-        error: (err: any) => console.error("Code exchange failed", err)
+        error: (err: any) => {
+          console.error("Code exchange failed", err)
+        }
       });
     } else {
       console.error("Authorization failed, no code received.", response);
     }
-    this.ngZone.run(() => {
-      this.router.navigateByUrl('');
-    });
   }
 }

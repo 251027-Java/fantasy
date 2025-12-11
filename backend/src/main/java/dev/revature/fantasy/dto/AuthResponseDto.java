@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AuthResponseDto {
     private String email;
     private String name;
+    private String jwtToken;
 }
