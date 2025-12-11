@@ -29,6 +29,7 @@ GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-client-secret
 JWT_SECRET=your-secret-key
 JWT_EXPIRATION_TIME_MILI=your-expiration-time
+FRONTEND_BASE_URL=your-frontend-base-url
 ```
 
 Then run the following commands:
