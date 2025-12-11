@@ -15,7 +15,10 @@ export class StatsService {
 	readonly numDecimalPlaces: number = 2;
 
 	// Inject HttpClient for making HTTP requests
-	constructor(private http: HttpClient, private authService: AuthService) {}
+	constructor(
+		private http: HttpClient,
+		private authService: AuthService,
+	) {}
 
 	// holds the stats
 	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });

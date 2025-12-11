@@ -18,6 +18,7 @@ import lombok.Setter;
 public class AppUser {
     @Id
     private String email;
+
     @NonNull
-    private String name;    
+    private String name;
 }

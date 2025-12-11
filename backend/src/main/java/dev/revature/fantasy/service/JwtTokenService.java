@@ -1,17 +1,12 @@
 package dev.revature.fantasy.service;
 
-import dev.revature.fantasy.model.AppUser;
-import dev.revature.fantasy.model.User;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.util.Date;
-
 import javax.crypto.SecretKey;
 
 @Service
@@ -50,12 +45,17 @@ public class JwtTokenService {
 
     public boolean validateToken(String token) {
         try {
-            var expiryDate = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload().getExpiration();
+            var expiryDate = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getExpiration();
             return expiryDate.after(new Date());
         } catch (Exception e) {
             return false;
         }
     }
-    
+
     // You would also include methods here to validate and extract claims from a token
 }

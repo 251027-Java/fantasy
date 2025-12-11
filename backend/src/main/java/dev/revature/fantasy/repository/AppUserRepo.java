@@ -1,11 +1,10 @@
 package dev.revature.fantasy.repository;
 
-import java.util.Optional;
-
+import dev.revature.fantasy.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import dev.revature.fantasy.model.AppUser;
+import java.util.Optional;
 
 @Repository
 public interface AppUserRepo extends JpaRepository<AppUser, String> {

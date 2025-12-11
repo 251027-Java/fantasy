@@ -40,14 +40,12 @@ public class MainController {
                 .orElseThrow(() -> new InvalidLeagueIdException("Invalid league id: " + id));
     }
 
-    /** 
+    /**
      * Send the token to google auth service to verify it
      */
     @PostMapping("/auth/google")
     public AuthResponseDto googleAuth(@RequestBody AuthRequestDto authRequestDto) {
-            return this.authService
-                    .auth(authRequestDto)
-                    .orElseThrow(() -> new AuthException("Authentication failed"));
+        return this.authService.auth(authRequestDto).orElseThrow(() -> new AuthException("Authentication failed"));
     }
 
     @ExceptionHandler(AuthException.class)

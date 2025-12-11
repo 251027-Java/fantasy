@@ -1,13 +1,5 @@
 package dev.revature.fantasy.service;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
@@ -16,25 +8,31 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-
+import dev.revature.fantasy.dto.AuthRequestDto;
 import dev.revature.fantasy.dto.AuthResponseDto;
 import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.AppUser;
 import dev.revature.fantasy.repository.AppUserRepo;
-import dev.revature.fantasy.dto.AuthRequestDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class GoogleAuthService implements AuthService {
-    
+
     private final String clientId;
     private final String clientSecret;
     private final JwtTokenService tokenService;
     private final AppUserRepo appUserRepo;
 
-    public GoogleAuthService(@Value("${GOOGLE_CLIENT_ID:MISSING}") String clientId,
-    @Value("${GOOGLE_CLIENT_SECRET:MISSING}") String clientSecret,
-    JwtTokenService tokenService,
-    AppUserRepo appUserRepo) {
+    public GoogleAuthService(
+            @Value("${GOOGLE_CLIENT_ID:MISSING}") String clientId,
+            @Value("${GOOGLE_CLIENT_SECRET:MISSING}") String clientSecret,
+            JwtTokenService tokenService,
+            AppUserRepo appUserRepo) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.tokenService = tokenService;
@@ -63,10 +61,10 @@ public class GoogleAuthService implements AuthService {
         return Optional.of(response);
     }
 
-
     private Optional<GoogleIdToken.Payload> verifyToken(String tokenString) {
         try {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                            new NetHttpTransport(), new GsonFactory())
                     .setAudience(Collections.singletonList(clientId))
                     .build();
 
@@ -85,32 +83,30 @@ public class GoogleAuthService implements AuthService {
         try {
             GlobalLogger.debug("Code: " + code);
             TokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-                new NetHttpTransport(), 
-                new GsonFactory(), 
-                clientId,
-                clientSecret,
-                code,                    
-                "http://localhost:4200"
-            )  
+                            new NetHttpTransport(),
+                            new GsonFactory(),
+                            clientId,
+                            clientSecret,
+                            code,
+                            "http://localhost:4200")
                     .execute();
-            
+
             GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());
 
             // get access token from response
             var googleResponse = (GoogleTokenResponse) tokenResponse;
-        
+
             // users verified identity
             GoogleIdToken idToken = googleResponse.parseIdToken();
-            
-        
+
             if (idToken != null) {
                 return Optional.of(idToken.getPayload());
             }
 
-            
         } catch (TokenResponseException e) {
-        // this handles errors like 400 Bad Request, invalid_grant, invalid_code etc.
-            GlobalLogger.error("Token Exchange Error (HTTP " + e.getStatusCode() + "): " + e.getDetails().getError());
+            // this handles errors like 400 Bad Request, invalid_grant, invalid_code etc.
+            GlobalLogger.error("Token Exchange Error (HTTP " + e.getStatusCode() + "): "
+                    + e.getDetails().getError());
         } catch (IOException e) {
             // this handles network issues like connection timeouts or IO failures
             GlobalLogger.error("IO Error during token exchange: " + e.getMessage());
@@ -118,7 +114,6 @@ public class GoogleAuthService implements AuthService {
             // catch-all for other unexpected issues
             GlobalLogger.error("Failed to verify google oauth code: " + e.getMessage());
         }
-        return Optional.empty(); 
+        return Optional.empty();
     }
-        
 }

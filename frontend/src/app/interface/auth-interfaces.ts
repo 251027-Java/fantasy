@@ -1,10 +1,9 @@
 export interface AuthResponse {
-    email: string;
-    name: string;
-    jwtToken: string;
+	email: string;
+	name: string;
+	jwtToken: string;
 }
 
 export interface AuthRequest {
-    code: string;
+	code: string;
 }
-

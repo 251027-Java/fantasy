@@ -3,21 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GoogleAuth } from './google-auth';
 
 describe('GoogleAuth', () => {
-  let component: GoogleAuth;
-  let fixture: ComponentFixture<GoogleAuth>;
+	let component: GoogleAuth;
+	let fixture: ComponentFixture<GoogleAuth>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GoogleAuth]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [GoogleAuth],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(GoogleAuth);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(GoogleAuth);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });
