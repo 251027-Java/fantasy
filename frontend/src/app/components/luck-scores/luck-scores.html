@@ -1,91 +1,129 @@
-<div style="margin: 0.5% auto 0;" class="w-full overflow-x-auto border-separate border-spacing-0 border border-black rounded-md overflow-hidden" [style.width.%]="getWidth()">
-    <table class="min-w-full table-fixed">
-        <thead>
-            <tr>
-                <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')" (click)="toggleSort('name')">
-                    <div class="flex items-center justify-center">
-                        <span>Name</span>
-                        @if (statsService.getStatsLoaded("Luck")) {
-                            <span class="ml-1 flex flex-col text-xs leading-2 select-none">
-                                @for (arrow of getSortArrows('name'); track arrow) {
-                                    <span>{{arrow}}</span>
-                                }
-                            </span>
-                        }
-                    </div>
-                </th>
-                @for (header of headers | keyvalue: keepInsertionOrder; track header.key) {
-                    @if (statsService.getColumnIsVisible("Luck", header.key)) {
-                        <th class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('headerTableClass')]" (click)="toggleSort(header.key)">
-                            <div class="flex items-center justify-center">
-                                <span>{{header.value}}</span>
-                                @if (statsService.getStatsLoaded("Luck")) {
-                                    <span class="ml-1 flex flex-col text-xs leading-2 select-none">
-                                        @for (arrow of getSortArrows(header.key); track arrow) {
-                                            <span>{{arrow}}</span>
-                                        }
-                                    </span>
-                                }
-                            </div>
-                        </th>
-                    }
-                }
-            </tr>
-        </thead>
-
-        @if (statsService.getStatsLoaded("Luck")) {
-            <tbody>
-                @for (member of statsService.luckStatsResponse().stats; track member.name) {
-                    @if (statsService.getMemberIsVisible(member.name)) {
-                        <tr>
-                            <td class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center">{{member.name}}</td>
-                            @for (header of headers | keyvalue: keepInsertionOrder; track header.key) {                                
-                                @if (statsService.getColumnIsVisible("Luck", header.key)) {
-                                    <td class="py-2 border border-gray-200 text-center" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('bodyTableClass')]">{{member.scores[header.key]}}</td>
-                                }
-                            }
-                        </tr>
-                    }
-                }
-            </tbody>
-        }
-    </table>
-
-    @if (!statsService.getStatsLoaded("Luck")) {
-        <div class="h-72 flex items-center justify-center" [ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
-            <p class="text-4xl text-center font-semibold" [ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">Loading Scores...</p>
-        </div>
-    } @else if (statsService.getNumMembersVisible() === 0) {        
-        <div class="h-24 flex items-center justify-center" [ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
-            <p class="text-4xl text-center font-semibold" [ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">Nobody to show!</p>
-        </div>
-    }
+<div
+	style="margin: 0.5% auto 0;"
+	class="w-full overflow-x-auto border-separate border-spacing-0 border border-black rounded-md overflow-hidden"
+	[style.width.%]="getWidth()">
+	<table class="min-w-full table-fixed">
+		<thead>
+			<tr>
+				<th
+					class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer"
+					[ngClass]="themeService.getCurrentThemeClassString('headerNameClass')"
+					(click)="toggleSort('name')">
+					<div class="flex items-center justify-center">
+						<span>Name</span>
+						@if (statsService.getStatsLoaded("Luck")) {
+						<span class="ml-1 flex flex-col text-xs leading-2 select-none">
+							@for (arrow of getSortArrows('name'); track arrow) {
+							<span>{{arrow}}</span>}
+						</span>
+						}
+					</div>
+				</th>
+				@for (header of headers | keyvalue: keepInsertionOrder; track
+				header.key) { @if (statsService.getColumnIsVisible("Luck", header.key))
+				{
+				<th
+					class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer"
+					[ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('headerTableClass')]"
+					(click)="toggleSort(header.key)">
+					<div class="flex items-center justify-center">
+						<span>{{header.value}}</span>
+						@if (statsService.getStatsLoaded("Luck")) {
+						<span class="ml-1 flex flex-col text-xs leading-2 select-none">
+							@for (arrow of getSortArrows(header.key); track arrow) {
+							<span>{{arrow}}</span>}
+						</span>
+						}
+					</div>
+				</th>
+				} }
+			</tr>
+		</thead>
+		@if (statsService.getStatsLoaded("Luck")) {
+		<tbody>
+			@for (member of statsService.luckStatsResponse().stats; track member.name)
+			{ @if (statsService.getMemberIsVisible(member.name)) {
+			<tr>
+				<td
+					class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center">
+					{{member.name}}
+				</td>
+				@for (header of headers | keyvalue: keepInsertionOrder; track
+				header.key) { @if (statsService.getColumnIsVisible("Luck", header.key))
+				{
+				<td
+					class="py-2 border border-gray-200 text-center"
+					[ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('bodyTableClass')]">
+					{{member.scores[header.key]}}
+				</td>
+				} }
+			</tr>
+			} }
+		</tbody>
+		}
+	</table>
+	@if (!statsService.getStatsLoaded("Luck")) {
+	<div
+		class="h-72 flex items-center justify-center"
+		[ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
+		<p
+			class="text-4xl text-center font-semibold"
+			[ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">
+			Loading Scores...
+		</p>
+	</div>
+	} @else if (statsService.getNumMembersVisible() === 0) {
+	<div
+		class="h-24 flex items-center justify-center"
+		[ngClass]="themeService.getCurrentThemeClassString('loadingTableBackgroundClass')">
+		<p
+			class="text-4xl text-center font-semibold"
+			[ngClass]="themeService.getCurrentThemeClassString('loadingTableClass')">
+			Nobody to show!
+		</p>
+	</div>
+	}
 </div>
-
 @if (statsService.getStatsLoaded("Luck")) {
-    <div class="mx-auto flex justify-around mt-6" style="width: 90%;">
-        <div class="border border-black rounded-md p-4 w-9/20 xl:w-1/6 lg:w-1/4 md:w-3/10 sm:w-1/3 bg-gray-100">
-            <h3 class="text-lg font-semibold mb-3 text-center break-all whitespace-normal">League Members</h3>
-            <div class="flex flex-col space-y-1">
-                @for (member of statsService.filteredLeagueMembers | keyvalue: caseInsensitiveSort; track member.key) {
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" [checked]="member.value" (change)="onMemberFilterChange($event, member.key)">
-                        <span class="break-all">{{member.key}}</span>
-                    </label>
-                }
-            </div>
-        </div>
+<div class="mx-auto flex justify-around mt-6" style="width: 90%;">
+	<div
+		class="border border-black rounded-md p-4 w-9/20 xl:w-1/6 lg:w-1/4 md:w-3/10 sm:w-1/3 bg-gray-100">
+		<h3
+			class="text-lg font-semibold mb-3 text-center break-all whitespace-normal">
+			League Members
+		</h3>
+		<div class="flex flex-col space-y-1">
+			@for (member of statsService.filteredLeagueMembers | keyvalue:
+			caseInsensitiveSort; track member.key) {
+			<label class="flex items-center space-x-2">
+				<input
+					type="checkbox"
+					class="form-checkbox h-5 w-5 text-blue-600"
+					[checked]="member.value"
+					(change)="onMemberFilterChange($event, member.key)" >
+				<span class="break-all">{{member.key}}</span>
+			</label>
+			}
+		</div>
+	</div>
 
-        <div class="border border-black rounded-md p-4 w-9/20 xl:w-1/6 lg:w-1/4 md:w-3/10 sm:w-1/3" [ngClass]="themeService.getCurrentThemeClassString('bodyTableClass')">
-            <h3 class="text-lg font-semibold mb-3 text-center">Stats</h3>
-            <div class="flex flex-col space-y-1">
-                @for (column of headers | keyvalue: keepInsertionOrder; track column.key) {
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" [checked]="statsService.getColumnIsVisible('Luck', column.key)" (change)="onColumnFilterChange($event, column.key)">
-                        <span class="break-all">{{getHeader(column.key)}}</span>
-                    </label>
-                }
-            </div>
-        </div>
-    </div>
+	<div
+		class="border border-black rounded-md p-4 w-9/20 xl:w-1/6 lg:w-1/4 md:w-3/10 sm:w-1/3"
+		[ngClass]="themeService.getCurrentThemeClassString('bodyTableClass')">
+		<h3 class="text-lg font-semibold mb-3 text-center">Stats</h3>
+		<div class="flex flex-col space-y-1">
+			@for (column of headers | keyvalue: keepInsertionOrder; track column.key)
+			{
+			<label class="flex items-center space-x-2">
+				<input
+					type="checkbox"
+					class="form-checkbox h-5 w-5 text-blue-600"
+					[checked]="statsService.getColumnIsVisible('Luck', column.key)"
+					(change)="onColumnFilterChange($event, column.key)" >
+				<span class="break-all">{{getHeader(column.key)}}</span>
+			</label>
+			}
+		</div>
+	</div>
+</div>
 }

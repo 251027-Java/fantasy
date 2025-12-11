@@ -32,6 +32,10 @@
 	"html": {
 		"parser": {
 			"interpolation": true
+		},
+		"formatter": {
+			"enabled": true,
+			"bracketSameLine": true
 		}
 	},
 	"css": {
