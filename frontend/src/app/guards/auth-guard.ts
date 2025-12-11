@@ -1,32 +1,28 @@
-// authGuard.ts
-
-import { inject } from '@angular/core';
-import { CanActivateFn, Router, UrlTree } from '@angular/router';
+// src/app/guards/auth.guard.ts
+import { Injectable } from '@angular/core';
+import {
+	ActivatedRouteSnapshot,
+	CanActivate,
+	RouterStateSnapshot,
+	UrlTree,
+} from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AuthService } from '../services/auth';
-// Adjust path as needed
+import { AuthService } from '../services/auth-service';
 
-export const authGuard: CanActivateFn = (
-	_route,
-	_state,
-): Observable<boolean | UrlTree> | boolean | UrlTree => {
-	// 1. Inject necessary services
-	const authService = inject(AuthService);
-	const router = inject(Router);
+@Injectable({
+	providedIn: 'root',
+})
+export class AuthGuard implements CanActivate {
+	constructor(private authService: AuthService) {}
 
-	// 2. Get the authentication status Observable
-	return authService.isLoggedIn$.pipe(
-		map((isLoggedIn) => {
-			if (isLoggedIn) {
-				// 3. User is logged in: Allow navigation
-				return true;
-			} else {
-				// 4. User is NOT logged in: Block navigation and redirect
-				// The router.createUrlTree creates a URL object representing the login page
-				console.log('Access denied. Redirecting to login.');
-				return router.createUrlTree(['/login']);
-			}
-		}),
-	);
-};
+	canActivate(
+		_route: ActivatedRouteSnapshot,
+		_state: RouterStateSnapshot,
+	):
+		| Observable<boolean | UrlTree>
+		| Promise<boolean | UrlTree>
+		| boolean
+		| UrlTree {
+		return this.authService.isAuthorized();
+	}
+}
