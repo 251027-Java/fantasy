@@ -1,10 +1,6 @@
 package dev.revature.fantasy.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
-import dev.revature.fantasy.model.*;
+import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.repository.WeekScoreRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class WeekScoreServiceTest {
     @Mock
@@ -22,26 +22,9 @@ public class WeekScoreServiceTest {
     @InjectMocks
     WeekScoreService service;
 
-    WeekScore createMockWeekScore() {
-        League league = new League();
-        User user = new User();
-
-        RosterUser rosterUser = new RosterUser();
-        rosterUser.setUser(user);
-        rosterUser.setLeague(league);
-
-        WeekScoreId weekScoreId = new WeekScoreId();
-        weekScoreId.setRosterUser(rosterUser);
-
-        WeekScore weekScore = new WeekScore();
-        weekScore.setId(weekScoreId);
-
-        return weekScore;
-    }
-
     @Test
-    void testSavesAllWeekScores() {
-        List<WeekScore> mockWeekScores = List.of(createMockWeekScore());
+    void saveWeekScores_usesRepositoryToSave() {
+        List<WeekScore> mockWeekScores = List.of();
 
         service.upsertWeekScores(mockWeekScores);
 
@@ -49,77 +32,62 @@ public class WeekScoreServiceTest {
     }
 
     @Test
-    void testObtainWeekScoresByLeagueIdUpToMaxWeek() {
+    void obtainWeekScoresWithValidLeagueIdAndUpToMaxWeek_returnsAllFoundWeekScores() {
+        List<WeekScore> mockWeekScores1 = List.of(new WeekScore(), new WeekScore());
+        List<WeekScore> mockWeekScores2 = List.of(new WeekScore());
+
         String leagueId = "someLeagueId";
-
-        WeekScore w1 = createMockWeekScore();
-        WeekScore w2 = createMockWeekScore();
-        WeekScore w3 = createMockWeekScore();
-
-        w1.getId().getRosterUser().getLeague().setId(leagueId);
-        w2.getId().getRosterUser().getLeague().setId(leagueId);
-        w3.getId().getRosterUser().getLeague().setId(leagueId);
-
-        List<WeekScore> mockWeekScores1 = List.of(w1, w2);
-        List<WeekScore> mockWeekScores2 = List.of(w3);
-
         when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, leagueId)).thenReturn(mockWeekScores1);
         when(repo.findWeekScoresByIdWeekNumAndLeagueId(2, leagueId)).thenReturn(mockWeekScores2);
 
-        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(leagueId, 2);
+        int maxWeek = 2;
+
+        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(leagueId, maxWeek);
 
         assertEquals(2, weekScores.size());
 
         List<WeekScore> realWeekScores1 = weekScores.get(0);
         List<WeekScore> realWeekScores2 = weekScores.get(1);
 
-        assertEquals(2, realWeekScores1.size());
-        assertEquals(1, realWeekScores2.size());
-
-        realWeekScores1.forEach(weekScore -> assertEquals(
-                "someLeagueId", weekScore.getId().getRosterUser().getLeague().getId()));
-        realWeekScores2.forEach(weekScore -> assertEquals(
-                "someLeagueId", weekScore.getId().getRosterUser().getLeague().getId()));
+        assertEquals(mockWeekScores1, realWeekScores1);
+        assertEquals(mockWeekScores2, realWeekScores2);
     }
 
     @Test
-    void testObtainFewerWeekScoresWithLargeMaxWeek() {
+    void obtainWeekScoresWithValidLeagueIdAndLargeMaxWeek_returnsLessThanMaxWeekResults() {
+        List<WeekScore> mockWeekScores1 = List.of(new WeekScore(), new WeekScore());
+
         String leagueId = "someLeagueId";
-
-        WeekScore w1 = createMockWeekScore();
-        WeekScore w2 = createMockWeekScore();
-
-        w1.getId().getRosterUser().getLeague().setId(leagueId);
-        w2.getId().getRosterUser().getLeague().setId(leagueId);
-
-        List<WeekScore> mockWeekScores = List.of(w1, w2);
-
-        when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, leagueId)).thenReturn(mockWeekScores);
+        when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, leagueId)).thenReturn(mockWeekScores1);
         when(repo.findWeekScoresByIdWeekNumAndLeagueId(2, leagueId)).thenReturn(List.of());
 
-        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(leagueId, 10);
+        int maxWeek = 2;
+
+        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(leagueId, maxWeek);
 
         assertEquals(1, weekScores.size());
 
-        List<WeekScore> realWeekScores = weekScores.getFirst();
-        assertEquals(2, realWeekScores.size());
-
-        realWeekScores.forEach(weekScore -> assertEquals(
-                "someLeagueId", weekScore.getId().getRosterUser().getLeague().getId()));
+        List<WeekScore> realWeekScores1 = weekScores.getFirst();
+        assertEquals(mockWeekScores1, realWeekScores1);
     }
 
     @Test
-    void testObtainZeroWeekScoresWithNonPositiveMaxWeek() {
-        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId("asd", 0);
+    void tryObtainWeekScoresWithNonPositiveMaxWeek_returnsEmptyList() {
+        String id = "asd";
+        int maxWeek = 0;
+
+        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(id, maxWeek);
 
         assertTrue(weekScores.isEmpty());
     }
 
     @Test
-    void testObtainZeroWeekScoresWithMismatchLeagueId() {
-        when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, "asd")).thenReturn(List.of());
+    void tryObtainWeekScoresWithNonExistantLeagueId() {
+        int maxWeek = 1;
+        String id = "asd";
+        when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, id)).thenReturn(List.of());
 
-        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId("asd", 1);
+        List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(id, maxWeek);
 
         assertTrue(weekScores.isEmpty());
     }

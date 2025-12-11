@@ -4,15 +4,15 @@ import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.repository.LeagueRepo;
 import dev.revature.fantasy.repository.RosterUserRepo;
 import dev.revature.fantasy.repository.UserRepo;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,14 +30,17 @@ public class RosterUserServiceTest {
     RosterUserService service;
 
     @Test
-    void testObtainRosterUsersFromLeagueId() {
+    void obtainRosterUserWithValidUserIdAndLeagueId_returnsFoundRosterUser() {
         String leagueId = "asd";
-        List<RosterUser> mockRosterUsers = List.of();
+        String userId = "qwe";
 
-when(rosterUserRepo.findRosterUsersByLeagueId(leagueId)).thenReturn(mockRosterUsers);
+        RosterUser rosterUser = new RosterUser();
+        Optional<RosterUser> mockRosterUser = Optional.of(rosterUser);
 
-List<RosterUser> rosterUsers= service.getAllRosterUsersByLeagueId(leagueId);
+        when(rosterUserRepo.findByUserIdAndLeagueId(userId, leagueId)).thenReturn(mockRosterUser);
 
-        Assertions.assertEquals(1,rosterUsers.size());
+        Optional<RosterUser> realRosterUser = service.getRosterUserByUserIdAndLeagueId(userId, leagueId);
+
+        assertEquals(mockRosterUser, realRosterUser);
     }
 }
