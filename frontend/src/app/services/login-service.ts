@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { LoginResponse } from '../interface/login-response';
+import { AuthService } from './auth-service';
 
 @Injectable({
 	providedIn: 'root',
@@ -10,7 +11,7 @@ export class LoginService {
 	private username: string = 'leeeem';
 
 	// Inject HttpClient for making HTTP requests
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient, private authService: AuthService) { }
 
 	LeagueResponse: WritableSignal<LoginResponse> = signal({
 		userId: '',
@@ -21,8 +22,14 @@ export class LoginService {
 	getLeagues(): Observable<LoginResponse> {
 		// Gain Login response
 		try {
+			// add the Bearer token to the request
 			let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(
 				`api/login/${this.username}`,
+				{
+					headers: {
+						Authorization: `Bearer ${this.authService.getToken()}`,
+					},
+				},
 			);
 
 			resp = resp.pipe(

@@ -35,6 +35,7 @@ export class League implements OnInit {
 	) {}
 
 	public cardList: CardData[] = [];
+	public loading: boolean = true;
 
 	ngOnInit(): void {
 		this.loginServe.getLeagues().subscribe((data) => {
@@ -51,6 +52,8 @@ export class League implements OnInit {
 				'Raw data2 (JSON string):',
 				JSON.stringify(this.cardList, null, 2),
 			);
+			this.loading = false;
+			this.cdRef.detectChanges();
 		});
 
 		//console.log("Raw data3 (JSON string):", JSON.stringify(this.cardList, null, 2));

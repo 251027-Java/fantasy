@@ -39,4 +39,9 @@ export class AuthService {
     }
     return false;
   }
+
+  getToken(): string {
+    const token: string | null = sessionStorage.getItem('token');
+    return token ? token : "no_token_found";
+  }
 }

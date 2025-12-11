@@ -22,17 +22,20 @@
             choose your league from the list below
           </p>
         </div>
-
-        <ng-container *ngIf="loading">
-          <div class="flex items-center justify-center min-h-[400px]">
-            <div class="text-white text-2xl flex items-center gap-3">
-              <div class="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
-              <span>Loading cards...</span>
-            </div>
-          </div>
-        </ng-container>
+        
 
         <div class="scrollbox">
+
+          @if (loading) {
+          <ng-container>
+            <div class="flex items-center justify-center min-h-[400px]">
+              <div class="text-white text-2xl flex items-center gap-3">
+                <div class="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                <span>Loading cards...</span>
+              </div>
+            </div>
+          </ng-container>
+        }
             <div class="grid grid-cols-2 gap--">
                 @for (card of cardList; track card.id) {
 
@@ -72,7 +75,8 @@
             </div>
         </div>
 
-        <ng-container *ngIf="!loading">
+        <!-- had loading ngIf here -->
+        <ng-container>
           <!-- <app-scroll-card
             *ngFor="let card of cards"
             [card]="card"
@@ -85,5 +89,6 @@
             </p>
           </div>
         </ng-container>
+
       </div>
     </div>
