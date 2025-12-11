@@ -82,6 +82,7 @@ export class StatsPage {
 
 		this.selectTab(this.tabs[0]);
 
-		if (this.statsService.getCurrentLeagueId() === '') this.statsService.displayStatsLoadingError();
+		if (this.statsService.getCurrentLeagueId() === '')
+			this.statsService.displayStatsLoadingError();
 	}
 }
