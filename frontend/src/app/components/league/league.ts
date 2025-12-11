@@ -26,7 +26,6 @@ import { StatsService } from '../../services/stats-service';
 })
 export class League implements OnInit {
 	// Determines number of items you'll see wtihin carousel
-	//
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
@@ -46,14 +45,13 @@ export class League implements OnInit {
 				buttonText: 'View',
 			}));
 
+			this.loading = false;
 			this.cdRef.detectChanges();
 			//console.log("data coming in: " + this.cardList);
 			console.log(
 				'Raw data2 (JSON string):',
 				JSON.stringify(this.cardList, null, 2),
 			);
-			this.loading = false;
-			this.cdRef.detectChanges();
 		});
 
 		//console.log("Raw data3 (JSON string):", JSON.stringify(this.cardList, null, 2));

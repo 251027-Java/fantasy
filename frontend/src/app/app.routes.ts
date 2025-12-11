@@ -3,7 +3,7 @@ import { GoogleAuth } from './components/google-auth/google-auth';
 import { League } from './components/league/league';
 import { Login } from './components/login/login';
 import { StatsPage } from './components/stats-page/stats-page';
-import { AuthGuard } from './guards/auth-guard-guard';
+import { AuthGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
 	{

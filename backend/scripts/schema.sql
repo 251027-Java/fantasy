@@ -1,4 +1,10 @@
 
+    create table app_user (
+        email varchar(255) not null,
+        name varchar(255),
+        primary key (email)
+    );
+
     create table league (
         id varchar(255) not null,
         name varchar(50),

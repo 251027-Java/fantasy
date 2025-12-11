@@ -27,15 +27,18 @@ public class GoogleAuthService implements AuthService {
     private final String clientSecret;
     private final JwtTokenService tokenService;
     private final AppUserRepo appUserRepo;
+    private final String redirectUri;
 
     public GoogleAuthService(
             @Value("${GOOGLE_CLIENT_ID:MISSING}") String clientId,
             @Value("${GOOGLE_CLIENT_SECRET:MISSING}") String clientSecret,
+            @Value("${FRONTEND_BASE_URL:MISSING}") String redirectUri,
             JwtTokenService tokenService,
             AppUserRepo appUserRepo) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.tokenService = tokenService;
+        this.redirectUri = redirectUri;
         this.appUserRepo = appUserRepo;
         GlobalLogger.debug("Client ID: " + clientId);
         // GlobalLogger.debug("Client Secret: " + clientSecret);
@@ -83,12 +86,7 @@ public class GoogleAuthService implements AuthService {
         try {
             GlobalLogger.debug("Code: " + code);
             TokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-                            new NetHttpTransport(),
-                            new GsonFactory(),
-                            clientId,
-                            clientSecret,
-                            code,
-                            "http://localhost:4200")
+                            new NetHttpTransport(), new GsonFactory(), clientId, clientSecret, code, redirectUri)
                     .execute();
 
             GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());

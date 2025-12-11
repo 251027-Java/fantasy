@@ -29,30 +29,37 @@ export class GoogleAuth implements AfterViewInit {
 
 	ngAfterViewInit(): void {
 		// sets up google client to request a code for the backend to exchange for a token
+		this.checkAndInitializeGoogle();
+		this.renderManualButton();
+	}
+
+	private checkAndInitializeGoogle(): void {
 		if (typeof google !== 'undefined') {
-			this.codeClient = google.accounts.oauth2.initCodeClient({
-				client_id: this.loadGoogleClientId(),
-				scope: 'openid email profile', // Scopes required for user info
-				redirect_uri: 'http://localhost:4200',
-				ux_mode: 'popup', // Use popup mode for SPA
-				callback: (response: AuthRequest) => this.handleCodeResponse(response),
-			});
-			// need to render the button after the client is initialized
-			// so that functionality is available on press
-			this.renderManualButton();
+			this.initializeCodeClient();
 		} else {
-			console.error('Google Identity Services script not loaded');
+			console.error('Google Identity Services script not loaded, retrying...');
+			setTimeout(() => this.checkAndInitializeGoogle(), 100);
 		}
+	}
+
+	private initializeCodeClient(): void {
+		this.codeClient = google.accounts.oauth2.initCodeClient({
+			client_id: this.loadGoogleClientId(),
+			scope: 'openid email profile', // Scopes required for user info
+			redirect_uri: window.location.origin,
+			ux_mode: 'popup', // Use popup mode for SPA
+			callback: (response: AuthRequest) => this.handleCodeResponse(response),
+		});
 	}
 
 	signInWithGoogle() {
 		if (this.codeClient) {
-			this.codeClient.requestCode(); // This opens the Google consent popup
+			this.codeClient.requestCode();
 		}
 	}
 
 	// Example of a manual button rendering function
-	renderManualButton() {
+	private renderManualButton() {
 		// get button element and unhide it
 		const button = document.getElementById('google-btn');
 		button?.classList.remove('hidden');
@@ -72,16 +79,12 @@ export class GoogleAuth implements AfterViewInit {
 	// }
 
 	// the above but actually verfying it comes from our backend
-	handleCodeResponse(response: AuthRequest) {
-		// Check for the code property
+	private handleCodeResponse(response: AuthRequest) {
 		if (response.code) {
 			console.log(`Authorization·Code·received:·${response.code}`);
 
-			// Send the code to your backend service for the secure exchange
 			this.authService.verifyGoogleCode(response.code).subscribe({
 				next: (resp: AuthResponse) => {
-					// ... success logic
-					// TODO: give the user a token
 					sessionStorage.setItem('token', resp.jwtToken);
 
 					console.log(`Code exchange successful: ${resp}`);

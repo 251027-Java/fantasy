@@ -14,10 +14,12 @@ public class JwtTokenService {
 
     // Inject the secret key from your .env file
     private final String secret;
-    private static final long EXPIRATION_TIME = 600000; // 10 minutes in milliseconds
+    private final long EXPIRATION_TIME;
 
-    public JwtTokenService(@Value("${JWT_SECRET}") String secret) {
+    public JwtTokenService(
+            @Value("${JWT_SECRET}") String secret, @Value("${JWT_EXPIRATION_TIME_MILI}") long expirationTime) {
         this.secret = secret;
+        this.EXPIRATION_TIME = expirationTime;
     }
 
     // Helper method to get the signing key

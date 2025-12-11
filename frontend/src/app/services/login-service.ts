@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { LoginResponse } from '../interface/login-response';
 import { AuthService } from './auth-service';
 
@@ -62,5 +62,31 @@ export class LoginService {
 
 	usernameSet(username: string) {
 		this.username = username;
+	}
+
+	// It is initialized to 'false' (logged out)
+	// BehaviorSubject is used to hold the current authentication state
+	// Allows components to subscribe and get the latest value (fast)
+	private loggedInSubject: BehaviorSubject<boolean> =
+		new BehaviorSubject<boolean>(false);
+
+	public isLoggedIn$: Observable<boolean> = this.loggedInSubject.asObservable();
+
+	Login(): void {
+		if (!this.loggedInSubject.value) {
+			this.loggedInSubject.next(true);
+			console.log('login: State is now TRUE');
+		}
+	}
+
+	logout(): void {
+		if (this.loggedInSubject.value) {
+			this.loggedInSubject.next(false);
+			console.log('Logut: State is now FALSE');
+		}
+	}
+
+	getIsLoggedIn(): boolean {
+		return this.loggedInSubject.value;
 	}
 }

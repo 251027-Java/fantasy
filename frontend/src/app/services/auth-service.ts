@@ -18,7 +18,6 @@ export class AuthService {
 		return this.http.post<AuthResponse>('api/auth/google', { code });
 	}
 
-	// TODO: implement JWT token storage to a given user
 	isAuthorized(): boolean {
 		// check if the token exists
 		const token: string | null = sessionStorage.getItem('token');
