@@ -73,7 +73,6 @@ public class FantasyStatsService {
         List<League> databaseLeagues = DatabaseFormatterService.formatLeagueInfo(sleeperLeagues);
         // save to database
         this.leagueService.idempotentSave(databaseLeagues);
-        // TODO: think about why we do/don't need the result here
 
         // convert to dto (LoginResponse)
         LeagueDto[] leagueResponses = databaseLeagues.stream()
@@ -95,13 +94,12 @@ public class FantasyStatsService {
      * @return the league stats dto, not sure when this would/should be empty
      */
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
-        // TODO: check if there are weekscores already in database for this league
-        // and that there are the correct amount of weeks, and
-        // get the nfl state info from sleeper
         SleeperNFLStateResponse nflState = ResponseFormatter.getNFLState();
+        // TODO: dynamically determine when playoffs start
+        int leaguePlayoffStartWeek = 15;
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
         int currSeason = Integer.parseInt(nflState.getDisplayWeek());
-        int numWeeksToCompute = currentWeek - 1;
+        int numWeeksToCompute = Math.min(currentWeek, leaguePlayoffStartWeek) - 1;
 
         int sizeOfLeague = this.leagueService.getSizeOfLeague(leagueId);
 
