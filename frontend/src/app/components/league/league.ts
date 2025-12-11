@@ -26,7 +26,6 @@ import { StatsService } from '../../services/stats-service';
 })
 export class League implements OnInit {
 	// Determines number of items you'll see wtihin carousel
-	//
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
@@ -35,6 +34,7 @@ export class League implements OnInit {
 	) {}
 
 	public cardList: CardData[] = [];
+	public loading: boolean = true;
 
 	ngOnInit(): void {
 		this.loginServe.getLeagues().subscribe((data) => {
@@ -45,6 +45,7 @@ export class League implements OnInit {
 				buttonText: 'View',
 			}));
 
+			this.loading = false;
 			this.cdRef.detectChanges();
 			//console.log("data coming in: " + this.cardList);
 			console.log(

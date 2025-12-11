@@ -4,6 +4,7 @@ import { toast } from 'ngx-sonner';
 import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
+import { AuthService } from './auth-service';
 
 export type StatsType = 'Luck';
 
@@ -11,10 +12,13 @@ export type StatsType = 'Luck';
 	providedIn: 'root',
 })
 export class StatsService {
-	readonly numDecimalPlaces: number = 8;
+	readonly numDecimalPlaces: number = 2;
 
 	// Inject HttpClient for making HTTP requests
-	constructor(private http: HttpClient) {}
+	constructor(
+		private http: HttpClient,
+		private authService: AuthService,
+	) {}
 
 	// holds the stats
 	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });
@@ -54,9 +58,15 @@ export class StatsService {
 		// Recieve an observable after a get request to the spring backend. Map LeagueStatsDTO to stats-response interface
 		let resp: Observable<StatsResponse> = this.http.get<StatsResponse>(
 			`api/league/${this.currentLeagueId}/stats`,
+			{
+				headers: {
+					Authorization: `Bearer ${this.authService.getToken()}`,
+				},
+			},
 		);
 
 		// Pipe the data to map it to the StatsResponse interface
+		console.log(resp);
 		resp = resp.pipe(
 			map<any, StatsResponse>((data) => {
 				// Map the received data to the StatsResponse interface
