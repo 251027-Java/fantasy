@@ -1,63 +1,37 @@
-<div
-	class="min-h-screen"
-	style="padding: 0 0 0.5%;"
-	[ngClass]="imageBackgroundClass">
-	<div class="flex justify-between items-center">
-		<button
-			class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer"
-			[ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')"
-			(click)="backToLeagues()">
-			&lt;&lt; Leagues
-		</button>
-		<p
-			class="topcorner text-black font-medium bg-white border-black border rounded-sm px-2 py-1">
-			Current League:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{currentLeagueName}}
-		</p>
-	</div>
+<div class="min-h-screen" style="padding: 0 0 0.5%;" [ngClass]="imageBackgroundClass">
+    <div class="flex justify-between items-center">
+        <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
+            &lt;&lt; Leagues
+        </button>
+        <p class="topcorner text-black font-medium bg-white border-black border rounded-sm px-2 py-1">
+            Current League:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{currentLeagueName}}
+        </p>
+    </div>
 
-	<h1
-		class="w-fit mx-auto text-center text-4xl font-normal text-gray-800 tracking-wide">
-		{{displayedComponentTitlePrebold}}
-		<span
-			class="font-bold"
-			[ngClass]="themeService.getCurrentThemeClassString('displayedComponentTitleBoldClass')"
-			>{{displayedComponentTitleBold}}</span
-		>
-		{{displayedComponentTitlePostbold}}
-	</h1>
+    <h1 class="w-fit mx-auto text-center text-4xl font-normal text-gray-800 tracking-wide">
+        {{displayedComponentTitlePrebold}}<span class="font-bold" [ngClass]="themeService.getCurrentThemeClassString('displayedComponentTitleBoldClass')">{{displayedComponentTitleBold}}</span>{{displayedComponentTitlePostbold}}
+    </h1>
 
-	<div
-		class="flex justify-between items-center gap-4 md:gap-8 lg:gap-10"
-		style="margin: 2% auto 0.5%; width:90%;">
-		<div class="flex gap-2 md:gap-6 lg:gap-10 justify-center">
-			@for (tab of tabs; track tab.label) { @if (tab.isActive) {
-			<button
-				(click)="selectTab(tab)"
-				class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border text-white cursor-pointer"
-				[ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">
-				{{tab.label}}
-			</button>
-			} @else {
-			<button
-				(click)="selectTab(tab)"
-				class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 cursor-pointer">
-				{{tab.label}}
-			</button>
-			} }
-		</div>
-		<div class="flex gap-2 justify-center">
-			@for (themeColor of themeService.getThemeColors(); track themeColor) {
-			<button
-				(click)="themeService.setStatsTheme(themeColor)"
-				class="w-8 md:w-12 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer"
-				[ngClass]="themeService.getThemeClassString(themeColor, 'selectThemeButtonClasses')"></button>
-			}
-		</div>
-	</div>
+    <div class="flex justify-between items-center gap-4 md:gap-8 lg:gap-10" style="margin: 2% auto 0.5%; width:90%;">
+        <div class="flex gap-2 md:gap-6 lg:gap-10 justify-center">
+            @for (tab of tabs; track tab.label) {
+                @if (tab.isActive){
+                    <button (click)="selectTab(tab)" class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
+                } @else {
+                    <button (click)="selectTab(tab)" class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 cursor-pointer">{{tab.label}}</button>
+                }
+            }
+        </div>
+        <div class="flex gap-2 justify-center">
+            @for (themeColor of themeService.getThemeColors(); track themeColor) {
+                <button (click)="themeService.setStatsTheme(themeColor)" class="w-8 md:w-12 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getThemeClassString(themeColor, 'selectThemeButtonClasses')"></button>
+            }
+        </div>
+    </div>
 
-	<div>
-		<ng-container *ngComponentOutlet="activeTab.component"></ng-container>
-	</div>
+    <div>
+        <ng-container *ngComponentOutlet="activeTab.component"></ng-container>
+    </div>
 </div>
 
 <hlm-toaster />
