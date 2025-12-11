@@ -11,7 +11,6 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { AuthService } from '../../services/auth';
 import { LoginService } from '../../services/login-service';
 
 @Component({
@@ -36,7 +35,6 @@ export class Login implements OnInit {
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
-		private authService: AuthService,
 		private cdRef: ChangeDetectorRef,
 	) {}
 
@@ -63,7 +61,7 @@ export class Login implements OnInit {
 					console.log(
 						`These are the leagues: ${JSON.stringify(response.leagues)}`,
 					);
-					this.authService.Login();
+					this.loginServe.Login();
 					this.router.navigateByUrl('league');
 				},
 				error: (err: string) => {

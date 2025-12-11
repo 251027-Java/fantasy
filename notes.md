@@ -42,5 +42,3 @@ pipeline for login
 - convert response to db format (dto)
 - persist to database
 - return response to as json to endpoint
-
-TODO: add foreign key relationships in table

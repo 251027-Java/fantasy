@@ -7,9 +7,9 @@ import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
-import { AuthService } from '../../services/auth';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
 	selector: 'app-league',
@@ -26,7 +26,6 @@ import { StatsService } from '../../services/stats-service';
 })
 export class League implements OnInit {
 	// Determines number of items you'll see wtihin carousel
-	//
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
@@ -36,6 +35,7 @@ export class League implements OnInit {
 	) {}
 
 	public cardList: CardData[] = [];
+	public loading: boolean = true;
 
 	ngOnInit(): void {
 		this.loginServe.getLeagues().subscribe((data) => {
@@ -46,6 +46,7 @@ export class League implements OnInit {
 				buttonText: 'View',
 			}));
 
+			this.loading = false;
 			this.cdRef.detectChanges();
 			//console.log("data coming in: " + this.cardList);
 			console.log(
