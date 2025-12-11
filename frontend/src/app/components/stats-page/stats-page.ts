@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: <whatever> */
 import { NgClass, NgComponentOutlet } from '@angular/common';
 import { Component, Type } from '@angular/core';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { LuckScores } from '../luck-scores/luck-scores';
 import { TestScores } from '../test-scores/test-scores';
+import { HlmToaster } from '@spartan-ng/helm/sonner';
 
 interface Tab {
 	namePrebold: string;
@@ -13,11 +15,12 @@ interface Tab {
 	label: string;
 	component: Type<any>;
 	isActive: boolean;
+	imageBackgroundClass: string;
 }
 
 @Component({
 	selector: 'app-stats-page',
-	imports: [NgComponentOutlet, NgClass],
+	imports: [NgComponentOutlet, NgClass, HlmToaster],
 	templateUrl: './stats-page.html',
 	styleUrl: './stats-page.css',
 })
@@ -32,6 +35,7 @@ export class StatsPage {
 			label: 'Luck Scores',
 			component: LuckScores,
 			isActive: false,
+			imageBackgroundClass: 'luckstatsbackground',
 		},
 		{
 			namePrebold: '',
@@ -40,12 +44,14 @@ export class StatsPage {
 			label: 'Test Scores',
 			component: TestScores,
 			isActive: false,
+			imageBackgroundClass: 'testbackground',
 		},
 	];
 	activeTab: Tab = this.tabs[0];
 	displayedComponentTitlePrebold: string = '';
 	displayedComponentTitleBold: string = '';
 	displayedComponentTitlePostbold: string = '';
+	imageBackgroundClass: string = '';
 
 	currentLeagueName: string = '';
 
@@ -63,6 +69,7 @@ export class StatsPage {
 		this.displayedComponentTitlePrebold = tab.namePrebold;
 		this.displayedComponentTitleBold = tab.nameBold;
 		this.displayedComponentTitlePostbold = tab.namePostbold;
+		this.imageBackgroundClass = tab.imageBackgroundClass;
 		tab.isActive = true;
 	}
 
@@ -71,9 +78,8 @@ export class StatsPage {
 	}
 
 	ngOnInit() {
-		this.currentLeagueName = this.statsService.currentLeagueName;
+		this.currentLeagueName = this.statsService.getCurrentLeagueName();
 
-		this.statsService.getLeagueLuckStats();
 		this.selectTab(this.tabs[0]);
 	}
 }

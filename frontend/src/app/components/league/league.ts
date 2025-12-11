@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
+import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
 import { LoginService } from '../../services/login-service';
@@ -14,6 +15,7 @@ import { StatsService } from '../../services/stats-service';
 	imports: [
 		HlmFormFieldImports,
 		HlmSelectImports,
+		HlmInput,
 		HlmSelectImports,
 		BrnSelectImports,
 		HlmButtonImports,
@@ -56,8 +58,7 @@ export class League implements OnInit {
 
 	viewLeague(card: CardData): void {
 		console.log('Viewing league with id:', card.id);
-		this.statsService.currentLeagueId = String(card.id);
-		this.statsService.currentLeagueName = card.title;
+		this.statsService.setLeague(String(card.id), card.title);
 		this.router.navigateByUrl('stats');
 	}
 }

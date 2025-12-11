@@ -1,8 +1,15 @@
 package dev.revature.fantasy.service;
 
-import dev.revature.fantasy.dto.*;
-import dev.revature.fantasy.exception.*;
-import dev.revature.fantasy.model.*;
+import dev.revature.fantasy.dto.LeagueDto;
+import dev.revature.fantasy.dto.LeagueStatsDto;
+import dev.revature.fantasy.dto.LoginDto;
+import dev.revature.fantasy.dto.RosterUserDto;
+import dev.revature.fantasy.exception.HttpConnectionException;
+import dev.revature.fantasy.exception.InvalidUsernameException;
+import dev.revature.fantasy.model.League;
+import dev.revature.fantasy.model.RosterUser;
+import dev.revature.fantasy.model.User;
+import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
@@ -70,7 +77,7 @@ public class FantasyStatsService {
 
         // convert to dto (LoginResponse)
         LeagueDto[] leagueResponses = databaseLeagues.stream()
-                .map(league -> new LeagueDto(league.getLeagueId(), league.getLeagueName()))
+                .map(league -> new LeagueDto(league.getId(), league.getName()))
                 .toArray(LeagueDto[]::new);
 
         LoginDto loginResponse = new LoginDto(usernameResponse.getUserId(), leagueResponses);
@@ -83,13 +90,13 @@ public class FantasyStatsService {
      * valid
      * and already in the database.
      *
+     *
      * @param leagueId the sleeper league id to get the stats for
      * @return the league stats dto, not sure when this would/should be empty
      */
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
         // TODO: check if there are weekscores already in database for this league
-        // and that there are the correct amount of weeks, and users
-
+        // and that there are the correct amount of weeks, and
         // get the nfl state info from sleeper
         SleeperNFLStateResponse nflState = ResponseFormatter.getNFLState();
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
@@ -139,6 +146,7 @@ public class FantasyStatsService {
         // starting from the first week we don't have
         weekScores.clear();
         List<WeekScore> weekScoresToPersist = new ArrayList<>();
+
         for (int week = numWeeksFound + 1; week <= numWeeksToCompute; week++) {
             var matchups = ResponseFormatter.getMatchupsFromLeagueIdAndWeek(leagueId, week);
             // convertTo WeekScores for computation
@@ -162,6 +170,7 @@ public class FantasyStatsService {
      * Does the stats computation and returns the stats dto for stats endpoint
      * response. Requires that the parameters are compatible, ie that the weekScores
      * reference the same rosterUsers.
+     *
      *
      * @param weekScores  the weekscores for the league
      * @param rosterUsers the rosters for the league

@@ -94,7 +94,7 @@ export class ThemeService {
 		blue: {
 			selectThemeButtonClasses: 'border-blue-700 bg-blue-600 hover:bg-blue-800',
 			backToLeaguesButtonClasses:
-				'border-blue-700 bg-blue-900 hover:bg-blue-950',
+				'border-blue-600 bg-blue-900 hover:bg-blue-950',
 			displayedComponentTitleBoldClass: 'text-blue-700',
 			selectedTabButtonClasses: 'border-blue-700 bg-blue-600 hover:bg-blue-700',
 
@@ -109,7 +109,7 @@ export class ThemeService {
 			selectThemeButtonClasses:
 				'border-violet-700 bg-violet-500 hover:bg-violet-700',
 			backToLeaguesButtonClasses:
-				'border-violet-700 bg-violet-900 hover:bg-violet-950',
+				'border-violet-600 bg-violet-900 hover:bg-violet-950',
 			displayedComponentTitleBoldClass: 'text-violet-700',
 			selectedTabButtonClasses:
 				'border-violet-700 bg-violet-600 hover:bg-violet-700',

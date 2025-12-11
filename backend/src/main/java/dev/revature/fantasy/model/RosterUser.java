@@ -1,10 +1,11 @@
 package dev.revature.fantasy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Optional;
 
 @Entity
 @Table(
@@ -12,31 +13,34 @@ import lombok.Setter;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"roster_id", "league_id"})})
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class RosterUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment in DB
-    @Column(name = "roster_user_id")
-    private Long rosterUserId;
+    private Long id;
 
-    @Column(name = "roster_id")
+    @Column(name = "roster_id", nullable = false)
     private Integer rosterId;
 
-    @Column(name = "user_id_num")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_id"), nullable = false)
+    @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
-    @Column(name = "league_id")
-    private String leagueId;
+    @ManyToOne
+    @JoinColumn(name = "league_id", foreignKey = @ForeignKey(name = "fk_league_id"), nullable = false)
+    @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private League league;
 
-    @Column(name = "wins")
     private Integer wins;
 
-    @Column(name = "ties")
     private Integer ties;
 
-    @Column(name = "losses")
     private Integer losses;
 
     @Column(name = "fpts_decimal")
@@ -48,14 +52,13 @@ public class RosterUser {
     @Column(name = "fpts_against")
     private Integer fptsAgainst;
 
-    @Column(name = "fpts")
     private Integer fpts;
 
     // constructor where everything except rosterUserId is passed in
     public RosterUser(
             Integer rosterId,
-            String userId,
-            String leagueId,
+            User user,
+            League league,
             Integer wins,
             Integer ties,
             Integer losses,
@@ -64,8 +67,8 @@ public class RosterUser {
             Integer fptsAgainst,
             Integer fpts) {
         this.rosterId = rosterId;
-        this.userId = userId;
-        this.leagueId = leagueId;
+        this.user = user;
+        this.league = league;
         this.wins = wins;
         this.ties = ties;
         this.losses = losses;
@@ -75,19 +78,13 @@ public class RosterUser {
         this.fpts = fpts;
     }
 
-    @Override
-    public String toString() {
-        return "RosterUser{" + "rosterUserId="
-                + rosterUserId + ", rosterId="
-                + rosterId + ", userId="
-                + userId + ", leagueId="
-                + leagueId + ", wins="
-                + wins + ", ties="
-                + ties + ", losses="
-                + losses + ", fptsDecimal="
-                + fptsDecimal + ", fptsAgainstDecimal="
-                + fptsAgainstDecimal + ", fptsAgainst="
-                + fptsAgainst + ", fpts="
-                + fpts + '}';
+    @ToString.Include
+    private String userId() {
+        return Optional.ofNullable(user).map(User::getId).orElse(null);
+    }
+
+    @ToString.Include
+    private String leagueId() {
+        return Optional.ofNullable(league).map(League::getId).orElse(null);
     }
 }

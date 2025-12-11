@@ -29,4 +29,4 @@ jobs:
 
       - name: Cache ddl check dependencies
         continue-on-error: true
-        run: just compile _gen-classpath
+        run: just ddl

@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/style/useImportType: idk */
 /** biome-ignore-all assist/source/organizeImports: whatever */
-import { Component } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Score } from '../../interface/stats-response';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
@@ -21,7 +21,9 @@ export class LuckScores {
 	sortColumn: luckStatColumn = 'none';
 	sortAsc: boolean = true;
 
-	readonly headers: [keyof Score, string][] = [
+	@ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+
+	readonly headers: Map<keyof Score, string> = new Map<keyof Score, string>([
 		['totalLuck', 'Total Luck'],
 		['medLuck', 'Median Luck'],
 		['apLuck', 'All Play Luck'],
@@ -31,14 +33,29 @@ export class LuckScores {
 		['wins', 'Wins'],
 		['loses', 'Losses'],
 		['ties', 'Ties'],
-	] as const;
+	]);
 
-	constructor(statsServ: StatsService, themeServ: ThemeService) {
+	constructor(
+		statsServ: StatsService,
+		themeServ: ThemeService,
+		private ngZone: NgZone,
+	) {
 		this.statsService = statsServ;
 		this.themeService = themeServ;
 	}
 
-	toggleSort(column: luckStatColumn) {
+	getHeader(key: keyof any): string {
+		return this.headers.get(key as keyof Score) || '';
+	}
+
+	getNumDataColumnsVisible(): number {
+		if (!this.statsService.getStatsLoaded('Luck')) return this.headers.size;
+		return this.statsService.getNumDataColumnsVisible('Luck');
+	}
+
+	toggleSort(column: luckStatColumn): void {
+		if (!this.statsService.getStatsLoaded('Luck')) return;
+
 		if (this.sortColumn === column) {
 			this.sortAsc = !this.sortAsc;
 		} else {
@@ -55,4 +72,37 @@ export class LuckScores {
 		}
 		return ['▴', '▾'];
 	}
+
+	getWidth(): number {
+		if (this.statsService.getNumMembersVisible() === 0) return 90;
+		return (
+			7.5 * Math.min(12, this.statsService.getNumDataColumnsVisible('Luck') + 3)
+		);
+	}
+
+	onMemberFilterChange(event: Event, member: string) {
+		const input = event.target as HTMLInputElement;
+		if (!input) return;
+
+		const doc = document.documentElement;
+		const offset = doc.scrollHeight - doc.scrollTop - doc.clientHeight;
+
+		this.statsService.setMemberIsVisible(member, input.checked);
+
+		this.ngZone.runOutsideAngular(() => {
+			requestAnimationFrame(() => {
+				doc.scrollTop = doc.scrollHeight - doc.clientHeight - offset;
+			});
+		});
+	}
+	onColumnFilterChange(event: Event, column: keyof Score) {
+		const input = event.target as HTMLInputElement;
+		if (input !== undefined)
+			this.statsService.setColumnIsVisible('Luck', column, input.checked);
+	}
+
+	keepInsertionOrder = () => 0;
+	caseInsensitiveSort = (a: any, b: any) => {
+		return a.key.toLowerCase().localeCompare(b.key.toLowerCase());
+	};
 }

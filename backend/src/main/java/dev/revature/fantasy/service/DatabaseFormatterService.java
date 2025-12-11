@@ -1,8 +1,11 @@
 package dev.revature.fantasy.service;
 
-import dev.revature.fantasy.dto.*;
+import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.logger.GlobalLogger;
-import dev.revature.fantasy.model.*;
+import dev.revature.fantasy.model.League;
+import dev.revature.fantasy.model.User;
+import dev.revature.fantasy.model.WeekScore;
+import dev.revature.fantasy.model.WeekScoreId;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
 import org.springframework.stereotype.Service;
 
@@ -88,8 +91,8 @@ public class DatabaseFormatterService {
                         "roster is empty for rosterId: " + matchup.getRosterId() + " and leagueId: " + leagueId);
                 continue;
             }
-            WeekScoreId weekScoreId = new WeekScoreId(rosterUser.get().getRosterUserId(), week);
-            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints(), leagueId);
+            WeekScoreId weekScoreId = new WeekScoreId(rosterUser.get(), week);
+            WeekScore weekScore = new WeekScore(weekScoreId, matchup.getPoints());
             weekScores.add(weekScore);
         }
         return weekScores;

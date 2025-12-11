@@ -1,32 +1,66 @@
 <div class="flex flex-col space-y-10 items-center justify-center min-h-screen ">
 
-    <!-- This is the header of the card. Plaed a the top. Can add some logos if wished -->
-    <section class="w-full max-w-sm rounded-xl shadow-2xl bg-white border border-gray-300" hlmCard>
-        <div hlmCardHeader>
-            <!-- <h3 hlmCardTitle>Login to your account</h3> -->
-            <p hlmCardDescription>Enter your username below</p>
+    <section
+    class="w-full max-w-sm rounded-2xl shadow-xl 
+            bg-white border border-gray-200 
+            text-gray-900 p-6 
+            transition-all duration-300 
+            hover:shadow-2xl"
+    hlmCard
+    >
 
+        <!-- Header -->
+        <div 
+            hlmCardHeader 
+            class="text-center mb-4 space-y-1"
+        >
+            <p hlmCardDescription class="text-sm text-gray-500">
+            Enter your username below
+            </p>
         </div>
 
-        <!-- THis is the cards content. Shows what mainly makes up the card -->
-        <div hlmCardContent class="mt-4">
-            <form [formGroup]="loginControl" (ngSubmit)="Login()">
-                <hlm-form-field>
-                    <div class="flex flex-col gap-6">
-                        <div class="grid gap-2">
-                            <label hlmLabel for="email">username</label>
-                            <input hlmInput type="user" id="user" placeholder="Some-Username" required
-                                formControlName="user" />
-                            <!-- Some ngIf that shows a different hlm-error based on what is returned from HTTP GET -->
-                            <hlm-error>Your username is required</hlm-error>
-                        </div>
-                    </div>
-                </hlm-form-field>
+        <!-- Content -->
+        <div hlmCardContent>
+            <form [formGroup]="loginControl" (ngSubmit)="Login()" class="space-y-6">
+
+            <hlm-form-field class="space-y-2">
+
+                <label hlmLabel for="user" class="font-medium text-gray-700">
+                Username
+                </label>
+
+                <input
+                    hlmInput
+                    id="user"
+                    placeholder="Enter your username"
+                    required
+                    formControlName="user"
+                    class="w-full"
+                />
+
+                <hlm-error class="text-red-600 text-sm">
+                    Your username is required
+                </hlm-error>
+
+            </hlm-form-field>
+
             </form>
         </div>
 
-        <div hlmCardFooter class="flex-col gap-2">
-            <button hlmBtn type="submit" class="w-full" (click)="Login()">Login</button>
+        <!-- Footer -->
+        <div hlmCardFooter class="pt-4">
+            <button
+            hlmBtn
+            type="submit"
+            class="w-full bg-blue-600 hover:bg-blue-500 
+                    text-white font-medium py-2 rounded-lg 
+                    transition-colors duration-200"
+            (click)="Login()"
+            >
+            Login
+            </button>
         </div>
+
     </section>
+
 </div>
