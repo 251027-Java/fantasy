@@ -22,7 +22,16 @@ just -l
 
 ## Quick start
 
-To get started, run the following commands:
+To get started, populate the .env file in the backend directory with the following variables:
+
+```sh
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+JWT_SECRET=your-secret-key
+JWT_EXPIRATION_TIME_MILI=your-expiration-time
+```
+
+Then run the following commands:
 
 ```sh
 just db-create # create and start the database
