@@ -69,6 +69,10 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency> 
 
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -117,7 +121,26 @@
             <version>0.13.0</version>
             <scope>runtime</scope>
         </dependency>
+
     </dependencies>
+    <profiles>
+        <profile>
+            <id>macos-native-dns</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-resolver-dns-native-macos</artifactId>
+                    <version>4.2.7.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
