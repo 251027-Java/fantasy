@@ -6,11 +6,14 @@ import static org.mockito.Mockito.*;
 
 import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.repository.WeekScoreRepo;
+import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
+import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperMatchupResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -18,6 +21,12 @@ import java.util.List;
 public class WeekScoreServiceTest {
     @Mock
     WeekScoreRepo repo;
+
+    @Mock
+    ResponseFormatter responseFormatter;
+
+    @Mock
+    DatabaseFormatterService databaseFormatterService;
 
     @InjectMocks
     WeekScoreService service;
@@ -90,5 +99,37 @@ public class WeekScoreServiceTest {
         List<List<WeekScore>> weekScores = service.findWeekScoresByLeagueId(id, maxWeek);
 
         assertTrue(weekScores.isEmpty());
+    }
+
+    @Test
+    void concurrentGetWeekScores_getAllWeekScoresForLeague_returnsTheWeekScores() {
+        String leagueId = "asd";
+
+        SleeperMatchupResponse m1 = new SleeperMatchupResponse();
+        SleeperMatchupResponse m2 = new SleeperMatchupResponse();
+        SleeperMatchupResponse m3 = new SleeperMatchupResponse();
+
+        List<SleeperMatchupResponse> mockMatchup1 = List.of(m1, m2);
+        List<SleeperMatchupResponse> mockMatchup2 = List.of(m3);
+
+        int week1 = 1;
+        int week2 = 2;
+
+        when(responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(leagueId, week1))
+                .thenReturn(Mono.just(mockMatchup1));
+        when(responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(leagueId, week2))
+                .thenReturn(Mono.just(mockMatchup2));
+
+        when(databaseFormatterService.formatMatchups(mockMatchup1, leagueId, week1))
+                .thenReturn(List.of(new WeekScore(), new WeekScore()));
+        when(databaseFormatterService.formatMatchups(mockMatchup2, leagueId, week2))
+                .thenReturn(List.of(new WeekScore()));
+
+        int numWeeksFound = 0;
+        int numWeeksToCompute = 2;
+
+        List<WeekScore> weekScores = service.concurrentGetWeekScores(leagueId, numWeeksFound, numWeeksToCompute);
+
+        assertEquals(3, weekScores.size());
     }
 }

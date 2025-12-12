@@ -42,6 +42,9 @@ public class FantasyStatsServiceTest {
     @Mock
     RosterUserService rosterUserService;
 
+    @Mock
+    ResponseFormatter responseFormatter;
+
     @InjectMocks
     FantasyStatsService fantasyStatsService;
 
