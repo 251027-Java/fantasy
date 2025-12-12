@@ -1,4 +1,4 @@
-package dev.revature.fantasy.springConfig;
+package dev.revature.fantasy.springconfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
