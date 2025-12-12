@@ -1,7 +1,5 @@
 package dev.revature.fantasy.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.model.RosterUser;
@@ -15,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StatsComputationServiceTest {
     static final double EPSILON = 1e-3;
@@ -82,7 +82,7 @@ public class StatsComputationServiceTest {
     }
 
     @Test
-    void luckDataToDto_() {
+    void toDto_validLuckDataAndMapping_returnsStatsInDtoForm() {
         long rosterUserId = 1L;
 
         Map<Long, Double> totalMedianLuckScores = Map.of(rosterUserId, 5.5);
