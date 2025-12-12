@@ -4,10 +4,9 @@ import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.repository.WeekScoreRepo;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperMatchupResponse;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,10 @@ public class WeekScoreService {
     private final ResponseFormatter responseFormatter;
     private final DatabaseFormatterService databaseFormatterService;
 
-    public WeekScoreService(WeekScoreRepo repo, ResponseFormatter responseFormatter, DatabaseFormatterService databaseFormatterService) {
+    public WeekScoreService(
+            WeekScoreRepo repo,
+            ResponseFormatter responseFormatter,
+            DatabaseFormatterService databaseFormatterService) {
         this.repo = repo;
         this.responseFormatter = responseFormatter;
         this.databaseFormatterService = databaseFormatterService;
@@ -52,22 +54,18 @@ public class WeekScoreService {
     }
 
     public List<WeekScore> concurrentGetWeekScores(String leagueId, int numWeeksFound, int numWeeksToCompute) {
-        var monoScores =  Flux.range(numWeeksFound + 1, numWeeksToCompute - numWeeksFound)
-        .flatMap(
-            (Integer week) -> {
+        var monoScores = Flux.range(numWeeksFound + 1, numWeeksToCompute - numWeeksFound)
+                .flatMap(
+                        (Integer week) -> {
+                            Mono<List<SleeperMatchupResponse>> matchupsMono =
+                                    this.responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(leagueId, week);
 
-                Mono<List<SleeperMatchupResponse>> matchupsMono = 
-                    this.responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(leagueId, week);
-
-                return matchupsMono
-                    .flatMapIterable(
-                        (List<SleeperMatchupResponse> matchups) -> {
-                            return this.databaseFormatterService.formatMatchups(matchups, leagueId, week);
-                        }
-                    );
-            },
-            MAX_CONCURRENCY 
-        ).collectList();
+                            return matchupsMono.flatMapIterable((List<SleeperMatchupResponse> matchups) -> {
+                                return this.databaseFormatterService.formatMatchups(matchups, leagueId, week);
+                            });
+                        },
+                        MAX_CONCURRENCY)
+                .collectList();
 
         List<WeekScore> scores = monoScores.block();
 

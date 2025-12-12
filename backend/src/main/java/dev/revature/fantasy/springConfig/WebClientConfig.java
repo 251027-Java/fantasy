@@ -10,7 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     // Define the base URL for your target API (e.g., the Sleeper API)
-    private static final String BASE_URL = "https://api.sleeper.app/v1"; 
+    private static final String BASE_URL = "https://api.sleeper.app/v1";
 
     /**
      * Creates and configures the primary WebClient bean.
@@ -19,15 +19,14 @@ public class WebClientConfig {
      */
     @Bean
     public WebClient sleeperWebClient() {
-        return WebClient.create().mutate()
-            // Set the common base URL for all requests
-            .baseUrl(BASE_URL) 
-            
-            // Apply common headers
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+        return WebClient.create()
+                .mutate()
+                // Set the common base URL for all requests
+                .baseUrl(BASE_URL)
 
-            
-            .build();
+                // Apply common headers
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
 }

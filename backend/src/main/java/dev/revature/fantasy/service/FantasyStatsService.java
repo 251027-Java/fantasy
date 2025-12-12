@@ -13,12 +13,8 @@ import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +28,6 @@ public class FantasyStatsService {
     private final StatsComputationService statsComputationService;
     private final RosterUserService rosterUserService;
     private final ResponseFormatter responseFormatter;
-
 
     public FantasyStatsService(
             LeagueService leagueService,
@@ -148,7 +143,8 @@ public class FantasyStatsService {
 
         // make matchup requests for each week from sleeper
         // starting from the first week we don't have
-        var weekScoresToPersist = this.weekScoreService.concurrentGetWeekScores(leagueId, numWeeksFound, numWeeksToCompute);
+        var weekScoresToPersist =
+                this.weekScoreService.concurrentGetWeekScores(leagueId, numWeeksFound, numWeeksToCompute);
         // persist weekscores all at once with idempotency
         this.weekScoreService.upsertWeekScores(weekScoresToPersist);
 
@@ -160,8 +156,6 @@ public class FantasyStatsService {
         // need the rosterUserIds
         return this.weekScoresToStatsDto(allWeekScores, rosterUsers);
     }
-        
-    
 
     /**
      * Does the stats computation and returns the stats dto for stats endpoint

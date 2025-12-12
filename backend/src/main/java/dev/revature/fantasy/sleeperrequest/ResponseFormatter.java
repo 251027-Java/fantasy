@@ -9,6 +9,9 @@ import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperPlayerRes
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperRosterUserResponse;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUserResponse;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUsernameResponse;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -19,11 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.client.WebClient;
-
 /**
  * RequestFormatter is a class used to format the responses from sleeper into
  * POJO
@@ -33,8 +31,8 @@ public class ResponseFormatter {
 
     private static final ObjectMapper om = new ObjectMapper();
 
-    private static final ParameterizedTypeReference<List<SleeperMatchupResponse>> MATCHUP_LIST_TYPE = 
-        new ParameterizedTypeReference<List<SleeperMatchupResponse>>() {};
+    private static final ParameterizedTypeReference<List<SleeperMatchupResponse>> MATCHUP_LIST_TYPE =
+            new ParameterizedTypeReference<List<SleeperMatchupResponse>>() {};
 
     private final WebClient webClient;
 
@@ -138,33 +136,34 @@ public class ResponseFormatter {
     }
 
     /**
-     * Retrieves matchups for a specific league and week, returning a Mono 
+     * Retrieves matchups for a specific league and week, returning a Mono
      * that will emit the list of matchups.
      * * @param leagueId The league ID.
      * @param weekNum The week number.
      * @return Mono<List<SleeperMatchupResponse>>
      */
     public Mono<List<SleeperMatchupResponse>> nonBlockGetMatchupsFromLeagueIdAndWeek(String leagueId, int weekNum) {
-        
+
         // Define the API endpoint URL
         String uri = String.format("/league/%s/matchups/%d", leagueId, weekNum);
 
-        return webClient.get()
-            .uri(uri)
-            .retrieve()
-            // handle HTTP errors 
-            .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(), clientResponse -> {
-                GlobalLogger.error(
-                    String.format("API returned error for league_id '%s' week '%d', status: %d", 
-                                  leagueId, weekNum, clientResponse.statusCode().value()));
-                return Mono.error(new SleeperException("Error fetching matchups: " + clientResponse.statusCode()));
-            })
-            .bodyToMono(MATCHUP_LIST_TYPE)
-            // handle any exceptions (HTTP errors, deserialization errors, etc.)
-            .onErrorResume(Exception.class, e -> {
-                System.out.println("No matchups found (or error occurred)");
-                return Mono.just(List.of());
-            });
+        return webClient
+                .get()
+                .uri(uri)
+                .retrieve()
+                // handle HTTP errors
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(), clientResponse -> {
+                    GlobalLogger.error(String.format(
+                            "API returned error for league_id '%s' week '%d', status: %d",
+                            leagueId, weekNum, clientResponse.statusCode().value()));
+                    return Mono.error(new SleeperException("Error fetching matchups: " + clientResponse.statusCode()));
+                })
+                .bodyToMono(MATCHUP_LIST_TYPE)
+                // handle any exceptions (HTTP errors, deserialization errors, etc.)
+                .onErrorResume(Exception.class, e -> {
+                    System.out.println("No matchups found (or error occurred)");
+                    return Mono.just(List.of());
+                });
     }
 
     public static List<SleeperMatchupResponse> getMatchupsFromLeagueIdAndWeek(String leagueId, int weekNum) {
