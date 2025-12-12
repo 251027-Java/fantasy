@@ -6,6 +6,7 @@ import dev.revature.fantasy.dto.LoginDto;
 import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
+import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.User;
@@ -154,7 +155,10 @@ public class FantasyStatsService {
 
         // do stats computation
         // need the rosterUserIds
+        GlobalLogger.debug("Computing stats for league " + leagueId);
         return this.weekScoresToStatsDto(allWeekScores, rosterUsers);
+
+        // get weekly stats data
     }
 
     /**
