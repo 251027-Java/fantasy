@@ -97,7 +97,7 @@ export class StatsService {
 				return resp;
 			}),
 			catchError(() => {
-				this.displayError();
+				this.displayStatsLoadingError();
 				return of({ stats: [] } as StatsResponse);
 			}),
 		);
@@ -126,7 +126,7 @@ export class StatsService {
 					),
 				);
 			} catch (_error) {
-				this.displayError();
+				this.displayStatsLoadingError();
 			}
 		});
 	}
@@ -232,7 +232,7 @@ export class StatsService {
 		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
 	}
 
-	private displayError(): void {
+	displayStatsLoadingError(): void {
 		toast('Error loading stats for this league.', {
 			action: {
 				label: 'Close',
