@@ -1,6 +1,9 @@
 package dev.revature.fantasy.controller;
 
-import dev.revature.fantasy.dto.*;
+import dev.revature.fantasy.dto.AuthRequestDto;
+import dev.revature.fantasy.dto.AuthResponseDto;
+import dev.revature.fantasy.dto.LeagueStatsDto;
+import dev.revature.fantasy.dto.LoginDto;
 import dev.revature.fantasy.exception.AuthException;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidLeagueIdException;
@@ -23,7 +26,7 @@ public class MainController {
         this.authService = authService;
     }
 
-    @GetMapping("/login/{username}")
+    @GetMapping("/info/{username}")
     public LoginDto getUserInfo(@PathVariable String username)
             throws HttpConnectionException, InvalidUsernameException {
         // TODO: send 406 status code if there are no leagues for the user
