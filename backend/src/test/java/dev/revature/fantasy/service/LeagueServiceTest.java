@@ -1,5 +1,8 @@
 package dev.revature.fantasy.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.repository.LeagueRepo;
 import org.junit.jupiter.api.Test;
@@ -11,9 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 public class LeagueServiceTest {
     @Mock
@@ -23,7 +23,7 @@ public class LeagueServiceTest {
     LeagueService service;
 
     @Test
-    void savingLeagues_returnsSameLeagues() {
+    void idempotentSave_savingLeagues_returnsSameLeagues() {
         List<League> mockLeagues = List.of(new League(), new League());
 
         List<League> leagues = service.idempotentSave(mockLeagues);
@@ -33,7 +33,7 @@ public class LeagueServiceTest {
     }
 
     @Test
-    void getSizeOfExistingLeague_returnsSizeOfLeague() {
+    void getSizeOfLeague_sizeOfExistingLeague_returnsSizeOfLeague() {
         League mockLeague = new League();
         mockLeague.setNumRosters(10);
 
@@ -48,7 +48,7 @@ public class LeagueServiceTest {
     }
 
     @Test
-    void getSizeOfNonExistantLeague_returnsDefaultValue() {
+    void getSizeOfLeague_sizeOfNonExistantLeague_returnsDefaultValue() {
         String id = "asd";
         when(repo.findById(id)).thenReturn(Optional.empty());
 

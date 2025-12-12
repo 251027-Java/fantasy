@@ -1,5 +1,9 @@
 package dev.revature.fantasy.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+
 import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.repository.WeekScoreRepo;
 import org.junit.jupiter.api.Test;
@@ -10,10 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 public class WeekScoreServiceTest {
     @Mock
@@ -23,7 +23,7 @@ public class WeekScoreServiceTest {
     WeekScoreService service;
 
     @Test
-    void saveWeekScores_usesRepositoryToSave() {
+    void upsertWeekScores_saveWeekScores_usesRepositoryToSave() {
         List<WeekScore> mockWeekScores = List.of();
 
         service.upsertWeekScores(mockWeekScores);
@@ -32,7 +32,7 @@ public class WeekScoreServiceTest {
     }
 
     @Test
-    void obtainWeekScoresWithValidLeagueIdAndUpToMaxWeek_returnsAllFoundWeekScores() {
+    void findWeekScoresByLeagueId_validLeagueIdAndUpToMaxWeek_returnsAllFoundWeekScores() {
         List<WeekScore> mockWeekScores1 = List.of(new WeekScore(), new WeekScore());
         List<WeekScore> mockWeekScores2 = List.of(new WeekScore());
 
@@ -54,7 +54,7 @@ public class WeekScoreServiceTest {
     }
 
     @Test
-    void obtainWeekScoresWithValidLeagueIdAndLargeMaxWeek_returnsLessThanMaxWeekResults() {
+    void findWeekScoresByLeagueId_ValidLeagueIdAndLargeMaxWeek_returnsLessThanMaxWeekResults() {
         List<WeekScore> mockWeekScores1 = List.of(new WeekScore(), new WeekScore());
 
         String leagueId = "someLeagueId";
@@ -72,7 +72,7 @@ public class WeekScoreServiceTest {
     }
 
     @Test
-    void tryObtainWeekScoresWithNonPositiveMaxWeek_returnsEmptyList() {
+    void findWeekScoresByLeagueId_nonPositiveMaxWeek_returnsEmptyList() {
         String id = "asd";
         int maxWeek = 0;
 
@@ -82,7 +82,7 @@ public class WeekScoreServiceTest {
     }
 
     @Test
-    void tryObtainWeekScoresWithNonExistantLeagueId() {
+    void findWeekScoresByLeagueId_nonExistantLeagueId_returnsEmptyList() {
         int maxWeek = 1;
         String id = "asd";
         when(repo.findWeekScoresByIdWeekNumAndLeagueId(1, id)).thenReturn(List.of());
