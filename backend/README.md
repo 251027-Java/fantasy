@@ -22,9 +22,9 @@ just -l
 
 ## Quick start
 
-To get started, populate the .env file in the backend directory with the following variables:
+To get started, populate the `.env` file in the backend directory with the following variables:
 
-```sh
+```
 GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-client-secret
 JWT_SECRET=your-secret-key
