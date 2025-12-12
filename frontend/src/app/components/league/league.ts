@@ -7,15 +7,16 @@ import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
+import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
+import { ThemeService } from '../../services/theme-service';
 
 @Component({
 	selector: 'app-league',
 	imports: [
 		HlmFormFieldImports,
 		HlmSelectImports,
-		HlmInput,
 		HlmSelectImports,
 		BrnSelectImports,
 		HlmButtonImports,
@@ -30,6 +31,8 @@ export class League implements OnInit {
 		private router: Router,
 		private loginServe: LoginService,
 		private statsService: StatsService,
+		private authService: AuthService,
+		private themeService: ThemeService,
 		private cdRef: ChangeDetectorRef,
 	) {}
 
@@ -55,6 +58,13 @@ export class League implements OnInit {
 		});
 
 		//console.log("Raw data3 (JSON string):", JSON.stringify(this.cardList, null, 2));
+	}
+
+	Logout(): void {
+		this.loginServe.logout();
+		this.statsService.reset();
+		this.themeService.reset();
+		this.router.navigateByUrl('');
 	}
 
 	viewLeague(card: CardData): void {

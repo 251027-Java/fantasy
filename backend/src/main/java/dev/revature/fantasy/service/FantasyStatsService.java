@@ -6,6 +6,7 @@ import dev.revature.fantasy.dto.LoginDto;
 import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
+import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.User;
@@ -63,14 +64,14 @@ public class FantasyStatsService {
 
         // Recieve an HTTP response from sleeper for the given username as a
         // SleeperUsernameResponse object (JSON userID)
-        SleeperUsernameResponse usernameResponse = ResponseFormatter.getUserIdFromUsername(usernameStr);
+        SleeperUsernameResponse usernameResponse = this.responseFormatter.getUserIdFromUsername(usernameStr);
         // if username not found
         if (usernameResponse == null) {
             return Optional.empty();
         }
 
         List<SleeperLeagueResponse> sleeperLeagues =
-                ResponseFormatter.getLeaguesFromUserId(usernameResponse.getUserId());
+                this.responseFormatter.getLeaguesFromUserId(usernameResponse.getUserId());
         // convert league responses to database format
         List<League> databaseLeagues = DatabaseFormatterService.formatLeagueInfo(sleeperLeagues);
         // save to database
@@ -96,7 +97,7 @@ public class FantasyStatsService {
      * @return the league stats dto, not sure when this would/should be empty
      */
     public Optional<LeagueStatsDto> computeStats(String leagueId) {
-        SleeperNFLStateResponse nflState = ResponseFormatter.getNFLState();
+        SleeperNFLStateResponse nflState = this.responseFormatter.getNFLState();
         // TODO: dynamically determine when playoffs start
         int leaguePlayoffStartWeek = 15;
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
@@ -124,7 +125,7 @@ public class FantasyStatsService {
         }
 
         // make sleeper request with leagueId to get users
-        List<SleeperUserResponse> sleeperUsers = ResponseFormatter.getUsersFromLeague(leagueId);
+        List<SleeperUserResponse> sleeperUsers = this.responseFormatter.getUsersFromLeague(leagueId);
         if (sleeperUsers.size() == 0) {
             return Optional.empty();
         }
@@ -135,7 +136,7 @@ public class FantasyStatsService {
         this.userService.idempotentSave(databaseUsers);
 
         // get rosters from leagueId
-        List<SleeperRosterUserResponse> sleeperRosterUsers = ResponseFormatter.getRostersFromLeagueId(leagueId);
+        List<SleeperRosterUserResponse> sleeperRosterUsers = this.responseFormatter.getRostersFromLeagueId(leagueId);
         List<RosterUserDto> rosterUserDtos = DatabaseFormatterService.formatRosterUsers(sleeperRosterUsers);
 
         // persist to database, need to upsert incase a users' stats (wins, etc) changed
@@ -154,7 +155,10 @@ public class FantasyStatsService {
 
         // do stats computation
         // need the rosterUserIds
+        GlobalLogger.debug("Computing stats for league " + leagueId);
         return this.weekScoresToStatsDto(allWeekScores, rosterUsers);
+
+        // get weekly stats data
     }
 
     /**
