@@ -38,7 +38,7 @@ export class StatsPage {
 			imageBackgroundClass: 'luckstatsbackground',
 		},
 		{
-			namePrebold: 'You\'re ',
+			namePrebold: "You're ",
 			nameBold: 'mid',
 			namePostbold: ' af.',
 			label: 'Median Scores',

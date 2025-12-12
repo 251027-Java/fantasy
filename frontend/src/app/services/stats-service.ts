@@ -3,9 +3,9 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
+import { medianLuckStatColumn } from '../components/median-luck-scores/median-luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
 import { AuthService } from './auth-service';
-import { medianLuckStatColumn } from '../components/median-luck-scores/median-luck-scores';
 
 export type StatsType = 'Luck' | 'MedianLuck';
 
@@ -22,7 +22,10 @@ export class StatsService {
 	) {}
 
 	// holds the stats
-	statsResponse: WritableSignal<StatsResponse> = signal({ stats: [], weeklyMedianLuck: [] });
+	statsResponse: WritableSignal<StatsResponse> = signal({
+		stats: [],
+		weeklyMedianLuck: [],
+	});
 
 	// filters for what is displayed
 	filteredLeagueMembers: Map<string, boolean> = new Map<string, boolean>();
@@ -34,7 +37,6 @@ export class StatsService {
 	private currentLeagueId: string = '';
 	private currentLeagueName: string = '';
 
-	
 	private readonly nameColumnWidthClassStrings: Record<number, string> = {
 		0: 'w-[100%]',
 		1: 'w-2/3',
@@ -128,7 +130,9 @@ export class StatsService {
 					// Push each median stat into the stats array with proper formatting
 					resp.weeklyMedianLuck.push({
 						userName: medPlayer.userName,
-						stats: medPlayer.stats.map((luck: Number) => Number(luck.toFixed(this.numDecimalPlaces))),
+						stats: medPlayer.stats.map((luck: number) =>
+							Number(luck.toFixed(this.numDecimalPlaces)),
+						),
 					});
 				}
 
@@ -266,14 +270,13 @@ export class StatsService {
 		}
 
 		this.statsResponse().weeklyMedianLuck.sort((a, b) => {
-			if (a.stats[column as number - 1] < b.stats[column as number - 1])
+			if (a.stats[(column as number) - 1] < b.stats[(column as number) - 1])
 				return sortAsc ? -1 : 1;
-			if (a.stats[column as number - 1] > b.stats[column as number - 1])
+			if (a.stats[(column as number) - 1] > b.stats[(column as number) - 1])
 				return sortAsc ? 1 : -1;
 			return 0;
 		});
 	}
-	
 
 	// Adding setters and getters to stats-service to store current league info
 	setLeague(newLeagueId: string, newLeagueName: string) {

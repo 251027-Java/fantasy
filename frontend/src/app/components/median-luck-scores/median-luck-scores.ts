@@ -1,6 +1,12 @@
 /** biome-ignore-all lint/style/useImportType: idk */
 /** biome-ignore-all assist/source/organizeImports: whatever */
-import { Component, ElementRef, HostListener, NgZone, ViewChild } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	HostListener,
+	NgZone,
+	ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
@@ -31,11 +37,11 @@ export class MedianLuckScores {
 		this.themeService = themeServ;
 	}
 
-  windowWidth: number = 0;
-  @HostListener('window:resize', ['$event'])
-  getScreenSize(_event?: any): void {
-    this.windowWidth = window.innerWidth;
-  }
+	windowWidth: number = 0;
+	@HostListener('window:resize', ['$event'])
+	getScreenSize(_event?: any): void {
+		this.windowWidth = window.innerWidth;
+	}
 
 	getNumDataColumnsVisible(): number {
 		if (!this.statsService.getStatsLoaded('MedianLuck')) return 0;
@@ -65,7 +71,8 @@ export class MedianLuckScores {
 	getWidth(): number {
 		if (this.statsService.getNumMembersVisible() === 0) return 90;
 		return (
-			7.5 * Math.min(12, this.statsService.getNumDataColumnsVisible('MedianLuck') + 3)
+			7.5 *
+			Math.min(12, this.statsService.getNumDataColumnsVisible('MedianLuck') + 3)
 		);
 	}
 
