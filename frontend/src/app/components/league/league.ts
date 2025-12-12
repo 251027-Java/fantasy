@@ -7,9 +7,9 @@ import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
+import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
-import { AuthService } from '../../services/auth-service';
 
 @Component({
 	selector: 'app-league',
