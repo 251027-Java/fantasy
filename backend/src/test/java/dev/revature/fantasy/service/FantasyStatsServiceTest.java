@@ -1,16 +1,23 @@
 package dev.revature.fantasy.service;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+
 import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.LoginDto;
+import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
 import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.model.RosterUser;
+import dev.revature.fantasy.model.User;
 import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperNFLStateResponse;
+import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperRosterUserResponse;
+import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUserResponse;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUsernameResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +30,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FantasyStatsServiceTest {
@@ -94,6 +98,7 @@ public class FantasyStatsServiceTest {
 
         List<League> mockLeagues = List.of(mockLeague);
         mockDfs.when(() -> DatabaseFormatterService.formatLeagueInfo(List.of())).thenReturn(mockLeagues);
+        // end of arrange
 
         Optional<LoginDto> realLoginDto = fantasyStatsService.login(username);
 
@@ -104,26 +109,29 @@ public class FantasyStatsServiceTest {
     @Test
     void computeStats_validLeagueIdWithAllExistingWeekScoresInDatabase_returnsLeagueStatsEarly() {
         String leagueId = "asd";
-        int maxWeekToSearch = 1;
+        int numWeeksToCompute = 1;
 
         SleeperNFLStateResponse nflState = new SleeperNFLStateResponse();
-        nflState.setDisplayWeek("" + (maxWeekToSearch + 1));
+        nflState.setDisplayWeek("2");
 
         mockRf.when(ResponseFormatter::getNFLState).thenReturn(nflState);
 
         int leagueRosters = 1;
-        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
         when(leagueService.getSizeOfLeague(leagueId)).thenReturn(leagueRosters);
-        when(weekScoreService.findWeekScoresByLeagueId(leagueId, maxWeekToSearch))
+
+        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, numWeeksToCompute))
                 .thenReturn(weekScoresInDatabase);
 
         List<RosterUser> rosterUsers = List.of(new RosterUser());
         when(rosterUserService.getAllRosterUsersByLeagueId(leagueId)).thenReturn(rosterUsers);
 
+        // for method weekScoresToStatsDto
         LuckData luckData = null;
         when(statsComputationService.computeStats(rosterUsers, weekScoresInDatabase))
                 .thenReturn(luckData);
         when(statsComputationService.toDto(eq(luckData), anyMap())).thenReturn(new LeagueStatsDto(new StatDto[] {}));
+        // end of arrange
 
         Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
 
@@ -133,23 +141,82 @@ public class FantasyStatsServiceTest {
     @Test
     void computeStats_leagueIdWithSomeExistingWeekScoresInDatabaseButNowDeletedInSleeper_returnsEmpty() {
         String leagueId = "asd";
-        int maxWeekToSearch = 1;
+        int numWeeksToCompute = 1;
 
         SleeperNFLStateResponse nflState = new SleeperNFLStateResponse();
-        nflState.setDisplayWeek("" + (maxWeekToSearch + 1));
+        nflState.setDisplayWeek("2");
 
         mockRf.when(ResponseFormatter::getNFLState).thenReturn(nflState);
 
         int leagueRosters = 2;
-        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
         when(leagueService.getSizeOfLeague(leagueId)).thenReturn(leagueRosters);
-        when(weekScoreService.findWeekScoresByLeagueId(leagueId, maxWeekToSearch))
+
+        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, numWeeksToCompute))
                 .thenReturn(weekScoresInDatabase);
 
         mockRf.when(() -> ResponseFormatter.getUsersFromLeague(leagueId)).thenReturn(List.of());
+        // end of arrange
 
         Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
 
         assertTrue(realLeagueStatsDto.isEmpty());
+    }
+
+    @Test
+    void computeStats_newLeagueId_returnsLeagueStats() {
+        String leagueId = "asd";
+        int numWeeksToCompute = 1;
+
+        SleeperNFLStateResponse nflState = new SleeperNFLStateResponse();
+        nflState.setDisplayWeek("2");
+
+        mockRf.when(ResponseFormatter::getNFLState).thenReturn(nflState);
+
+        int leagueRosters = -1;
+        when(leagueService.getSizeOfLeague(leagueId)).thenReturn(leagueRosters);
+
+        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of());
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, numWeeksToCompute))
+                .thenReturn(weekScoresInDatabase);
+
+        List<SleeperUserResponse> sleeperUserResponses = List.of(new SleeperUserResponse());
+        mockRf.when(() -> ResponseFormatter.getUsersFromLeague(leagueId)).thenReturn(sleeperUserResponses);
+
+        List<User> users = List.of(new User());
+        mockDfs.when(() -> DatabaseFormatterService.formatUsers(sleeperUserResponses))
+                .thenReturn(users);
+
+        List<SleeperRosterUserResponse> sleeperRosterUserResponses = List.of(new SleeperRosterUserResponse());
+        mockRf.when(() -> ResponseFormatter.getRostersFromLeagueId(leagueId)).thenReturn(sleeperRosterUserResponses);
+
+        List<RosterUserDto> rosterUserDtos = List.of();
+        mockRf.when(() -> DatabaseFormatterService.formatRosterUsers(sleeperRosterUserResponses))
+                .thenReturn(rosterUserDtos);
+
+        List<RosterUser> rosterUsers = List.of(new RosterUser());
+        when(rosterUserService.upsertUsers(rosterUserDtos)).thenReturn(rosterUsers);
+
+        int numWeeksFound = weekScoresInDatabase.size();
+        List<WeekScore> weekScores = List.of(new WeekScore());
+        when(weekScoreService.concurrentGetWeekScores(leagueId, numWeeksFound, numWeeksToCompute))
+                .thenReturn(weekScores);
+
+        List<List<WeekScore>> updatedWeekScores = List.of(List.of(new WeekScore()));
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, numWeeksToCompute))
+                .thenReturn(updatedWeekScores);
+
+        // for method weekScoresToStatsDto
+        LuckData luckData = null;
+        when(statsComputationService.computeStats(rosterUsers, updatedWeekScores))
+                .thenReturn(luckData);
+        when(statsComputationService.toDto(eq(luckData), anyMap())).thenReturn(new LeagueStatsDto(new StatDto[] {}));
+        // end of arrange
+
+        Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
+
+        assertTrue(realLeagueStatsDto.isPresent());
+        verify(userService, times(1)).idempotentSave(users);
+        verify(weekScoreService, times(1)).upsertWeekScores(weekScores);
     }
 }
