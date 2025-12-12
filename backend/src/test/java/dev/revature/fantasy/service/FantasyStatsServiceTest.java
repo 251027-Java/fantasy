@@ -5,20 +5,14 @@ import static org.mockito.Mockito.*;
 
 import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.LoginDto;
-import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
-import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.model.RosterUser;
-import dev.revature.fantasy.model.User;
 import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
-import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperNFLStateResponse;
-import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperRosterUserResponse;
-import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUserResponse;
-import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUsernameResponse;
+import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,18 +52,15 @@ public class FantasyStatsServiceTest {
     FantasyStatsService fantasyStatsService;
 
     MockedStatic<ResponseFormatter> mockRf;
-    MockedStatic<DatabaseFormatterService> mockDfs;
 
     @BeforeEach
     void setUp() {
         mockRf = mockStatic(ResponseFormatter.class);
-        mockDfs = mockStatic(DatabaseFormatterService.class);
     }
 
     @AfterEach
     void tearDown() {
         mockRf.close();
-        mockDfs.close();
     }
 
     @Test
@@ -90,20 +81,18 @@ public class FantasyStatsServiceTest {
 
         mockRf.when(() -> ResponseFormatter.getUserIdFromUsername(username))
                 .thenReturn(new SleeperUsernameResponse(userId));
-        mockRf.when(() -> ResponseFormatter.getLeaguesFromUserId(userId)).thenReturn(List.of());
 
-        League mockLeague = new League();
-        mockLeague.setId("1234");
-        mockLeague.setName("a league");
+        SleeperLeagueResponse sleeperLeagueResponse = new SleeperLeagueResponse();
+        sleeperLeagueResponse.setLeagueId("qwe");
+        sleeperLeagueResponse.setName("a name");
 
-        List<League> mockLeagues = List.of(mockLeague);
-        mockDfs.when(() -> DatabaseFormatterService.formatLeagueInfo(List.of())).thenReturn(mockLeagues);
+        mockRf.when(() -> ResponseFormatter.getLeaguesFromUserId(userId)).thenReturn(List.of(sleeperLeagueResponse));
         // end of arrange
 
         Optional<LoginDto> realLoginDto = fantasyStatsService.login(username);
 
         assertTrue(realLoginDto.isPresent());
-        verify(leagueService, times(1)).idempotentSave(mockLeagues);
+        verify(leagueService, times(1)).idempotentSave(anyList());
     }
 
     @Test
@@ -183,19 +172,14 @@ public class FantasyStatsServiceTest {
         List<SleeperUserResponse> sleeperUserResponses = List.of(new SleeperUserResponse());
         mockRf.when(() -> ResponseFormatter.getUsersFromLeague(leagueId)).thenReturn(sleeperUserResponses);
 
-        List<User> users = List.of(new User());
-        mockDfs.when(() -> DatabaseFormatterService.formatUsers(sleeperUserResponses))
-                .thenReturn(users);
+        SleeperRosterUserResponse sleeperRosterUserResponse = new SleeperRosterUserResponse();
+        sleeperRosterUserResponse.setSettings(new UserSettings());
 
-        List<SleeperRosterUserResponse> sleeperRosterUserResponses = List.of(new SleeperRosterUserResponse());
-        mockRf.when(() -> ResponseFormatter.getRostersFromLeagueId(leagueId)).thenReturn(sleeperRosterUserResponses);
-
-        List<RosterUserDto> rosterUserDtos = List.of();
-        mockRf.when(() -> DatabaseFormatterService.formatRosterUsers(sleeperRosterUserResponses))
-                .thenReturn(rosterUserDtos);
+        mockRf.when(() -> ResponseFormatter.getRostersFromLeagueId(leagueId))
+                .thenReturn(List.of(sleeperRosterUserResponse));
 
         List<RosterUser> rosterUsers = List.of(new RosterUser());
-        when(rosterUserService.upsertUsers(rosterUserDtos)).thenReturn(rosterUsers);
+        when(rosterUserService.upsertUsers(anyList())).thenReturn(rosterUsers);
 
         int numWeeksFound = weekScoresInDatabase.size();
         List<WeekScore> weekScores = List.of(new WeekScore());
@@ -216,7 +200,7 @@ public class FantasyStatsServiceTest {
         Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
 
         assertTrue(realLeagueStatsDto.isPresent());
-        verify(userService, times(1)).idempotentSave(users);
+        verify(userService, times(1)).idempotentSave(anyList());
         verify(weekScoreService, times(1)).upsertWeekScores(weekScores);
     }
 }
