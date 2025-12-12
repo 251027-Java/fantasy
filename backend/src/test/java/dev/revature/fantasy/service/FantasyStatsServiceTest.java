@@ -1,12 +1,14 @@
 package dev.revature.fantasy.service;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
-
+import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.LoginDto;
+import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
 import dev.revature.fantasy.model.League;
+import dev.revature.fantasy.model.RosterUser;
+import dev.revature.fantasy.model.WeekScore;
+import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperNFLStateResponse;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.SleeperUsernameResponse;
@@ -21,6 +23,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FantasyStatsServiceTest {
@@ -97,10 +102,54 @@ public class FantasyStatsServiceTest {
     }
 
     @Test
-    void computeStats_validLeagueId_() {
+    void computeStats_validLeagueIdWithAllExistingWeekScoresInDatabase_returnsLeagueStatsEarly() {
+        String leagueId = "asd";
+        int maxWeekToSearch = 1;
+
         SleeperNFLStateResponse nflState = new SleeperNFLStateResponse();
-        nflState.setDisplayWeek("displayweek");
+        nflState.setDisplayWeek("" + (maxWeekToSearch + 1));
 
         mockRf.when(ResponseFormatter::getNFLState).thenReturn(nflState);
+
+        int leagueRosters = 1;
+        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
+        when(leagueService.getSizeOfLeague(leagueId)).thenReturn(leagueRosters);
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, maxWeekToSearch))
+                .thenReturn(weekScoresInDatabase);
+
+        List<RosterUser> rosterUsers = List.of(new RosterUser());
+        when(rosterUserService.getAllRosterUsersByLeagueId(leagueId)).thenReturn(rosterUsers);
+
+        LuckData luckData = null;
+        when(statsComputationService.computeStats(rosterUsers, weekScoresInDatabase))
+                .thenReturn(luckData);
+        when(statsComputationService.toDto(eq(luckData), anyMap())).thenReturn(new LeagueStatsDto(new StatDto[] {}));
+
+        Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
+
+        assertTrue(realLeagueStatsDto.isPresent());
+    }
+
+    @Test
+    void computeStats_leagueIdWithSomeExistingWeekScoresInDatabaseButNowDeletedInSleeper_returnsEmpty() {
+        String leagueId = "asd";
+        int maxWeekToSearch = 1;
+
+        SleeperNFLStateResponse nflState = new SleeperNFLStateResponse();
+        nflState.setDisplayWeek("" + (maxWeekToSearch + 1));
+
+        mockRf.when(ResponseFormatter::getNFLState).thenReturn(nflState);
+
+        int leagueRosters = 2;
+        List<List<WeekScore>> weekScoresInDatabase = List.of(List.of(new WeekScore()));
+        when(leagueService.getSizeOfLeague(leagueId)).thenReturn(leagueRosters);
+        when(weekScoreService.findWeekScoresByLeagueId(leagueId, maxWeekToSearch))
+                .thenReturn(weekScoresInDatabase);
+
+        mockRf.when(() -> ResponseFormatter.getUsersFromLeague(leagueId)).thenReturn(List.of());
+
+        Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
+
+        assertTrue(realLeagueStatsDto.isEmpty());
     }
 }
