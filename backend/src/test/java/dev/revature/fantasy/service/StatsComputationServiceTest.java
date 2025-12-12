@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.StatDto;
+import dev.revature.fantasy.dto.WeeklyMedianLuckDto;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.model.WeekScoreId;
@@ -86,7 +87,8 @@ public class StatsComputationServiceTest {
         long rosterUserId = 1L;
 
         Map<Long, Double> totalMedianLuckScores = Map.of(rosterUserId, 5.5);
-        MedianLuck medianLuck = new MedianLuck(null, totalMedianLuckScores);
+        Map<Long, List<Double>> medianLuckScoresByWeek = Map.of(rosterUserId, List.of(2.0));
+        MedianLuck medianLuck = new MedianLuck(medianLuckScoresByWeek, totalMedianLuckScores);
 
         Map<Long, AllPlayData> allPlayDataMap = Map.of(rosterUserId, new AllPlayData());
 
@@ -100,5 +102,9 @@ public class StatsComputationServiceTest {
         StatDto[] stats = dto.getStats();
         assertEquals(1, stats.length);
         assertEquals("some username", stats[0].getUserName());
+
+        WeeklyMedianLuckDto[] weeklyMedianLuck = dto.getWeeklyMedianLuck();
+        assertEquals(1, weeklyMedianLuck.length);
+        assertEquals("some username", weeklyMedianLuck[0].getUserName());
     }
 }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.LoginDto;
 import dev.revature.fantasy.dto.StatDto;
+import dev.revature.fantasy.dto.WeeklyMedianLuckDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
 import dev.revature.fantasy.model.RosterUser;
@@ -104,7 +105,8 @@ public class FantasyStatsServiceTest {
         LuckData luckData = null;
         when(statsComputationService.computeStats(rosterUsers, weekScoresInDatabase))
                 .thenReturn(luckData);
-        when(statsComputationService.toDto(eq(luckData), anyMap())).thenReturn(new LeagueStatsDto(new StatDto[] {}));
+        when(statsComputationService.toDto(eq(luckData), anyMap()))
+                .thenReturn(new LeagueStatsDto(new StatDto[] {}, new WeeklyMedianLuckDto[] {}));
         // end of arrange
 
         Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
@@ -178,7 +180,8 @@ public class FantasyStatsServiceTest {
         LuckData luckData = null;
         when(statsComputationService.computeStats(rosterUsers, updatedWeekScores))
                 .thenReturn(luckData);
-        when(statsComputationService.toDto(eq(luckData), anyMap())).thenReturn(new LeagueStatsDto(new StatDto[] {}));
+        when(statsComputationService.toDto(eq(luckData), anyMap()))
+                .thenReturn(new LeagueStatsDto(new StatDto[] {}, new WeeklyMedianLuckDto[] {}));
         // end of arrange
 
         Optional<LeagueStatsDto> realLeagueStatsDto = fantasyStatsService.computeStats(leagueId);
