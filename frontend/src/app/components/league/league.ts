@@ -59,7 +59,7 @@ export class League implements OnInit {
 	}
 
 	Logout(): void {
-		this.authService.logout();
+		this.loginServe.logout();
 		this.router.navigateByUrl('');
 	}
 

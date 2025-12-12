@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {
 	ActivatedRouteSnapshot,
 	CanActivate,
+	Router,
 	RouterStateSnapshot,
 	UrlTree,
 } from '@angular/router';
@@ -13,7 +14,7 @@ import { AuthService } from '../services/auth-service';
 	providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private router: Router) {}
 
 	canActivate(
 		_route: ActivatedRouteSnapshot,
@@ -23,6 +24,7 @@ export class AuthGuard implements CanActivate {
 		| Promise<boolean | UrlTree>
 		| boolean
 		| UrlTree {
+			this.router.parseUrl('/login')
 		return this.authService.isAuthorized();
 	}
 }
