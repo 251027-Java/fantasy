@@ -7,4 +7,24 @@ import lombok.NonNull;
 public class LeagueStatsDto {
     @NonNull
     private StatDto[] stats;
+
+    // Weekly median stats 
+    /*
+    {
+        WeeklyMedianLuckDto[]
+
+        WeeklyMedianLuckDto =
+        {
+            String username;
+            double[] stats;
+        }
+        
+    }
+
+
+     */
+    @NonNull
+    private WeeklyMedianLuckDto[] weeklyMedianLuck;
+
+
 }

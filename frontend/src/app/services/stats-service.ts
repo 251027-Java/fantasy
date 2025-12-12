@@ -21,7 +21,7 @@ export class StatsService {
 	) {}
 
 	// holds the stats
-	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });
+	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [], weeklyMedianLuck: [] });
 
 	// filters for what is displayed
 	filteredLeagueMembers: Map<string, boolean> = new Map<string, boolean>();
@@ -70,7 +70,7 @@ export class StatsService {
 		resp = resp.pipe(
 			map<any, StatsResponse>((data) => {
 				// Map the received data to the StatsResponse interface
-				const resp: StatsResponse = { stats: [] };
+				const resp: StatsResponse = { stats: [], weeklyMedianLuck: [] };
 				for (const stat of data.stats) {
 					// Push each stat into the stats array with proper formatting
 					resp.stats.push({
@@ -98,7 +98,7 @@ export class StatsService {
 			}),
 			catchError(() => {
 				this.displayError();
-				return of({ stats: [] } as StatsResponse);
+				return of({ stats: [], weeklyMedianLuck: [] } as StatsResponse);
 			}),
 		);
 
@@ -225,7 +225,7 @@ export class StatsService {
 		this.currentLeagueName = '';
 
 		//reset all stats for a new league
-		this.luckStatsResponse.set({ stats: [] });
+		this.luckStatsResponse.set({ stats: [], weeklyMedianLuck: [] });
 
 		//reset all filters
 		this.filteredLeagueMembers = new Map<string, boolean>();

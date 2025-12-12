@@ -6,6 +6,7 @@ import dev.revature.fantasy.dto.LoginDto;
 import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
+import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.League;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.User;
@@ -13,6 +14,8 @@ import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
+import net.bytebuddy.agent.builder.AgentBuilder.CircularityLock.Global;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -161,7 +164,10 @@ public class FantasyStatsService {
 
         // do stats computation
         // need the rosterUserIds
+        GlobalLogger.debug("Computing stats for league " + leagueId);
         return this.weekScoresToStatsDto(allWeekScores, rosterUsers);
+
+        // get weekly stats data 
     }
 
     /**
