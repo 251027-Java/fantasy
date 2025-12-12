@@ -13,7 +13,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.http.HttpResponse;
@@ -37,10 +36,7 @@ public class ResponseFormatter {
     static final ParameterizedTypeReference<List<SleeperMatchupResponse>> MATCHUP_LIST_TYPE =
             new ParameterizedTypeReference<List<SleeperMatchupResponse>>() {};
 
-    public ResponseFormatter(
-            WebClient webClient,
-            SleeperRequestHandler sleeperRequestHandler,
-            ObjectMapper om) {
+    public ResponseFormatter(WebClient webClient, SleeperRequestHandler sleeperRequestHandler, ObjectMapper om) {
         this.webClient = webClient;
         this.sleeperRequestHandler = sleeperRequestHandler;
         this.om = om;
@@ -115,8 +111,7 @@ public class ResponseFormatter {
         try {
             HttpResponse<String> response = this.sleeperRequestHandler.getUsersFromLeague(leagueId);
             if (response.statusCode() == 200) {
-                List<SleeperUserResponse> resp =
-                        om.readValue(response.body(), SleeperTypeReferences.getUserListType());
+                List<SleeperUserResponse> resp = om.readValue(response.body(), SleeperTypeReferences.getUserListType());
                 return resp;
             }
         } catch (Exception e) {
@@ -174,7 +169,8 @@ public class ResponseFormatter {
 
     public List<SleeperMatchupResponse> getMatchupsFromLeagueIdAndWeek(String leagueId, int weekNum) {
         try {
-            HttpResponse<String> response = this.sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(leagueId, weekNum);
+            HttpResponse<String> response =
+                    this.sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(leagueId, weekNum);
             if (response.statusCode() == 200) {
                 List<SleeperMatchupResponse> resp =
                         om.readValue(response.body(), SleeperTypeReferences.getMatchupListType());

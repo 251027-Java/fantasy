@@ -2,14 +2,13 @@ package dev.revature.fantasy.sleeperrequest;
 
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.logger.GlobalLogger;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class SleeperRequestHandler {

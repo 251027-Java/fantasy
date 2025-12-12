@@ -1,36 +1,29 @@
 package dev.revature.fantasy.sleeperrequest;
 
-import dev.revature.fantasy.exception.HttpConnectionException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
+import dev.revature.fantasy.exception.HttpConnectionException;
+import dev.revature.fantasy.exception.SleeperException;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
 import org.apache.http.HttpStatus;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import tools.jackson.core.JacksonException;
+import reactor.core.publisher.Mono;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import static org.mockito.ArgumentMatchers.anyString;
-
-import static org.mockito.ArgumentMatchers.eq;
-
-import static org.mockito.Mockito.*;
-
-
 
 @ExtendWith(MockitoExtension.class)
 public class ResponseFormatterTest {
@@ -44,43 +37,37 @@ public class ResponseFormatterTest {
     @Mock
     private HttpResponse<String> mockHttpResponse;
 
-
     @Mock
     private ObjectMapper mockObjectMapper;
 
     @InjectMocks
     private ResponseFormatter responseFormatter;
 
-
-
     private final String TEST_LEAGUE_ID = "123";
     private final String TEST_USER_ID = "456";
     private final String TEST_USERNAME = "tester";
-    
-    
+
     @Test
     void getPlayers_Success_ReturnsListOfPlayers() throws Exception {
         // arrange
-        final String mockResponseBody = 
-                "{\"1\": {\"player_id\": \"1\"}, " +
-                "\"2\": {\"player_id\": \"2\"} }";
+        final String mockResponseBody = "{\"1\": {\"player_id\": \"1\"}, " + "\"2\": {\"player_id\": \"2\"} }";
         final var player1 = new SleeperPlayerResponse("1", List.of("QB"), "team", "first_name", "last_name", 1, "1", 1);
-        final var player2 = new SleeperPlayerResponse("2", List.of("WR"), "team", "first_name1", "last_name2", 2, "2", 2);
-        
+        final var player2 =
+                new SleeperPlayerResponse("2", List.of("WR"), "team", "first_name1", "last_name2", 2, "2", 2);
+
         final Map<String, SleeperPlayerResponse> expectedDeserializeResponse = Map.of(
                 "1", player1,
-                "2", player2
-        );
+                "2", player2);
 
         final List<SleeperPlayerResponse> expectedResponse = List.of(player1, player2);
 
         when(sleeperRequestHandler.getPlayers()).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
-       
 
         doReturn(expectedDeserializeResponse)
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getPlayerMapType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getPlayerMapType()));
         // act
         List<SleeperPlayerResponse> result = responseFormatter.getPlayers();
 
@@ -109,6 +96,30 @@ public class ResponseFormatterTest {
     }
 
     @Test
+    void getPlayers_DeserializationError_ReturnsEmptyList() throws Exception {
+        // arrange
+        final String badResponseBody = "Invalid JSON";
+        when(sleeperRequestHandler.getPlayers()).thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
+
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getPlayerMapType()));
+
+        // act
+        List<SleeperPlayerResponse> result = responseFormatter.getPlayers();
+
+        // assert
+        assertTrue(result.isEmpty());
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getPlayerMapType()));
+        verify(sleeperRequestHandler).getPlayers();
+    }
+
+    @Test
     void getPlayers_HandlerThrowsException_ReturnsEmptyList() throws Exception {
         // arrange
         when(sleeperRequestHandler.getPlayers()).thenThrow(new HttpConnectionException("Network error"));
@@ -127,13 +138,15 @@ public class ResponseFormatterTest {
         int currentYear = LocalDate.now().getYear();
         final String mockResponseBody = "[{\"league_id\": \"1\"}]";
         SleeperLeagueResponse mockLeague = new SleeperLeagueResponse(10, currentYear, "1", "1", "leagueName");
-        
-        when(sleeperRequestHandler.getLeaguesFromUserIDAndSeason(TEST_USER_ID, currentYear)).thenReturn(mockHttpResponse);
+
+        when(sleeperRequestHandler.getLeaguesFromUserIDAndSeason(TEST_USER_ID, currentYear))
+                .thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(List.of(mockLeague))
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getLeagueListType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getLeagueListType()));
 
         // act
         List<SleeperLeagueResponse> result = responseFormatter.getLeaguesFromUserId(TEST_USER_ID);
@@ -152,14 +165,16 @@ public class ResponseFormatterTest {
         // arrange
         int currentYear = LocalDate.now().getYear();
         final String badResponseBody = "Invalid JSON";
-        
-        when(sleeperRequestHandler.getLeaguesFromUserIDAndSeason(TEST_USER_ID, currentYear)).thenReturn(mockHttpResponse);
+
+        when(sleeperRequestHandler.getLeaguesFromUserIDAndSeason(TEST_USER_ID, currentYear))
+                .thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(badResponseBody);
-        
+
         // (simulate jackson error)
         doThrow(new JsonParseException())
-            .when(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getLeagueListType()));
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getLeagueListType()));
 
         // act
         List<SleeperLeagueResponse> result = responseFormatter.getLeaguesFromUserId(TEST_USER_ID);
@@ -171,7 +186,7 @@ public class ResponseFormatterTest {
         verify(mockObjectMapper).readValue(anyString(), eq(SleeperTypeReferences.getLeagueListType()));
         verify(sleeperRequestHandler).getLeaguesFromUserIDAndSeason(TEST_USER_ID, currentYear);
     }
-    
+
     // --- Test Cases for getUserIdFromUsername() ---
 
     @Test
@@ -180,13 +195,14 @@ public class ResponseFormatterTest {
         final String mockResponseBody = "{\"user_id\": \"456\"}";
         SleeperUsernameResponse mockUserResponse = new SleeperUsernameResponse();
         mockUserResponse.setUserId(TEST_USER_ID);
-        
+
         when(sleeperRequestHandler.getUserFromUsername(TEST_USERNAME)).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(mockUserResponse)
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getUsernameType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getUsernameType()));
 
         // ACT
         SleeperUsernameResponse result = responseFormatter.getUserIdFromUsername(TEST_USERNAME);
@@ -199,7 +215,31 @@ public class ResponseFormatterTest {
         verify(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getUsernameType()));
         assertEquals(TEST_USER_ID, result.getUserId());
     }
-    
+
+    @Test
+    void getUserIdFromUsername_DeserializationError_ReturnsNull() throws Exception {
+        // arrange
+        final String badResponseBody = "Invalid JSON";
+        when(sleeperRequestHandler.getUserFromUsername(TEST_USERNAME)).thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
+
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getUsernameType()));
+
+        // act
+        SleeperUsernameResponse result = responseFormatter.getUserIdFromUsername(TEST_USERNAME);
+
+        // assert
+        assertNull(result);
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getUsernameType()));
+        verify(sleeperRequestHandler).getUserFromUsername(TEST_USERNAME);
+    }
+
     @Test
     void getUserIdFromUsername_NotFound_ReturnsNull() throws Exception {
         // arrange
@@ -216,21 +256,20 @@ public class ResponseFormatterTest {
         verify(mockHttpResponse, never()).body();
         assertNull(result);
     }
-    
-    
 
     @Test
     void getUsersFromLeague_Success_ReturnsListOfUsers() throws Exception {
         // arrange
         final String mockResponseBody = "[{\"user_id\": \"1\"}]";
         SleeperUserResponse mockUser = new SleeperUserResponse();
-        
+
         when(sleeperRequestHandler.getUsersFromLeague(TEST_LEAGUE_ID)).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(List.of(mockUser))
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getUserListType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getUserListType()));
 
         // act
         List<SleeperUserResponse> result = responseFormatter.getUsersFromLeague(TEST_LEAGUE_ID);
@@ -244,6 +283,31 @@ public class ResponseFormatterTest {
         assertEquals(1, result.size());
     }
 
+    @Test
+    void getUsersFromLeague_DeserializationError_ReturnsEmptyList() throws Exception {
+        // arrange
+        final String badResponseBody = "Invalid JSON";
+
+        when(sleeperRequestHandler.getUsersFromLeague(TEST_LEAGUE_ID)).thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
+
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getUserListType()));
+
+        // act
+        List<SleeperUserResponse> result = responseFormatter.getUsersFromLeague(TEST_LEAGUE_ID);
+
+        // assert
+        assertTrue(result.isEmpty());
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getUserListType()));
+        verify(sleeperRequestHandler).getUsersFromLeague(TEST_LEAGUE_ID);
+    }
+
     // --- Test Cases for getRostersFromLeagueId() ---
 
     @Test
@@ -251,13 +315,14 @@ public class ResponseFormatterTest {
         // arrange
         final String mockResponseBody = "[{\"roster_id\": 1}]";
         SleeperRosterUserResponse mockRoster = new SleeperRosterUserResponse();
-        
+
         when(sleeperRequestHandler.getRostersFromLeague(TEST_LEAGUE_ID)).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(List.of(mockRoster))
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getRosterUserListType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getRosterUserListType()));
 
         // act
         List<SleeperRosterUserResponse> result = responseFormatter.getRostersFromLeagueId(TEST_LEAGUE_ID);
@@ -270,7 +335,32 @@ public class ResponseFormatterTest {
         assertEquals(1, result.size());
         assertEquals(result.get(0), mockRoster);
     }
-    
+
+    @Test
+    void getRostersFromLeagueId_DeserializationError_ReturnsEmptyList() throws Exception {
+        // arrange
+        final String badResponseBody = "Invalid JSON";
+
+        when(sleeperRequestHandler.getRostersFromLeague(TEST_LEAGUE_ID)).thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
+
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getRosterUserListType()));
+
+        // act
+        List<SleeperRosterUserResponse> result = responseFormatter.getRostersFromLeagueId(TEST_LEAGUE_ID);
+
+        // assert
+        assertTrue(result.isEmpty());
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getRosterUserListType()));
+        verify(sleeperRequestHandler).getRostersFromLeague(TEST_LEAGUE_ID);
+    }
+
     // --- Test Cases for getMatchupsFromLeagueIdAndWeek (Blocking) ---
 
     @Test
@@ -279,16 +369,19 @@ public class ResponseFormatterTest {
         final int testWeek = 5;
         final String mockResponseBody = "[{\"matchup_id\": 1}]";
         SleeperMatchupResponse mockMatchup = new SleeperMatchupResponse();
-        
-        when(sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek)).thenReturn(mockHttpResponse);
+
+        when(sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek))
+                .thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(List.of(mockMatchup))
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getMatchupListType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getMatchupListType()));
 
         // ACT
-        List<SleeperMatchupResponse> result = responseFormatter.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+        List<SleeperMatchupResponse> result =
+                responseFormatter.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
 
         // ASSERT
         verify(mockHttpResponse).statusCode();
@@ -298,7 +391,35 @@ public class ResponseFormatterTest {
         assertEquals(1, result.size());
         assertEquals(result.get(0), mockMatchup);
     }
-    
+
+    @Test
+    void getMatchupsFromLeagueIdAndWeek_DeserializationError_ReturnsEmptyList() throws Exception {
+        // arrange
+        final int testWeek = 5;
+        final String badResponseBody = "Invalid JSON";
+
+        when(sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek))
+                .thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
+
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getMatchupListType()));
+
+        // act
+        List<SleeperMatchupResponse> result =
+                responseFormatter.getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+
+        // assert
+        assertTrue(result.isEmpty());
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getMatchupListType()));
+        verify(sleeperRequestHandler).getMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+    }
+
     // --- Test Cases for getNFLState() ---
 
     @Test
@@ -307,13 +428,14 @@ public class ResponseFormatterTest {
         final String mockResponseBody = "{\"week\": 10, \"season\": \"2024\"}";
         SleeperNFLStateResponse mockState = new SleeperNFLStateResponse();
         mockState.setWeek("10");
-        
+
         when(sleeperRequestHandler.getNFLState()).thenReturn(mockHttpResponse);
         when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
         when(mockHttpResponse.body()).thenReturn(mockResponseBody);
 
         doReturn(mockState)
-            .when(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getNFLStateType()));
+                .when(mockObjectMapper)
+                .readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getNFLStateType()));
 
         // act
         SleeperNFLStateResponse result = responseFormatter.getNFLState();
@@ -325,86 +447,105 @@ public class ResponseFormatterTest {
         verify(mockObjectMapper).readValue(eq(mockResponseBody), eq(SleeperTypeReferences.getNFLStateType()));
     }
 
-    // // --- Test Cases for nonBlockGetMatchupsFromLeagueIdAndWeek (Reactive) ---
+    @Test
+    void getNFLState_DeserializationError_ReturnsNull() throws Exception {
+        // arrange
+        final String badResponseBody = "Invalid JSON";
 
-    // // This requires mocking the WebClient's fluent API chain (get().uri().retrieve()...)
-    // @Test
-    // void nonBlockGetMatchupsFromLeagueIdAndWeek_Success_ReturnsMonoOfMatchups() {
-    //     // ARRANGE
-    //     final int testWeek = 5;
-    //     final String uri = String.format("/league/%s/matchups/%d", TEST_LEAGUE_ID, testWeek);
-    //     SleeperMatchupResponse mockMatchup = new SleeperMatchupResponse();
-    //     List<SleeperMatchupResponse> expectedList = List.of(mockMatchup);
+        when(sleeperRequestHandler.getNFLState()).thenReturn(mockHttpResponse);
+        when(mockHttpResponse.statusCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.body()).thenReturn(badResponseBody);
 
-    //     // Mock the WebClient chain
-    //     WebClient.RequestHeadersUriSpec requestHeadersUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
-    //     WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
-    //     WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+        // (simulate jackson error)
+        doThrow(new JsonParseException())
+                .when(mockObjectMapper)
+                .readValue(eq(badResponseBody), eq(SleeperTypeReferences.getNFLStateType()));
 
-    //     when(webClient.get()).thenReturn(requestHeadersUriSpec);
-    //     when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersSpec);
-    //     when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        
-    //     // Mocking the successful bodyToMono call
-    //     // The cast to ParameterizedTypeReference is necessary due to generics/type erasure
-    //     when(responseSpec.bodyToMono(any()))
-    //         .thenReturn(Mono.just(expectedList));
+        // act
+        SleeperNFLStateResponse result = responseFormatter.getNFLState();
 
-    //     // ACT
-    //     Mono<List<SleeperMatchupResponse>> resultMono = 
-    //         responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+        // assert
+        assertNull(result);
+        verify(mockHttpResponse).statusCode();
+        verify(mockHttpResponse).body();
+        verify(mockObjectMapper).readValue(eq(badResponseBody), eq(SleeperTypeReferences.getNFLStateType()));
+        verify(sleeperRequestHandler).getNFLState();
+    }
 
-    //     // ASSERT
-    //     // Block for testing, but the method returns a Mono
-    //     List<SleeperMatchupResponse> result = resultMono.block(); 
-    //     assertNotNull(result);
-    //     assertFalse(result.isEmpty());
-    //     assertEquals(1, result.size());
-    // }
+    // --- Test Cases for nonBlockGetMatchupsFromLeagueIdAndWeek (Reactive) ---
 
-    // @Test
-    // void nonBlockGetMatchupsFromLeagueIdAndWeek_Http404_ReturnsEmptyMono() {
-    //     // ARRANGE
-    //     final int testWeek = 5;
-    //     final String uri = String.format("/league/%s/matchups/%d", TEST_LEAGUE_ID, testWeek);
+    // This requires mocking the WebClient's fluent API chain (get().uri().retrieve()...)
+    @Test
+    void nonBlockGetMatchupsFromLeagueIdAndWeek_Success_ReturnsMonoOfMatchups() {
+        // ARRANGE
+        final int testWeek = 5;
+        final String uri = String.format("/league/%s/matchups/%d", TEST_LEAGUE_ID, testWeek);
+        SleeperMatchupResponse mockMatchup = new SleeperMatchupResponse();
+        List<SleeperMatchupResponse> expectedList = List.of(mockMatchup);
 
-    //     WebClient.RequestHeadersUriSpec requestHeadersUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
-    //     WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
-    //     WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
-    //     ClientResponse mockClientResponse = mock(ClientResponse.class);
+        // Mock the WebClient chain objects
+        WebClient.RequestHeadersUriSpec requestHeadersUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
 
-    //     when(webClient.get()).thenReturn(requestHeadersUriSpec);
-    //     when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersSpec);
-    //     when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
 
-    //     // Mock the onStatus part for 4xx/5xx error handling
-    //     when(responseSpec.onStatus(any(), any())).thenAnswer(invocation -> {
-    //         // Get the status predicate and handler function from the invocation arguments
-    //         java.util.function.Predicate<org.springframework.http.HttpStatus> predicate = invocation.getArgument(0);
-    //         java.util.function.Function<ClientResponse, Mono<? extends Throwable>> handlerFunction = invocation.getArgument(1);
+        // FIX 1: Mock the onStatus call to return the same responseSpec object.
+        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
 
-    //         // If the status is 4xx or 5xx (predicate returns true), call the handler
-    //         if (predicate.test(org.springframework.http.HttpStatus.NOT_FOUND)) { 
-    //             when(mockClientResponse.statusCode()).thenReturn(org.springframework.http.HttpStatus.NOT_FOUND);
-    //             return handlerFunction.apply(mockClientResponse); // Returns Mono<SleeperException>
-    //         }
-    //         return responseSpec;
-    //     });
+        // Mocking the successful bodyToMono call
+        when(responseSpec.bodyToMono(eq(ResponseFormatter.MATCHUP_LIST_TYPE))).thenReturn(Mono.just(expectedList));
 
-    //     // Mock the remaining bodyToMono part to return the error
-    //     when(responseSpec.bodyToMono(any(ResponseFormatter.MATCHUP_LIST_TYPE.getType())))
-    //         .thenReturn(Mono.error(new SleeperException("Simulated error")));
+        // ACT
+        Mono<List<SleeperMatchupResponse>> resultMono =
+                responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
 
-    //     // ACT
-    //     Mono<List<SleeperMatchupResponse>> resultMono = 
-    //         responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+        // ASSERT
+        // Block for testing, but the method returns a Mono
+        List<SleeperMatchupResponse> result = resultMono.block();
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertEquals(1, result.size());
 
-    //     // ASSERT
-    //     // Verify that the onErrorResume caught the SleeperException and returned an empty list
-    //     List<SleeperMatchupResponse> result = resultMono.block(); 
-    //     assertNotNull(result);
-    //     assertTrue(result.isEmpty());
-    // }
+        // Optional: Verify onStatus was called
+        verify(responseSpec, times(1)).onStatus(any(), any());
+    }
 
+    @Test
+    void nonBlockGetMatchupsFromLeagueIdAndWeek_Http404_ReturnsEmptyMono() {
+        // ARRANGE
+        final int testWeek = 5;
+        final String uri = String.format("/league/%s/matchups/%d", TEST_LEAGUE_ID, testWeek);
 
+        WebClient.RequestHeadersUriSpec requestHeadersUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
+        WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+        WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+
+        // FIX 1: Mock onStatus to return the responseSpec itself (success path)
+        when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
+
+        // FIX 2: Mock the NEXT method in the chain (bodyToMono) to return the error Mono.
+        when(responseSpec.bodyToMono(eq(ResponseFormatter.MATCHUP_LIST_TYPE)))
+                .thenReturn(Mono.error(new SleeperException("Simulated HTTP 404 error")));
+
+        // ACT
+        Mono<List<SleeperMatchupResponse>> resultMono =
+                responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(TEST_LEAGUE_ID, testWeek);
+
+        // ASSERT
+        // Verify that the onErrorResume caught the SleeperException and returned an empty list
+        List<SleeperMatchupResponse> result = resultMono.block();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verification: Ensure bodyToMono was called, which confirms the chain ran.
+        verify(responseSpec, times(1)).bodyToMono(eq(ResponseFormatter.MATCHUP_LIST_TYPE));
+    }
 }
