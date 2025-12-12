@@ -15,7 +15,6 @@ import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +27,7 @@ public class FantasyStatsService {
     private final WeekScoreService weekScoreService;
     private final StatsComputationService statsComputationService;
     private final RosterUserService rosterUserService;
+    private final ResponseFormatter responseFormatter;
 
     public FantasyStatsService(
             LeagueService leagueService,
@@ -35,13 +35,15 @@ public class FantasyStatsService {
             DatabaseFormatterService databaseFormatterService,
             WeekScoreService weekScoreService,
             StatsComputationService statsComputationService,
-            RosterUserService rosterUserService) {
+            RosterUserService rosterUserService,
+            ResponseFormatter responseFormatter) {
         this.leagueService = leagueService;
         this.userService = userService;
         this.databaseFormatterService = databaseFormatterService;
         this.weekScoreService = weekScoreService;
         this.statsComputationService = statsComputationService;
         this.rosterUserService = rosterUserService;
+        this.responseFormatter = responseFormatter;
     }
 
     /**
@@ -98,7 +100,6 @@ public class FantasyStatsService {
         // TODO: dynamically determine when playoffs start
         int leaguePlayoffStartWeek = 15;
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
-        int currSeason = Integer.parseInt(nflState.getDisplayWeek());
         int numWeeksToCompute = Math.min(currentWeek, leaguePlayoffStartWeek) - 1;
 
         int sizeOfLeague = this.leagueService.getSizeOfLeague(leagueId);
@@ -142,16 +143,8 @@ public class FantasyStatsService {
 
         // make matchup requests for each week from sleeper
         // starting from the first week we don't have
-        weekScores.clear();
-        List<WeekScore> weekScoresToPersist = new ArrayList<>();
-
-        for (int week = numWeeksFound + 1; week <= numWeeksToCompute; week++) {
-            var matchups = ResponseFormatter.getMatchupsFromLeagueIdAndWeek(leagueId, week);
-            // convertTo WeekScores for computation
-            var scores = this.databaseFormatterService.formatMatchups(matchups, leagueId, week);
-
-            weekScoresToPersist.addAll(scores);
-        }
+        var weekScoresToPersist =
+                this.weekScoreService.concurrentGetWeekScores(leagueId, numWeeksFound, numWeeksToCompute);
         // persist weekscores all at once with idempotency
         this.weekScoreService.upsertWeekScores(weekScoresToPersist);
 
