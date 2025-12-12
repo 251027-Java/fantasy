@@ -2,7 +2,7 @@
     <table class="min-w-full table-fixed">
         <thead>
             <tr>
-                <th class="px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('headerNameClass')" (click)="toggleSort('name')">
+                <th class="whitespace-nowrap px-4 py-3 border border-gray-300 text-white text-center rounded-tl-md border-b border-gray-300 border-r border-gray-300 cursor-pointer" [ngClass]="[statsService.getNameColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('headerNameClass')]" (click)="toggleSort('name')">
                     <div class="flex items-center justify-center">
                         <span>Name</span>
                         @if (statsService.getStatsLoaded("Luck")) {
@@ -16,7 +16,7 @@
                 </th>
                 @for (header of headers | keyvalue: keepInsertionOrder; track header.key) {
                     @if (statsService.getColumnIsVisible("Luck", header.key)) {
-                        <th class="py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('headerTableClass')]" (click)="toggleSort(header.key)">
+                        <th class="whitespace-nowrap px-1 py-3 border border-gray-200 text-center border-b border-gray-300 cursor-pointer" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('headerTableClass')]" (click)="toggleSort(header.key)">
                             <div class="flex items-center justify-center">
                                 <span>{{header.value}}</span>
                                 @if (statsService.getStatsLoaded("Luck")) {
@@ -35,13 +35,13 @@
 
         @if (statsService.getStatsLoaded("Luck")) {
             <tbody>
-                @for (member of statsService.luckStatsResponse().stats; track member.name) {
+                @for (member of statsService.statsResponse().stats; track member.name) {
                     @if (statsService.getMemberIsVisible(member.name)) {
                         <tr>
-                            <td class="px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center">{{member.name}}</td>
+                            <td class="whitespace-nowrap px-4 py-2 border-t border-b border-gray-200 border-r border-r-gray-300 bg-gray-100 text-center" [ngClass]="statsService.getNameColumnWidthClassString(getNumDataColumnsVisible())">{{member.name}}</td>
                             @for (header of headers | keyvalue: keepInsertionOrder; track header.key) {                                
                                 @if (statsService.getColumnIsVisible("Luck", header.key)) {
-                                    <td class="py-2 border border-gray-200 text-center" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('bodyTableClass')]">{{member.scores[header.key]}}</td>
+                                    <td class="whitespace-nowrap px-1 py-2 border border-gray-200 text-center" [ngClass]="[statsService.getDataColumnWidthClassString(getNumDataColumnsVisible()), themeService.getCurrentThemeClassString('bodyTableClass')]">{{member.scores[header.key]}}</td>
                                 }
                             }
                         </tr>

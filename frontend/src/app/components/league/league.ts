@@ -10,6 +10,7 @@ import { CardData } from '../../interface/card-data';
 import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
+import { ThemeService } from '../../services/theme-service';
 
 @Component({
 	selector: 'app-league',
@@ -31,6 +32,7 @@ export class League implements OnInit {
 		private loginServe: LoginService,
 		private statsService: StatsService,
 		private authService: AuthService,
+		private themeService: ThemeService,
 		private cdRef: ChangeDetectorRef,
 	) {}
 
@@ -60,6 +62,8 @@ export class League implements OnInit {
 
 	Logout(): void {
 		this.loginServe.logout();
+		this.statsService.reset();
+		this.themeService.reset();
 		this.router.navigateByUrl('');
 	}
 
