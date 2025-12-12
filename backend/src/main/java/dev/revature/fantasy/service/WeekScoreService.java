@@ -60,9 +60,8 @@ public class WeekScoreService {
                             Mono<List<SleeperMatchupResponse>> matchupsMono =
                                     this.responseFormatter.nonBlockGetMatchupsFromLeagueIdAndWeek(leagueId, week);
 
-                            return matchupsMono.flatMapIterable((List<SleeperMatchupResponse> matchups) -> {
-                                return this.databaseFormatterService.formatMatchups(matchups, leagueId, week);
-                            });
+                            return matchupsMono.flatMapIterable((List<SleeperMatchupResponse> matchups) ->
+                                    this.databaseFormatterService.formatMatchups(matchups, leagueId, week));
                         },
                         MAX_CONCURRENCY)
                 .collectList();
