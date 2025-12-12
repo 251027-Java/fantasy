@@ -105,7 +105,6 @@ public class FantasyStatsService {
         // TODO: dynamically determine when playoffs start
         int leaguePlayoffStartWeek = 15;
         int currentWeek = Integer.parseInt(nflState.getDisplayWeek());
-        int currSeason = Integer.parseInt(nflState.getDisplayWeek());
         int numWeeksToCompute = Math.min(currentWeek, leaguePlayoffStartWeek) - 1;
 
         int sizeOfLeague = this.leagueService.getSizeOfLeague(leagueId);
