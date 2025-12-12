@@ -97,7 +97,7 @@ export class StatsService {
 				return resp;
 			}),
 			catchError(() => {
-				this.displayError();
+				this.displayStatsLoadingError();
 				return of({ stats: [], weeklyMedianLuck: [] } as StatsResponse);
 			}),
 		);
