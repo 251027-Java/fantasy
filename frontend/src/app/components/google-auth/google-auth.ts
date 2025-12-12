@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HlmButton } from '@spartan-ng/helm/button';
 import { environment } from '../../../environments/environment';
 import { AuthRequest, AuthResponse } from '../../interface/auth-interfaces';
 import { AuthService } from '../../services/auth-service';
