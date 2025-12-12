@@ -30,7 +30,7 @@ export class LoginService {
 		try {
 			// add the Bearer token to the request
 			let resp: Observable<LoginResponse> = this.http.get<LoginResponse>(
-				`api/login/${this.username}`,
+				`api/info/${this.username}`,
 				{
 					headers: {
 						Authorization: `Bearer ${this.authService.getToken()}`,

@@ -3,10 +3,11 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { toast } from 'ngx-sonner';
 import { catchError, map, Observable, of } from 'rxjs';
 import { luckStatColumn } from '../components/luck-scores/luck-scores';
+import { medianLuckStatColumn } from '../components/median-luck-scores/median-luck-scores';
 import { Score, StatsResponse } from '../interface/stats-response';
 import { AuthService } from './auth-service';
 
-export type StatsType = 'Luck';
+export type StatsType = 'Luck' | 'MedianLuck';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,7 +22,10 @@ export class StatsService {
 	) {}
 
 	// holds the stats
-	luckStatsResponse: WritableSignal<StatsResponse> = signal({ stats: [] });
+	statsResponse: WritableSignal<StatsResponse> = signal({
+		stats: [],
+		weeklyMedianLuck: [],
+	});
 
 	// filters for what is displayed
 	filteredLeagueMembers: Map<string, boolean> = new Map<string, boolean>();
@@ -30,11 +34,32 @@ export class StatsService {
 		Map<keyof any, boolean>
 	>();
 
-	// Current league info is hardcoded for now
 	private currentLeagueId: string = '';
 	private currentLeagueName: string = '';
 
+	private readonly nameColumnWidthClassStrings: Record<number, string> = {
+		0: 'w-[100%]',
+		1: 'w-2/3',
+		2: 'w-2/4',
+		3: 'w-2/5',
+		4: 'w-2/6',
+		5: 'w-2/7',
+		6: 'w-2/8',
+		7: 'w-2/9',
+		8: 'w-2/10',
+		9: 'w-2/11',
+		10: 'w-2/12',
+		11: 'min-w-2/12',
+		12: 'min-w-2/12',
+		13: 'min-w-2/12',
+		14: 'min-w-2/12',
+		15: 'min-w-2/12',
+		16: 'min-w-2/12',
+		17: 'min-w-2/12',
+		18: 'min-w-2/12',
+	} as const;
 	private readonly columnWidthClassStrings: Record<number, string> = {
+		0: 'w-[0%]',
 		1: 'w-1/3',
 		2: 'w-1/4',
 		3: 'w-1/5',
@@ -45,7 +70,14 @@ export class StatsService {
 		8: 'w-1/10',
 		9: 'w-1/11',
 		10: 'w-1/12',
-		11: 'w-1/12',
+		11: 'min-w-1/12',
+		12: 'min-w-1/12',
+		13: 'min-w-1/12',
+		14: 'min-w-1/12',
+		15: 'min-w-1/12',
+		16: 'min-w-1/12',
+		17: 'min-w-1/12',
+		18: 'min-w-1/12',
 	} as const;
 
 	// gets all the stats from the league
@@ -70,7 +102,7 @@ export class StatsService {
 		resp = resp.pipe(
 			map<any, StatsResponse>((data) => {
 				// Map the received data to the StatsResponse interface
-				const resp: StatsResponse = { stats: [] };
+				const resp: StatsResponse = { stats: [], weeklyMedianLuck: [] };
 				for (const stat of data.stats) {
 					// Push each stat into the stats array with proper formatting
 					resp.stats.push({
@@ -93,25 +125,36 @@ export class StatsService {
 					});
 				}
 
+				//resp.weeklyMedianLuck = data.weeklyMedianLuck;
+				for (const medPlayer of data.weeklyMedianLuck) {
+					// Push each median stat into the stats array with proper formatting
+					resp.weeklyMedianLuck.push({
+						userName: medPlayer.userName,
+						stats: medPlayer.stats.map((luck: number) =>
+							Number(luck.toFixed(this.numDecimalPlaces)),
+						),
+					});
+				}
+
 				// Return the resp object containing the mapped stats
 				return resp;
 			}),
 			catchError(() => {
-				this.displayError();
-				return of({ stats: [] } as StatsResponse);
+				this.displayStatsLoadingError();
+				return of({ stats: [], weeklyMedianLuck: [] } as StatsResponse);
 			}),
 		);
 
-		// Subscribe to the observable and set the luckStatsResponse signal with the received data
+		// Subscribe to the observable and set the statsResponse signal with the received data
 		resp.subscribe((data) => {
 			try {
 				// set the data
-				this.luckStatsResponse.set(data);
+				this.statsResponse.set(data);
 
 				/* set the filters (all initialized to all true) */
 
 				// filter for members of the league
-				this.luckStatsResponse().stats.forEach((member) => {
+				this.statsResponse().stats.forEach((member) => {
 					this.filteredLeagueMembers.set(member.name, true);
 				});
 
@@ -119,18 +162,32 @@ export class StatsService {
 				this.filteredStats.set(
 					'Luck',
 					new Map<keyof Score, boolean>(
-						Object.keys(this.luckStatsResponse().stats[0].scores).map((k) => [
+						Object.keys(this.statsResponse().stats[0].scores).map((k) => [
 							k as keyof Score,
 							true,
 						]),
 					),
 				);
+
+				// filter for median luck stats
+				this.filteredStats.set(
+					'MedianLuck',
+					new Map<number, boolean>(
+						this.statsResponse().weeklyMedianLuck[0].stats.map((val, idx) => [
+							idx + 1,
+							true,
+						]),
+					),
+				);
 			} catch (_error) {
-				this.displayError();
+				this.displayStatsLoadingError();
 			}
 		});
 	}
 
+	getNameColumnWidthClassString(numStatColumnWidths: number): string {
+		return this.nameColumnWidthClassStrings[numStatColumnWidths];
+	}
 	getDataColumnWidthClassString(numStatColumnWidths: number): string {
 		return this.columnWidthClassStrings[numStatColumnWidths];
 	}
@@ -156,7 +213,9 @@ export class StatsService {
 	getStatsLoaded(statType: StatsType): boolean {
 		switch (statType) {
 			case 'Luck':
-				return this.luckStatsResponse().stats.length > 0;
+				return this.statsResponse().stats.length > 0;
+			case 'MedianLuck':
+				return this.statsResponse().weeklyMedianLuck.length > 0;
 			default:
 				return false;
 		}
@@ -188,15 +247,32 @@ export class StatsService {
 
 	sortLuckStats(column: luckStatColumn, sortAsc: boolean) {
 		if (column === ('name' as luckStatColumn)) {
-			this.luckStatsResponse().stats.sort(
+			this.statsResponse().stats.sort(
 				(a, b) => a.name.localeCompare(b.name) * (sortAsc ? 1 : -1),
 			);
+			return;
 		}
 
-		this.luckStatsResponse().stats.sort((a, b) => {
+		this.statsResponse().stats.sort((a, b) => {
 			if (a.scores[column as keyof Score] < b.scores[column as keyof Score])
 				return sortAsc ? -1 : 1;
 			if (a.scores[column as keyof Score] > b.scores[column as keyof Score])
+				return sortAsc ? 1 : -1;
+			return 0;
+		});
+	}
+	sortMedianLuckStats(column: medianLuckStatColumn, sortAsc: boolean) {
+		if (column === ('name' as medianLuckStatColumn)) {
+			this.statsResponse().weeklyMedianLuck.sort(
+				(a, b) => a.userName.localeCompare(b.userName) * (sortAsc ? 1 : -1),
+			);
+			return;
+		}
+
+		this.statsResponse().weeklyMedianLuck.sort((a, b) => {
+			if (a.stats[(column as number) - 1] < b.stats[(column as number) - 1])
+				return sortAsc ? -1 : 1;
+			if (a.stats[(column as number) - 1] > b.stats[(column as number) - 1])
 				return sortAsc ? 1 : -1;
 			return 0;
 		});
@@ -225,14 +301,14 @@ export class StatsService {
 		this.currentLeagueName = '';
 
 		//reset all stats for a new league
-		this.luckStatsResponse.set({ stats: [] });
+		this.statsResponse.set({ stats: [], weeklyMedianLuck: [] });
 
 		//reset all filters
 		this.filteredLeagueMembers = new Map<string, boolean>();
 		this.filteredStats = new Map<StatsType, Map<keyof any, boolean>>();
 	}
 
-	private displayError(): void {
+	displayStatsLoadingError(): void {
 		toast('Error loading stats for this league.', {
 			action: {
 				label: 'Close',
