@@ -41,7 +41,6 @@ jobs:
       - uses: taiki-e/install-action@just
 
       - name: Lint
-        working-directory: backend
         run: just check
 
   test-frontend:
@@ -95,7 +94,7 @@ jobs:
 
     env:
       GENERATED: temp.data
-      TARGET: scripts/init.sql
+      TARGET: scripts/schema.sql
 
     steps:
       - uses: actions/checkout@v6

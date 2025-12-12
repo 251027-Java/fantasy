@@ -1,6 +1,6 @@
 ci := env('CI', 'false')
-maven_ci_args := if ci == 'true' { '-B' } else { '' }
-maven := './mvnw ' + maven_ci_args
+maven_ci_args := if ci == 'true' { ' -B' } else { '' }
+maven := './mvnw' + maven_ci_args
 jar_loc := 'target/fantasy-0.0.1.jar'
 debug_args := '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
 ddl_file := 'scripts/schema.sql'
@@ -37,7 +37,7 @@ verify:
 
 # builds the jar
 build: clean
-    {{ maven }} package spring-boot:repackage
+    {{ maven }} package -DskipTests
 
 # cleans and verifies project integrity
 [default]
