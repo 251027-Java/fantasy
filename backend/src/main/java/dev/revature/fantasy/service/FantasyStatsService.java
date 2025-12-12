@@ -14,8 +14,6 @@ import dev.revature.fantasy.model.WeekScore;
 import dev.revature.fantasy.service.statsmodel.LuckData;
 import dev.revature.fantasy.sleeperrequest.ResponseFormatter;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
-import net.bytebuddy.agent.builder.AgentBuilder.CircularityLock.Global;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -160,7 +158,7 @@ public class FantasyStatsService {
         GlobalLogger.debug("Computing stats for league " + leagueId);
         return this.weekScoresToStatsDto(allWeekScores, rosterUsers);
 
-        // get weekly stats data 
+        // get weekly stats data
     }
 
     /**

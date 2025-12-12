@@ -11,4 +11,3 @@ public class WeeklyMedianLuckDto {
     @NonNull
     private Double[] stats;
 }
-

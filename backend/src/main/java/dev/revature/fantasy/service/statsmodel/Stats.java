@@ -212,10 +212,13 @@ public class Stats {
         // compile all weekly data
         List<WeeklyMedianLuckDto> weeklyMedianLuck = new ArrayList<>();
         medianLuckScores.getMedianLuckScoresByWeek().forEach((id, scores) -> {
-            weeklyMedianLuck.add(new WeeklyMedianLuckDto(rosterUserIdToName.get(id), scores.toArray(new Double[scores.size()])));
+            weeklyMedianLuck.add(
+                    new WeeklyMedianLuckDto(rosterUserIdToName.get(id), scores.toArray(new Double[scores.size()])));
         });
 
-        var leagueStatsDto = new LeagueStatsDto(stats.toArray(new StatDto[stats.size()]), weeklyMedianLuck.toArray(new WeeklyMedianLuckDto[weeklyMedianLuck.size()]));
+        var leagueStatsDto = new LeagueStatsDto(
+                stats.toArray(new StatDto[stats.size()]),
+                weeklyMedianLuck.toArray(new WeeklyMedianLuckDto[weeklyMedianLuck.size()]));
         GlobalLogger.debug("Computed stats for league " + leagueStatsDto.toString());
         return leagueStatsDto;
     }

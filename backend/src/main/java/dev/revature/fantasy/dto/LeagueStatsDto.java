@@ -8,7 +8,7 @@ public class LeagueStatsDto {
     @NonNull
     private StatDto[] stats;
 
-    // Weekly median stats 
+    // Weekly median stats
     /*
     {
         WeeklyMedianLuckDto[]
@@ -18,13 +18,11 @@ public class LeagueStatsDto {
             String username;
             double[] stats;
         }
-        
+
     }
 
 
      */
     @NonNull
     private WeeklyMedianLuckDto[] weeklyMedianLuck;
-
-
 }
