@@ -13,7 +13,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.http.HttpResponse;
@@ -31,11 +30,11 @@ public class ResponseFormatter {
 
     private final ObjectMapper om;
 
-    private static final ParameterizedTypeReference<List<SleeperMatchupResponse>> MATCHUP_LIST_TYPE =
-            new ParameterizedTypeReference<List<SleeperMatchupResponse>>() {};
-
     private final WebClient webClient;
     private final SleeperRequestHandler sleeperRequestHandler;
+
+    static final ParameterizedTypeReference<List<SleeperMatchupResponse>> MATCHUP_LIST_TYPE =
+            new ParameterizedTypeReference<List<SleeperMatchupResponse>>() {};
 
     public ResponseFormatter(WebClient webClient, SleeperRequestHandler sleeperRequestHandler, ObjectMapper om) {
         this.webClient = webClient;
@@ -50,7 +49,7 @@ public class ResponseFormatter {
             if (response.statusCode() == 200) {
 
                 Map<String, SleeperPlayerResponse> map =
-                        om.readValue(response.body(), new TypeReference<Map<String, SleeperPlayerResponse>>() {});
+                        om.readValue(response.body(), SleeperTypeReferences.getPlayerMapType());
                 List<SleeperPlayerResponse> resp = new ArrayList<>(map.values());
 
                 return resp;
@@ -76,7 +75,7 @@ public class ResponseFormatter {
             HttpResponse<String> response = this.sleeperRequestHandler.getLeaguesFromUserIDAndSeason(userId, year);
             if (response.statusCode() == 200) {
                 List<SleeperLeagueResponse> resp =
-                        om.readValue(response.body(), new TypeReference<List<SleeperLeagueResponse>>() {});
+                        om.readValue(response.body(), SleeperTypeReferences.getLeagueListType());
                 return resp;
             }
         } catch (Exception e) {
@@ -92,7 +91,7 @@ public class ResponseFormatter {
         try {
             HttpResponse<String> response = this.sleeperRequestHandler.getUserFromUsername(username);
             if (response.statusCode() == 200) {
-                SleeperUsernameResponse resp = om.readValue(response.body(), SleeperUsernameResponse.class);
+                SleeperUsernameResponse resp = om.readValue(response.body(), SleeperTypeReferences.getUsernameType());
                 return resp;
             }
         } catch (Exception e) {
@@ -112,8 +111,7 @@ public class ResponseFormatter {
         try {
             HttpResponse<String> response = this.sleeperRequestHandler.getUsersFromLeague(leagueId);
             if (response.statusCode() == 200) {
-                List<SleeperUserResponse> resp =
-                        om.readValue(response.body(), new TypeReference<List<SleeperUserResponse>>() {});
+                List<SleeperUserResponse> resp = om.readValue(response.body(), SleeperTypeReferences.getUserListType());
                 return resp;
             }
         } catch (Exception e) {
@@ -128,7 +126,7 @@ public class ResponseFormatter {
             HttpResponse<String> response = this.sleeperRequestHandler.getRostersFromLeague(leagueId);
             if (response.statusCode() == 200) {
                 List<SleeperRosterUserResponse> resp =
-                        om.readValue(response.body(), new TypeReference<List<SleeperRosterUserResponse>>() {});
+                        om.readValue(response.body(), SleeperTypeReferences.getRosterUserListType());
                 return resp;
             }
         } catch (Exception e) {
@@ -175,7 +173,7 @@ public class ResponseFormatter {
                     this.sleeperRequestHandler.getMatchupsFromLeagueIdAndWeek(leagueId, weekNum);
             if (response.statusCode() == 200) {
                 List<SleeperMatchupResponse> resp =
-                        om.readValue(response.body(), new TypeReference<List<SleeperMatchupResponse>>() {});
+                        om.readValue(response.body(), SleeperTypeReferences.getMatchupListType());
                 return resp;
             }
         } catch (Exception e) {
@@ -190,7 +188,7 @@ public class ResponseFormatter {
         try {
             HttpResponse<String> response = this.sleeperRequestHandler.getNFLState();
             if (response.statusCode() == 200) {
-                SleeperNFLStateResponse resp = om.readValue(response.body(), SleeperNFLStateResponse.class);
+                SleeperNFLStateResponse resp = om.readValue(response.body(), SleeperTypeReferences.getNFLStateType());
                 return resp;
             }
         } catch (Exception e) {
