@@ -89,7 +89,7 @@ export class ThemeService {
                 'border-green-700 bg-green-900 hover:bg-green-800',
             displayedComponentTitleBoldClass: 'text-green-500',
             selectedTabButtonClasses:
-                'bg-[radial-gradient(circle_at_top_right,_#072c1a,_#0e4227,_#051b11)]',
+                'border-green-600 bg-green-800 hover:bg-green-700',
 
             headerTableClass: 'bg-green-900 hover:bg-green-800',
             bodyTableClass: 'bg-black/20', 
