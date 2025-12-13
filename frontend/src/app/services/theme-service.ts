@@ -5,9 +5,9 @@ import { Theme, ThemeColor } from '../interface/theme';
     providedIn: 'root',
 })
 export class ThemeService {
-    readonly initialTheme: ThemeColor = 'blue';
+    readonly defaultTheme: ThemeColor = 'blue';
 
-    statsTheme: WritableSignal<ThemeColor> = signal(this.initialTheme);
+    statsTheme: WritableSignal<ThemeColor> = signal(this.defaultTheme);
 
     getThemeColors(): ThemeColor[] {
         return this.colorOrder;
@@ -137,6 +137,6 @@ export class ThemeService {
     } as const;
 
     reset() {
-        this.statsTheme.set(this.initialTheme);
+        this.statsTheme.set(this.defaultTheme);
     }
 }
