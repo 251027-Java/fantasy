@@ -31,7 +31,7 @@ export class StatsPage {
 		{
 			namePrebold: 'How ',
 			nameBold: 'lucky',
-			namePostbold: ' were you?',
+			namePostbold: ' are you?',
 			label: 'Luck Scores',
 			component: LuckScores,
 			isActive: false,
