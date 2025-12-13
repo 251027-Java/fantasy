@@ -84,7 +84,7 @@ export class ThemeService {
         },
         green: {
             selectThemeButtonClasses:
-                'border-green-600 bg-green-800 hover:bg-green-700',
+                'border-green-700 bg-green-800 hover:bg-green-700',
             backToLeaguesButtonClasses:
                 'border-green-700 bg-green-900 hover:bg-green-800',
             displayedComponentTitleBoldClass: 'text-green-500',
