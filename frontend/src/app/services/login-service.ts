@@ -68,7 +68,7 @@ export class LoginService {
 	}
 
 	// Assume the method now accepts the user as a string parameter
-	addToUserList(card: CardData, user: string): void {
+	addToCardUserList(card: CardData, user: string): void {
 		
 
 		const existingCard = this.cardList.find(c => c.id === card.id);

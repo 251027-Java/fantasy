@@ -37,7 +37,7 @@
         </div>
 
 
-        <div class="flex flex-row">
+        <div class="flex flex-row justify-between">
           <div hlmCardContent>
                 <form [formGroup]="searchControl" (ngSubmit)="retrieveLeagues()" class="space-y-6">
 
@@ -60,15 +60,22 @@
                         <hlm-error class="text-red-600 text-sm">
                             Previous username could not generate any leagues
                         </hlm-error>
+                      }@else {
+                        
+                        <hlm-error class="text-red-600 text-sm">
+                            You must enter a valid usernames
+                        </hlm-error>
                       }
-
-                      <hlm-error class="text-red-600 text-sm">
-                          You must enter a valid usernames
-                      </hlm-error>
 
                   </hlm-form-field>
                 </form>
                 <button hlmBtn (click)="retrieveLeagues()">This should appear to the right</button>
+            </div>
+            <div>
+              @for (user of userSearchList; track userSearchList) {
+
+                <button hlmBtn (click)="removeUserFromSearch(user)">X {{user}}</button>
+              }
             </div>
           </div>
 

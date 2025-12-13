@@ -37,16 +37,16 @@ export class League implements OnInit {
 	) {}
 
 	public cardList: CardData[] = [];
+	public userSearchList: String[] = [];
 	public loading: boolean = true;
 	public error: boolean = false;
-	public userSearchList: String[] = [];
 	public emptyListUser: boolean = false;
 	private currentCard: CardData = {id: "", title: "", users: [], description: "", buttonText: ""};
 
 	ngOnInit(): void {
 
 		this.cardList = this.loginServe.cardList;
-
+		this.userSearchList = this.loginServe.userSearchList;
 		this.loading = false;
 		this.error = false;
 
@@ -78,13 +78,42 @@ export class League implements OnInit {
 	});
 	//new FormControl('', [Validators.required, Validators.email]);
 
-	removeFromUserList(card: CardData): void{
 
+	removeUserFromSearch(user: String): void {
+		
+		console.log("button was pressed")
+
+		// We filter the userSearchList to create a new list that excludes the user string.
+		this.loginServe.userSearchList = this.loginServe.userSearchList.filter(
+			(existingUser) => existingUser !== user
+		);
+
+		
+		// Iterate over the main cardList and modify the 'users' array within each card.
+		this.loginServe.cardList.forEach((card) => {
+			// Filter the current card's users list, keeping only those NOT matching the user to be removed.
+			card.users = card.users.filter(
+				(existingUser) => existingUser !== user
+			);
+		});
+
+		
+		// Filter the main cardList to keep only cards where the 'users' array still has content (length > 0).
+		this.loginServe.cardList = this.loginServe.cardList.filter(
+			(card) => card.users.length > 0
+		);
+
+
+		// Update this .ts objects version of hte userSearchList and the LoginServe
+		this.userSearchList = this.loginServe.userSearchList;
+		this.cardList = this.loginServe.cardList;
+
+		console.log(`User ${user} removed from search lists.`);
+		console.log('Updated userSearchList:', this.loginServe.userSearchList);
+		console.log('Updated cardList:', this.loginServe.cardList);
+
+		// Notify Angular of changes to update the UI
 		this.cdRef.detectChanges();
-	}
-
-	addUserNameToSearchList(name: string): void {
-
 	}
 
 	retrieveLeagues(): void {
@@ -105,24 +134,15 @@ export class League implements OnInit {
 			//console.log('Logging in with:', this.searchControl.value.user);
 			//this.loginServe.loginUser(this.loginControl.value.user!);
 
+			// Subscribe to what is returned from .getLeagues from the current username
 			this.loginServe.getLeagues().subscribe({
+
+				// If no errors, do this
 				next: (response) => {
-					
-					//console.log('search successful');
-					// console.log(
-					// 	`These are the leagues: ${JSON.stringify(response.leagues)}`,
-					// );
 
-					// this.cardList = response.leagues.map((league) => ({
-					// 	id: league.id,
-					// 	title: league.name,
-					// 	description: `Welcome to the ${league.name} league!`,
-					// 	buttonText: 'View'
-					// }));
-
+					// From response, pull leagues list, from leagues list, for each league, add them to 
 					response.leagues.forEach((league) => {
 
-						
 						this.currentCard = {
 							id: league.id, 
 							title: league.name, 
@@ -131,11 +151,15 @@ export class League implements OnInit {
 							buttonText: 'View'}
 
 						// console.log("this is working for league: " + this.currentCard.id);
-						this.loginServe.addToUserList(this.currentCard, this.searchControl.value.user ?? '');
+						this.loginServe.addToCardUserList(this.currentCard, this.searchControl.value.user ?? '');
 
 						
 					});
+
+					 this.loginServe.userSearchList.includes(this.searchControl.value.user ?? "") ?
+					  "" : this.loginServe.userSearchList.push(this.searchControl.value.user ?? "");
 					
+					// Reset loading stylings
 					this.loading = false;
 
 					if(this.loginServe.cardList.length == 0){
@@ -144,9 +168,15 @@ export class League implements OnInit {
 						this.emptyListUser = false;
 					}
 
+					// Detect changes
 					this.cdRef.detectChanges();
 
+					// Check userSearchList persists (it does)
+					console.log(this.userSearchList);
+
 				},
+
+				// If errors, do this.
 				error: (err: string) => {
 					this.loading = false;
 					this.error = true;
