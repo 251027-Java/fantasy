@@ -4,6 +4,7 @@ import { HlmButton } from '@spartan-ng/helm/button';
 import { environment } from '../../../environments/environment';
 import { AuthRequest, AuthResponse } from '../../interface/auth-interfaces';
 import { AuthService } from '../../services/auth-service';
+import { LoginService } from '../../services/login-service';
 
 declare var google: any;
 
@@ -18,6 +19,7 @@ export class GoogleAuth implements AfterViewInit {
 	constructor(
 		private router: Router,
 		private authService: AuthService,
+		private loginServe: LoginService,
 	) {}
 
 	loadGoogleClientId(): string {
@@ -91,7 +93,8 @@ export class GoogleAuth implements AfterViewInit {
 					console.log(`Code exchange successful: ${resp}`);
 					console.log(`token: ${sessionStorage.getItem('token')}`);
 					// redirect to the login page
-					this.router.navigateByUrl('login');
+					this.loginServe.Login();
+					this.router.navigateByUrl('league');
 				},
 				error: (err: any) => {
 					console.error('Code exchange failed', err);
