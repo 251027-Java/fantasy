@@ -5,7 +5,7 @@ import { Theme, ThemeColor } from '../interface/theme';
     providedIn: 'root',
 })
 export class ThemeService {
-    readonly initialTheme: ThemeColor = 'red';
+    readonly initialTheme: ThemeColor = 'blue';
 
     statsTheme: WritableSignal<ThemeColor> = signal(this.initialTheme);
 
