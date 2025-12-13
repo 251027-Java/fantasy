@@ -13,6 +13,9 @@ import dev.revature.fantasy.dto.AuthResponseDto;
 import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.AppUser;
 import dev.revature.fantasy.repository.AppUserRepo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +48,8 @@ public class GoogleAuthService implements AuthService {
     }
 
     public Optional<AuthResponseDto> auth(AuthRequestDto authRequestDto) {
-        var payload = verifyCode(authRequestDto.getCode());
+        var codeTokenRequest = new CodeTokenRequestDto(clientId, clientSecret, authRequestDto.getCode(), redirectUri);
+        var payload = verifyCode(codeTokenRequest);
 
         if (payload.isEmpty()) {
             return Optional.empty();
@@ -64,14 +68,14 @@ public class GoogleAuthService implements AuthService {
         return Optional.of(response);
     }
 
-    private Optional<GoogleIdToken.Payload> verifyToken(String tokenString) {
+    public static Optional<GoogleIdToken.Payload> verifyToken(TokenVerifyDto dto) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                             new NetHttpTransport(), new GsonFactory())
-                    .setAudience(Collections.singletonList(clientId))
+                    .setAudience(Collections.singletonList(dto.getClientId()))
                     .build();
 
-            GoogleIdToken idToken = verifier.verify(tokenString);
+            GoogleIdToken idToken = verifier.verify(dto.getToken());
 
             if (idToken != null) {
                 return Optional.of(idToken.getPayload()); // Token is valid, return user info
@@ -82,11 +86,16 @@ public class GoogleAuthService implements AuthService {
         return Optional.empty(); // Token invalid
     }
 
-    private Optional<GoogleIdToken.Payload> verifyCode(String code) {
+    public static Optional<GoogleIdToken.Payload> verifyCode(CodeTokenRequestDto dto) {
         try {
-            GlobalLogger.debug("Code: " + code);
+            GlobalLogger.debug("Code: " + dto.getCode());
             TokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-                            new NetHttpTransport(), new GsonFactory(), clientId, clientSecret, code, redirectUri)
+                            new NetHttpTransport(),
+                            new GsonFactory(),
+                            dto.getClientId(),
+                            dto.getClientSecret(),
+                            dto.getCode(),
+                            dto.getRedirectUri())
                     .execute();
 
             GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());
@@ -113,5 +122,23 @@ public class GoogleAuthService implements AuthService {
             GlobalLogger.error("Failed to verify google oauth code: " + e.getMessage());
         }
         return Optional.empty();
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TokenVerifyDto {
+        private String clientId;
+        private String token;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CodeTokenRequestDto {
+        private String clientId;
+        private String clientSecret;
+        private String code;
+        private String redirectUri;
     }
 }

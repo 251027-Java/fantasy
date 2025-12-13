@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { LuckScores } from '../luck-scores/luck-scores';
-import { TestScores } from '../test-scores/test-scores';
+import { MedianLuckScores } from '../median-luck-scores/median-luck-scores';
 import { HlmToaster } from '@spartan-ng/helm/sonner';
 
 interface Tab {
@@ -31,20 +31,20 @@ export class StatsPage {
 		{
 			namePrebold: 'How ',
 			nameBold: 'lucky',
-			namePostbold: ' were you?',
+			namePostbold: ' are you?',
 			label: 'Luck Scores',
 			component: LuckScores,
 			isActive: false,
 			imageBackgroundClass: 'luckstatsbackground',
 		},
 		{
-			namePrebold: '',
-			nameBold: 'Testing',
-			namePostbold: '...',
-			label: 'Test Scores',
-			component: TestScores,
+			namePrebold: "You're ",
+			nameBold: 'mid',
+			namePostbold: ' af.',
+			label: 'Median Scores',
+			component: MedianLuckScores,
 			isActive: false,
-			imageBackgroundClass: 'testbackground',
+			imageBackgroundClass: 'medianluckstatsbackground',
 		},
 	];
 	activeTab: Tab = this.tabs[0];
@@ -81,5 +81,8 @@ export class StatsPage {
 		this.currentLeagueName = this.statsService.getCurrentLeagueName();
 
 		this.selectTab(this.tabs[0]);
+
+		if (this.statsService.getCurrentLeagueId() === '')
+			this.statsService.displayStatsLoadingError();
 	}
 }

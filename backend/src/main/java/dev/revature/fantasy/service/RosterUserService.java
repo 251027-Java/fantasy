@@ -2,7 +2,6 @@ package dev.revature.fantasy.service;
 
 import dev.revature.fantasy.dto.RosterUserDto;
 import dev.revature.fantasy.model.RosterUser;
-import dev.revature.fantasy.model.User;
 import dev.revature.fantasy.repository.LeagueRepo;
 import dev.revature.fantasy.repository.RosterUserRepo;
 import dev.revature.fantasy.repository.UserRepo;
@@ -59,22 +58,9 @@ public class RosterUserService {
     }
 
     public Map<Long, String> getRosterUserIdToName(List<RosterUser> rosterUsers) {
-
-        // 1. Extract all unique userIds (the join key) from the list of RosterUsers.
-        Set<String> userIds = rosterUsers.stream().map(e -> e.getUser().getId()).collect(Collectors.toSet());
-
-        List<User> users = userRepo.findAllById(userIds);
-        Map<String, String> userIdToDisplayName =
-                users.stream().collect(Collectors.toMap(User::getId, User::getDisplayName));
-
-        Map<Long, String> rosterUserIdToName = new HashMap<>();
-
-        for (RosterUser rosterUser : rosterUsers) {
-            String userId = rosterUser.getUser().getId();
-            String displayName = userIdToDisplayName.getOrDefault(userId, "Unknown User");
-            rosterUserIdToName.put(rosterUser.getId(), displayName);
-        }
-
-        return rosterUserIdToName;
+        return rosterUsers.stream()
+                .map(rosterUser ->
+                        Map.entry(rosterUser.getId(), rosterUser.getUser().getDisplayName()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
