@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { CardData } from '../interface/card-data';
 import { LoginResponse } from '../interface/login-response';
 import { AuthService } from './auth-service';
-import { CardData } from '../interface/card-data';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,7 +11,7 @@ import { CardData } from '../interface/card-data';
 export class LoginService {
 	public username: string = '';
 	public cardList: CardData[] = [];
-	public userSearchList: String[] = [];
+	public userSearchList: string[] = [];
 
 	// Inject HttpClient for making HTTP requests
 	constructor(
@@ -69,46 +69,43 @@ export class LoginService {
 
 	// Assume the method now accepts the user as a string parameter
 	addToCardUserList(card: CardData, user: string): void {
-		
-
-		const existingCard = this.cardList.find(c => c.id === card.id);
+		const existingCard = this.cardList.find((c) => c.id === card.id);
 
 		if (existingCard) {
-
-			
-			console.log(card.title + " League already exists in the list. Checking user...");
+			console.log(
+				card.title + ' League already exists in the list. Checking user...',
+			);
 
 			// Check if the user is already in the existing card's user list
 			if (existingCard.users.includes(user)) {
 				// User exists: Do nothing and exit (Guard Clause)
-				console.log(`User ${user} is already in ${existingCard.title}. Returning.`);
-				console.log(this.cardList.toString())
+				console.log(
+					`User ${user} is already in ${existingCard.title}. Returning.`,
+				);
+				console.log(this.cardList.toString());
 				return;
 			} else {
 				// User does NOT exist: Add the user to the existing card's list
 				existingCard.users.push(user);
-				console.log(`User ${user} added to existing league: ${existingCard.title}`);
+				console.log(
+					`User ${user} added to existing league: ${existingCard.title}`,
+				);
 			}
-
 		} else {
+			console.log('Adding ' + card.title + ' league to the list.');
 
-			
-			console.log("Adding " + card.title + " league to the list.");
-			
 			if (!card.users) {
 				card.users = [];
 			}
-			
+
 			// Add the current user to the new card's users list
 			card.users.push(user);
-			
+
 			// Add the entire modified card to the component's list
 			this.cardList.push(card);
 		}
 
-
-		console.log("Current Card List:", this.cardList);
-
+		console.log('Current Card List:', this.cardList);
 	}
 
 	// It is initialized to 'false' (logged out)

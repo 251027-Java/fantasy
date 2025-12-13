@@ -19,7 +19,7 @@ export class GoogleAuth implements AfterViewInit {
 	constructor(
 		private router: Router,
 		private authService: AuthService,
-		private loginServe: LoginService
+		private loginServe: LoginService,
 	) {}
 
 	loadGoogleClientId(): string {
