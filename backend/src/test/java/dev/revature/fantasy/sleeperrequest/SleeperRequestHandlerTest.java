@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import core.BaseTest;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class SleeperRequestHandlerTest {
+public class SleeperRequestHandlerTest extends BaseTest {
 
     @Mock
     private HttpClient mockHttpClient;

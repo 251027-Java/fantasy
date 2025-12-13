@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
+import core.BaseTest;
 import dev.revature.fantasy.exception.HttpConnectionException;
 import dev.revature.fantasy.exception.SleeperException;
 import dev.revature.fantasy.sleeperrequest.sleeperresponsemodel.*;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 @ExtendWith(MockitoExtension.class)
-public class ResponseFormatterTest {
+public class ResponseFormatterTest extends BaseTest {
 
     @Mock
     private SleeperRequestHandler sleeperRequestHandler;
