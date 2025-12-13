@@ -18,17 +18,17 @@ export const routes: Routes = [
 	{
 		path: 'login',
 		component: Login,
-		canActivate: [AuthGuard],
+		//canActivate: [AuthGuard],
 	},
 	{
 		path: 'league',
 		component: League,
-		canActivate: [AuthGuard],
+		//canActivate: [AuthGuard],
 	},
 	{
 		path: 'stats',
 		component: StatsPage,
-		canActivate: [AuthGuard],
+		//canActivate: [AuthGuard],
 	},
 	{
 		path: '**',

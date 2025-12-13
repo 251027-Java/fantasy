@@ -1,14 +1,14 @@
 <div class="min-h-screen" style="padding: 0 0 0.5%;" [ngClass]="imageBackgroundClass">
     <div class="flex justify-between items-center">
-        <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
+        <button class="topcorner flex-none max-w-48 flex-1 px-4 py-2 rounded-md text-center font-medium border-3 border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('backToLeaguesButtonClasses')" (click)="backToLeagues()">
             &lt;&lt; Leagues
         </button>
-        <p class="topcorner text-black font-medium bg-white border-black border rounded-sm px-2 py-1">
+        <p class="topcorner text-white font-medium bg-black border-white border-3 border rounded-sm px-2 py-1">
             Current League:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{currentLeagueName}}
         </p>
     </div>
 
-    <h1 class="w-fit mx-auto text-center text-4xl font-normal text-gray-800 tracking-wide">
+    <h1 class="w-fit mx-auto text-center text-4xl font-normal text-gray-200 tracking-wide">
         {{displayedComponentTitlePrebold}}<span class="font-bold" [ngClass]="themeService.getCurrentThemeClassString('displayedComponentTitleBoldClass')">{{displayedComponentTitleBold}}</span>{{displayedComponentTitlePostbold}}
     </h1>
 
@@ -16,9 +16,9 @@
         <div class="flex gap-2 md:gap-6 lg:gap-10 justify-center">
             @for (tab of tabs; track tab.label) {
                 @if (tab.isActive){
-                    <button (click)="selectTab(tab)" class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border text-white cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
                 } @else {
-                    <button (click)="selectTab(tab)" class="md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 cursor-pointer">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md text-center font-medium border border-gray-300 bg-black text-gray-200 hover:bg-gray-700 cursor-pointer">{{tab.label}}</button>
                 }
             }
         </div>

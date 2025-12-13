@@ -35,7 +35,7 @@ export class StatsPage {
 			label: 'Luck Scores',
 			component: LuckScores,
 			isActive: false,
-			imageBackgroundClass: 'luckstatsbackground',
+			imageBackgroundClass: 'luckstatsbackground-inverted',
 		},
 		{
 			namePrebold: "You're ",
@@ -44,7 +44,7 @@ export class StatsPage {
 			label: 'Median Scores',
 			component: MedianLuckScores,
 			isActive: false,
-			imageBackgroundClass: 'medianluckstatsbackground',
+			imageBackgroundClass: 'medianluckstatsbackground-inverted',
 		},
 	];
 	activeTab: Tab = this.tabs[0];

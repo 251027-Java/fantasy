@@ -28,10 +28,10 @@
 	background-image:
 		linear-gradient(
 			rgba(0, 0, 0, 0.94),
-			rgba(0, 0, 0, 0.9),
 			rgba(0, 0, 0, 0.8),
 			rgba(0, 0, 0, 0.8),
-			rgba(0, 0, 0, 0.8)
+			rgba(16, 16, 16, 0.8),
+			rgba(16, 16, 16, 0.8)
 		), url("/footballsinverted.jpg");
 }
 
@@ -39,9 +39,9 @@
 	background-image:
 		linear-gradient(
 			rgba(0, 0, 0, 0.6),
-			rgba(0, 0, 0, 0.5),
-			rgba(0, 0, 0, 0.1),
-			rgba(0, 0, 0, 0.1),
-			rgba(0, 0, 0, 0.1)
+			rgba(32, 32, 32, 0.6),
+			rgba(64, 64, 64, 0.3),
+			rgba(64, 64, 64, 0.3),
+			rgba(64, 64, 64, 0.3)
 		), url("/routesinverted.jpg");
 }
