@@ -1,0 +1,264 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Fantasy API",
+    "description": "An API to retrieve leagues and stats for fantasy football from [Sleeper](https://sleeper.com/)\n\nThis is not affiliated with [Sleeper](https://sleeper.com/).\n",
+    "contact": {
+      "name": "GitHub",
+      "url": "https://github.com/251027-Java/fantasy"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/auth/google": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Authenticate with a Google OAuth code.",
+        "operationId": "googleAuth",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/league/{id}/stats": {
+      "get": {
+        "tags": [
+          "League"
+        ],
+        "description": "Retrieve stats for a league.",
+        "operationId": "getLeagueStats",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueStatsDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    },
+    "/api/info/{username}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Retrieve user information associated with a username.",
+        "operationId": "getUserInfo",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "auth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthRequestDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "jwtToken": {
+            "type": "string"
+          }
+        }
+      },
+      "LeagueStatsDto": {
+        "type": "object",
+        "properties": {
+          "stats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatDto"
+            }
+          },
+          "weeklyMedianLuck": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeeklyMedianLuckDto"
+            }
+          }
+        }
+      },
+      "ScoreDto": {
+        "type": "object",
+        "properties": {
+          "totalLuck": {
+            "type": "number",
+            "format": "double"
+          },
+          "medLuck": {
+            "type": "number",
+            "format": "double"
+          },
+          "apLuck": {
+            "type": "number",
+            "format": "double"
+          },
+          "apWins": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "apLoses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "apTies": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wins": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ties": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "StatDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "score": {
+            "$ref": "#/components/schemas/ScoreDto"
+          }
+        }
+      },
+      "WeeklyMedianLuckDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "LeagueDto": {
+        "type": "object",
+        "properties": {
+          "leagueId": {
+            "type": "string"
+          },
+          "leagueName": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "leagues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeagueDto"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "auth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
