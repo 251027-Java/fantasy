@@ -30,7 +30,7 @@ import { Navbar } from '../navbar/navbar';
 		CommonModule,
 		ReactiveFormsModule,
 		HlmInput,
-		Navbar
+		Navbar,
 	],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
@@ -120,7 +120,7 @@ export class League implements OnInit {
 		this.cardList = this.loginServe.cardList;
 
 		// If cardlist has nothing within it, show that the search is empty
-		if(this.cardList.length == 0){
+		if (this.cardList.length === 0) {
 			this.emptyListUser = true;
 		}
 
