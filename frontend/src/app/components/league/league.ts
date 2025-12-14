@@ -17,6 +17,7 @@ import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
+import { Navbar } from '../navbar/navbar';
 
 @Component({
 	selector: 'app-league',
@@ -29,6 +30,7 @@ import { ThemeService } from '../../services/theme-service';
 		CommonModule,
 		ReactiveFormsModule,
 		HlmInput,
+		Navbar
 	],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
@@ -116,6 +118,11 @@ export class League implements OnInit {
 		// Update this .ts objects version of hte userSearchList and the LoginServe
 		this.userSearchList = this.loginServe.userSearchList;
 		this.cardList = this.loginServe.cardList;
+
+		// If cardlist has nothing within it, show that the search is empty
+		if(this.cardList.length == 0){
+			this.emptyListUser = true;
+		}
 
 		console.log(`User ${user} removed from search lists.`);
 		console.log('Updated userSearchList:', this.loginServe.userSearchList);
