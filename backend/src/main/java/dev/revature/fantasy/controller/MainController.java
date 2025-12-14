@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api")
-@Tag(name = "Endpoints")
 public class MainController {
 
     private final FantasyStatsService fantasyStatsService;
@@ -30,6 +29,7 @@ public class MainController {
         this.authService = authService;
     }
 
+    @Tag(name = "User")
     @Operation(
             description = "Retrieve user information associated with a username.",
             security = @SecurityRequirement(name = "auth"))
@@ -42,6 +42,7 @@ public class MainController {
                 .orElseThrow(() -> new InvalidUsernameException("Invalid username: " + username));
     }
 
+    @Tag(name = "League")
     @Operation(description = "Retrieve stats for a league.", security = @SecurityRequirement(name = "auth"))
     @GetMapping("/league/{id}/stats")
     public LeagueStatsDto getLeagueStats(@PathVariable String id)
@@ -54,6 +55,7 @@ public class MainController {
     /**
      * Send the token to google auth service to verify it
      */
+    @Tag(name = "Auth")
     @Operation(description = "Authenticate with a Google OAuth code.")
     @PostMapping("/auth/google")
     public AuthResponseDto googleAuth(@RequestBody AuthRequestDto authRequestDto) {

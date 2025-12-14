@@ -41,7 +41,7 @@ just run # start the server
 
 This will launch a PostgreSQL database in a docker container. If you'd like to connect to this database elsewhere, you can use the following connection string: `postgresql://postgres:secret@localhost:5432/dev`.
 
-In addition, the server will be launched and can be accessed at `http://localhost:8080`. While the server is running, you can access the documentation of our endpoints at `http://localhost:8080/api`.
+In addition, the server will be launched and can be accessed at `http://localhost:8080`. While the server is running, you can view our endpoints at `http://localhost:8080/swagger-ui.html`.
 
 If you want to learn more about what you can do with our backend, feel free to read the other sections.
 
@@ -55,7 +55,7 @@ Once the database has started, use the following command to start a development 
 just run
 ```
 
-The backend will be accessible through `http://localhost:8080`. While running, documentation of our endpoints will be located at `http://localhost:8080/api`.
+The backend will be accessible through `http://localhost:8080` and endpoints can be viewed via Swagger UI at `http://localhost:8080/swagger-ui.html`.
 
 With a development server, the tables in the database are automatically updated to match existing entities found in the `dev.revature.fantasy` package. 
 
@@ -82,11 +82,19 @@ just compile
 just refresh # an alias for compile
 ```
 
+## Endpoints
+
+The OpenApi specification of our API is located [here](./openapi.json). 
+
+Alternatively, it can be viewed while the server is running:
+- **OpenApi**: `http://localhost:8080/v3/api-docs`
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+
 ## Database management
 
 A PostgreSQL database in a docker container is used for our backend. Once created and started, you can utilize the following connection strings if necessary: 
-- Development: `postgresql://postgres:secret@localhost:5432/dev` 
-- Production: `postgresql://postgres:secret@localhost:5432/prod` 
+- **Development**: `postgresql://postgres:secret@localhost:5432/dev` 
+- **Production**: `postgresql://postgres:secret@localhost:5432/prod` 
 
 To view the DDL initialization of the production database, view the file, `scripts/schema.sql`. See [DDL generation](#ddl-generation) for more information on this file.
 
