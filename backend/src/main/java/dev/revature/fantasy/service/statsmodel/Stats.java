@@ -4,7 +4,6 @@ import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.ScoreDto;
 import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.dto.WeeklyMedianLuckDto;
-import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.WeekScore;
 
