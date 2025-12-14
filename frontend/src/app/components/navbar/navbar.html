@@ -8,7 +8,7 @@
             <h1 class="hover:underline hover:underline-offset-4 hover:cursor-pointer" (click)="goHome()">Home</h1>
             <h1 class="hover:underline hover:underline-offset-4 hover:cursor-pointer" (click)="goSearch()">Search</h1>
         </div>
-        @if(this.authServe.getToken() && this.loginServe.getIsLoggedIn()){
+        @if(this.authServe.isAuthorized()){
             <h1 class="text-white font-bold py-2 px-4">You're logged in!</h1>
         }@else {
             <button hlmBtn class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" (click)="scrollToLogin()">
