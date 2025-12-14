@@ -59,6 +59,7 @@ public class GoogleAuthService implements AuthService {
         String name = (String) payload.get().get("name");
 
         String token = tokenService.generateToken(email);
+        GlobalLogger.debug("Generated jwt:\n" + token);
 
         AppUser user = new AppUser(email, name);
         this.appUserRepo.save(user);
