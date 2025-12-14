@@ -1,0 +1,22 @@
+<div class="fixed top-0 left-0 right-0 z-10 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+    <div class="mx-auto px-6 py-4 flex  justify-between">
+        <div class="flex items-center gap-6">
+            <!--Add a football or the users avatar-->
+            <h1 class="text-2xl font-bold text-white">FANTASY</h1>
+        </div>
+        <div class="text-white flex flex-row justify-between py-2 gap-20">
+            <h1 class="hover:underline hover:underline-offset-4 hover:cursor-pointer" (click)="goHome()">Home</h1>
+            <h1 class="hover:underline hover:underline-offset-4 hover:cursor-pointer" (click)="goSearch()">Search</h1>
+        </div>
+        @if(this.authServe.getToken()){
+            <h1 class="text-white font-bold py-2 px-4">You're logged in!</h1>
+        }@else {
+            <button hlmBtn class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" (click)="scrollToLogin()">
+                Login
+            </button>
+        }
+        <!-- <div class="text-white/60 text-sm">
+            Visible: 
+        </div> -->
+    </div>
+</div>
