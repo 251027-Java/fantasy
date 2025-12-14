@@ -24,7 +24,8 @@
 			"@spartan-ng/helm/field": ["./src/app/ui/field/src/index.ts"],
 			"@spartan-ng/helm/label": ["./src/app/ui/label/src/index.ts"],
 			"@spartan-ng/helm/separator": ["./src/app/ui/separator/src/index.ts"],
-			"@spartan-ng/helm/sonner": ["./src/app/ui/sonner/src/index.ts"]
+			"@spartan-ng/helm/sonner": ["./src/app/ui/sonner/src/index.ts"],
+			"@spartan-ng/helm/accordion": ["./src/app/ui/accordion/src/index.ts"]
 		}
 	},
 	"angularCompilerOptions": {

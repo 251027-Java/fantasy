@@ -57,7 +57,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error("Could not get players", e);
         }
-        System.out.println("No users found");
+        GlobalLogger.debug("No users found");
         return List.of();
     }
 
@@ -81,7 +81,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error(String.format("Could not get leagues from user_id '%s'", userId), e);
         }
-        System.out.println("No leagues found");
+        GlobalLogger.debug("No leagues found");
         return List.of();
     }
 
@@ -97,7 +97,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error(String.format("Could not get user from username '%s'", username), e);
         }
-        System.out.println("No user found");
+        GlobalLogger.debug("No user found");
         return null;
     }
 
@@ -117,7 +117,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error(String.format("Could not get users from league_id '%s'", leagueId), e);
         }
-        System.out.println("No users found");
+        GlobalLogger.debug("No users found");
         return List.of();
     }
 
@@ -132,7 +132,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error(String.format("Could not get rosters from league_id '%s'", leagueId), e);
         }
-        System.out.println("No rosters found");
+        GlobalLogger.debug("No rosters found");
         return List.of();
     }
 
@@ -162,7 +162,7 @@ public class ResponseFormatter {
                 .bodyToMono(MATCHUP_LIST_TYPE)
                 // handle any exceptions (HTTP errors, deserialization errors, etc.)
                 .onErrorResume(Exception.class, e -> {
-                    System.out.println("No matchups found (or error occurred)");
+                    GlobalLogger.debug("No matchups found (or error occurred)");
                     return Mono.just(List.of());
                 });
     }
@@ -180,7 +180,7 @@ public class ResponseFormatter {
             GlobalLogger.error(
                     String.format("Could not get matchups from league_id '%s' for week '%d'", leagueId, weekNum), e);
         }
-        System.out.println("No matchups found");
+        GlobalLogger.debug("No matchups found");
         return List.of();
     }
 
@@ -194,7 +194,7 @@ public class ResponseFormatter {
         } catch (Exception e) {
             GlobalLogger.error("Could not get nfl state", e);
         }
-        System.out.println("No nfl state found");
+        GlobalLogger.debug("No nfl state found");
         return null;
     }
 }

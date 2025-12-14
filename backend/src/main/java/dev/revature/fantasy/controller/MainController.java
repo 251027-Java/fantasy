@@ -10,6 +10,9 @@ import dev.revature.fantasy.exception.InvalidLeagueIdException;
 import dev.revature.fantasy.exception.InvalidUsernameException;
 import dev.revature.fantasy.service.AuthService;
 import dev.revature.fantasy.service.FantasyStatsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,10 @@ public class MainController {
         this.authService = authService;
     }
 
+    @Tag(name = "User")
+    @Operation(
+            description = "Retrieve user information associated with a username.",
+            security = @SecurityRequirement(name = "auth"))
     @GetMapping("/info/{username}")
     public LoginDto getUserInfo(@PathVariable String username)
             throws HttpConnectionException, InvalidUsernameException {
@@ -35,6 +42,8 @@ public class MainController {
                 .orElseThrow(() -> new InvalidUsernameException("Invalid username: " + username));
     }
 
+    @Tag(name = "League")
+    @Operation(description = "Retrieve stats for a league.", security = @SecurityRequirement(name = "auth"))
     @GetMapping("/league/{id}/stats")
     public LeagueStatsDto getLeagueStats(@PathVariable String id)
             throws HttpConnectionException, InvalidLeagueIdException {
@@ -46,6 +55,8 @@ public class MainController {
     /**
      * Send the token to google auth service to verify it
      */
+    @Tag(name = "Auth")
+    @Operation(description = "Authenticate with a Google OAuth code.")
     @PostMapping("/auth/google")
     public AuthResponseDto googleAuth(@RequestBody AuthRequestDto authRequestDto) {
         return this.authService.auth(authRequestDto).orElseThrow(() -> new AuthException("Authentication failed"));
