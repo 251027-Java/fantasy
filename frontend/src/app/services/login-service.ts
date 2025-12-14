@@ -73,7 +73,7 @@ export class LoginService {
 
 		if (existingCard) {
 			console.log(
-				card.title + ' League already exists in the list. Checking user...',
+				`${card.title} League already exists in the list. Checking user...`,
 			);
 
 			// Check if the user is already in the existing card's user list
@@ -92,7 +92,7 @@ export class LoginService {
 				);
 			}
 		} else {
-			console.log('Adding ' + card.title + ' league to the list.');
+			console.log(`Adding ${card.title} league to the list.`);
 
 			if (!card.users) {
 				card.users = [];

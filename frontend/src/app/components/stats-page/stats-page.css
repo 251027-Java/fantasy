@@ -26,23 +26,13 @@
 
 .luckstatsbackground-inverted {
 	background-image:
-		linear-gradient(
-			#101828,
-			#101828,
-			#101828F8,
-			#101828F8,
-			#101828F8
-		), url("/footballsinverted.jpg");
+		linear-gradient(#101828, #101828, #101828f8, #101828f8, #101828f8),
+		url("/footballsinverted.jpg");
 	background-blend-mode: multiply;
 }
 
 .medianluckstatsbackground-inverted {
 	background-image:
-		linear-gradient(
-			#101828C0,
-			#101828C0,
-			#1E355F60,
-			#1E355F60,
-			#1E355F60
-		), url("/routesinverted.jpg");
+		linear-gradient(#101828c0, #101828c0, #1e355f60, #1e355f60, #1e355f60),
+		url("/routesinverted.jpg");
 }
