@@ -30,13 +30,13 @@ import { Navbar } from '../navbar/navbar';
 		CommonModule,
 		ReactiveFormsModule,
 		HlmInput,
-		Navbar
+		Navbar,
 	],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
 })
 export class League implements OnInit {
-	// Determines number of items you'll see wtihin carousel
+	// Determines number of items you'll see within carousel
 	constructor(
 		private router: Router,
 		private loginServe: LoginService,
@@ -65,7 +65,7 @@ export class League implements OnInit {
 		this.loading = false;
 		this.error = false;
 
-		if (this.loginServe.cardList.length == 0) {
+		if (this.loginServe.cardList.length === 0) {
 			this.emptyListUser = true;
 		} else {
 			this.emptyListUser = false;
@@ -73,7 +73,7 @@ export class League implements OnInit {
 
 		this.cdRef.detectChanges();
 
-		console.log('current username: ' + this.loginServe.username);
+		console.log(`current username: ${this.loginServe.username}`);
 
 		//console.log("Raw data3 (JSON string):", JSON.stringify(this.cardList, null, 2));
 	}
@@ -120,7 +120,7 @@ export class League implements OnInit {
 		this.cardList = this.loginServe.cardList;
 
 		// If cardlist has nothing within it, show that the search is empty
-		if(this.cardList.length == 0){
+		if (this.cardList.length === 0) {
 			this.emptyListUser = true;
 		}
 
@@ -181,7 +181,7 @@ export class League implements OnInit {
 					// Reset loading stylings
 					this.loading = false;
 
-					if (this.loginServe.cardList.length == 0) {
+					if (this.loginServe.cardList.length === 0) {
 						this.emptyListUser = true;
 					} else {
 						this.emptyListUser = false;

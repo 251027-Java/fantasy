@@ -5,27 +5,27 @@
 }
 
 .top-component {
-    /* ⭐️ CHANGE 1: Set the height to 2/3 of the viewport height (approx 66.67%) ⭐️ */
-    height: 95vh; /* Or 66.67vh for precision */
-    
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	/* ⭐️ CHANGE 1: Set the height to 2/3 of the viewport height (approx 66.67%) ⭐️ */
+	height: 95vh; /* Or 66.67vh for precision */
 
-    background-image: url("https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzg1ZGE1NmNvODVuOWd0NDQydzkwbWZ2dmJ1ZzJrOGZ1czh5eDFtdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aNJi783l8MnTtxIKWl/giphy.gif");
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-    /* ⭐️ CHANGE 2: Fix background-size unit for better control ⭐️ */
-    /* 50vh means the image is taking up 50% of the viewport height. 
+	background-image: url("https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzg1ZGE1NmNvODVuOWd0NDQydzkwbWZ2dmJ1ZzJrOGZ1czh5eDFtdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aNJi783l8MnTtxIKWl/giphy.gif");
+
+	/* ⭐️ CHANGE 2: Fix background-size unit for better control ⭐️ */
+	/* 50vh means the image is taking up 50% of the viewport height. 
        If you want the image to COVER the 67vh area, use 'cover'. */
-    background-size: cover; 
-    
-    /* If you stick with 50vh, that means the background image is only 
+	background-size: cover;
+
+	/* If you stick with 50vh, that means the background image is only 
        50% of the viewport height, which is fine, but `cover` might be intended. */
-    
-    background-position: center;
-    background-repeat: no-repeat;
+
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .top-component::before {
@@ -66,23 +66,23 @@
 	align-items: center;
 	justify-content: center;
 
-/* Set a strong base color (Your deepest color) */
-    background-color: #000000; /* Very dark gray */
-    
-    /* ⭐️ The Key: Apply the gradient over the base color ⭐️ */
-    background-image: linear-gradient(
-        to bottom, 
-        /* Start: Fade from the top section's white color to the dark center */
-        rgb(255, 255, 255) 0%, /* 70% opaque white at the very top */
-        rgba(26, 26, 26, 0.2) 9%,   /* Start fading to dark gray */
-        #1a1a1a 50%,                 /* Peak darkness in the middle */
-        rgba(26, 26, 26, 0.2) 95%,   /* Start fading back to light */
-        /* End: Fade to the bottom section's white color */
-        rgb(26, 26, 26, 0.2) 100% /* 70% opaque white at the very bottom */
-    );
-    
-    /* Ensure the text color is contrasting */
-    color: #ffffff; 
+	/* Set a strong base color (Your deepest color) */
+	background-color: #000000; /* Very dark gray */
+
+	/* ⭐️ The Key: Apply the gradient over the base color ⭐️ */
+	background-image: linear-gradient(
+		to bottom,
+		/* Start: Fade from the top section's white color to the dark center */
+		rgb(255, 255, 255) 0% /* 70% opaque white at the very top */,
+		rgba(26, 26, 26, 0.2) 9% /* Start fading to dark gray */,
+		#1a1a1a 50% /* Peak darkness in the middle */,
+		rgba(26, 26, 26, 0.2) 95% /* Start fading back to light */,
+		/* End: Fade to the bottom section's white color */
+		rgb(26, 26, 26, 0.2) 100% /* 70% opaque white at the very bottom */
+	);
+
+	/* Ensure the text color is contrasting */
+	color: #ffffff;
 }
 
 /* Ensure the gradients fill the entire box */
@@ -123,7 +123,6 @@
 	justify-content: center;
 }
 
-
 .very-bottom-component {
 	height: 95vh;
 	background: white;
@@ -134,20 +133,20 @@
 	justify-content: center;
 
 	/* Set a strong base color (Your deepest color) */
-    background-color: #000000; /* Very dark gray */
-    
-    /* ⭐️ The Key: Apply the gradient over the base color ⭐️ */
-    background-image: linear-gradient(
-        to bottom, 
-        /* Start: Fade from the top section's white color to the dark center */
-        rgb(26, 26, 26, 0.2) 0%, /* 70% opaque white at the very top */
-        rgba(26, 26, 26, 0.2) 9%,   /* Start fading to dark gray */
-        #1a1a1a 50%,                 /* Peak darkness in the middle */
-        rgba(26, 26, 26, 0.2) 95%,   /* Start fading back to light */
-        /* End: Fade to the bottom section's white color */
-        rgb(0, 0, 0) 100% /* 70% opaque white at the very bottom */
-    );
-    
-    /* Ensure the text color is contrasting */
-    color: #ffffff; 
+	background-color: #000000; /* Very dark gray */
+
+	/* ⭐️ The Key: Apply the gradient over the base color ⭐️ */
+	background-image: linear-gradient(
+		to bottom,
+		/* Start: Fade from the top section's white color to the dark center */
+		rgb(26, 26, 26, 0.2) 0% /* 70% opaque white at the very top */,
+		rgba(26, 26, 26, 0.2) 9% /* Start fading to dark gray */,
+		#1a1a1a 50% /* Peak darkness in the middle */,
+		rgba(26, 26, 26, 0.2) 95% /* Start fading back to light */,
+		/* End: Fade to the bottom section's white color */
+		rgb(0, 0, 0) 100% /* 70% opaque white at the very bottom */
+	);
+
+	/* Ensure the text color is contrasting */
+	color: #ffffff;
 }

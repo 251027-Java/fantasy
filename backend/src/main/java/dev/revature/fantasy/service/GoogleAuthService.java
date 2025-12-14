@@ -99,7 +99,7 @@ public class GoogleAuthService implements AuthService {
                             dto.getRedirectUri())
                     .execute();
 
-            GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());
+            // GlobalLogger.debug("Token Response: " + tokenResponse.toPrettyString());
 
             // get access token from response
             var googleResponse = (GoogleTokenResponse) tokenResponse;
