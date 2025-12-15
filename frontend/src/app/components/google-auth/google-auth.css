@@ -4,7 +4,6 @@
 	object-fit: cover;
 }
 
-
 .top-component {
 	/* ⭐️ CHANGE 1: Set the height to 2/3 of the viewport height (approx 66.67%) ⭐️ */
 	height: 95vh; /* Or 66.67vh for precision */
@@ -28,7 +27,6 @@
 	background-position: center;
 	background-repeat: no-repeat;
 }
-
 
 .top-component::before {
 	content: "";
@@ -125,8 +123,7 @@
 	justify-content: center;
 }
 
-.bottom-component.visible{
-
+.bottom-component.visible {
 }
 
 .very-bottom-component {
