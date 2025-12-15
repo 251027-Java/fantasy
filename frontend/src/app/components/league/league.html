@@ -9,7 +9,7 @@
             Let's find your League
           </h2>
           <p class="text-xl text-white/70">
-            choose your league from the list below
+            Search by username andchoose your league from the list below
           </p>
         </div>
 
@@ -30,7 +30,7 @@
                           placeholder="Enter your username"
                           required
                           formControlName="user"
-                          class="w-full"
+                          class="w-full bg-gray-900 text-white"
                       />
 
                       @if(error){
@@ -117,15 +117,16 @@
                             </p>
                         </div>
 
-                        <div hlmCardContent class="p-6 pt-0">
+                        <!-- <div hlmCardContent class="p-6 pt-0">
                             <p class="text-sm text-gray-300 leading-relaxed">
                               This is the main content area for the {{ card.title }} league summary.
                             </p>
-                        </div>
+                        </div> -->
 
                         <div hlmCardFooter class="p-6 pt-4">
                             @if(hoveredCardId == card.id){
                               <div class="">
+                                users in league:
                                 @for(user of card.users; track user){
                                   <h1 class=" text-blue-400 font-extrabold 
                                           [text-shadow:
@@ -136,7 +137,7 @@
                                           pb-1">
                                     {{user}}
                                 </h1>
-                              }
+                                }
                             
                             <button
                                 hlmBtn
@@ -161,12 +162,6 @@
             [card]="card"
             (visibilityChange)="onVisibilityChange($event)"
           ></app-scroll-card> -->
-
-          <div class="text-center py-12">
-            <p class="text-white/50 text-lg">
-              Scroll back up to see them reappear
-            </p>
-          </div>
 
       </div>
     </div>

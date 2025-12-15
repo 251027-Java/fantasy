@@ -398,7 +398,7 @@
 
 
     <!-- Separation 4 -->
-    <section class="very-bottom-component  flex flex-row " id="Login" id="section3">
+    <section class="very-bottom-component  flex flex-row " id="Login">
 
         <section class="h-full flex flex-row justify-start w-full flex-grow ">
 
@@ -410,8 +410,13 @@
                 </p>
                     <div id="google-btn-container" class="mt-6">
                         <!-- make sure the button is hidden by default, then show it when the client is initialized -->
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
-                        id="google-btn" (click)="signInWithGoogle()">Login with Google</button>
+                         @if(!this.authService.isAuthorized()){
+                            <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
+                            id="google-btn" (click)="signInWithGoogle()">Login with Google</button>
+                         }@else{
+                            <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
+                            id="google-btn" (click)="navigateSearch()">Go to Search</button>
+                         }
                     </div>
             </div>
            
