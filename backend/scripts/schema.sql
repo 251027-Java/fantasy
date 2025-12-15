@@ -29,12 +29,6 @@
         unique (roster_id, league_id)
     );
 
-    create table system_metadata (
-        key varchar(255) not null,
-        value varchar(255),
-        primary key (key)
-    );
-
     create table users (
         id varchar(255) not null,
         display_name varchar(255),
