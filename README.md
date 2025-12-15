@@ -9,7 +9,6 @@
 <a href="https://www.spartan.ng/"><img src="https://img.shields.io/badge/Spartan-75011D?style=for-the-badge" alt="Spartan" /></a>
 <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge" alt="TypeScript" /></a>
 <a href="https://www.npmjs.com/"><img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge" alt="npm" /></a>
-<a href="https://vite.dev/"><img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge" alt="Vite" /></a>
 <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge" alt="Vitest" /></a>
 <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-5A3E85?style=for-the-badge" alt="just" /></a>
 <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge" alt="Docker" /></a>
