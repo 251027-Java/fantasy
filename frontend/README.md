@@ -1,12 +1,12 @@
 # Fantasy frontend
 
-The backend for our fantasy football web application.
+The frontend for our fantasy football web application.
 
 ## Prequisites
 
 We require the following tools to run our frontend:
 
-- [NodeJS](https://nodejs.org/en)
+- [NodeJS v24](https://nodejs.org/en)
 
 ## Quick start
 
@@ -18,6 +18,10 @@ npm start # start the frontend
 ```
 
 This will serve the frontend on `http://localhost:4200`.
+
+## Wireframes
+
+View our wireframes [here](./wireframes.pdf).
 
 ## Running
 
