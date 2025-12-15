@@ -1,21 +1,28 @@
 import { AfterViewInit, Component, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon } from '@ng-icons/core';
+import { BrnSelectImports } from '@spartan-ng/brain/select';
+import {
+	HlmAccordion,
+	HlmAccordionContent,
+	HlmAccordionIcon,
+	HlmAccordionImports,
+	HlmAccordionItem,
+} from '@spartan-ng/helm/accordion';
 import { HlmButton, HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardDescription } from '@spartan-ng/helm/card';
+import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { environment } from '../../../environments/environment';
 import { AuthRequest, AuthResponse } from '../../interface/auth-interfaces';
 import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
-import { Navbar } from "../navbar/navbar";
-import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
-import { HlmSelectImports } from '@spartan-ng/helm/select';
-import { BrnSelectImports } from '@spartan-ng/brain/select';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HlmInput } from '@spartan-ng/helm/input';
-import { HlmCardDescription } from "@spartan-ng/helm/card";
-import { HlmAccordionIcon, HlmAccordionContent, HlmAccordionItem, HlmAccordion, HlmAccordionImports } from "@spartan-ng/helm/accordion";
-import { NgIcon } from '@ng-icons/core';
-import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { Navbar } from '../navbar/navbar';
 
 declare var google: any;
 
@@ -23,23 +30,23 @@ declare var google: any;
 	selector: 'app-google-auth',
 	standalone: true,
 	imports: [
-    Navbar,
-    HlmFormFieldImports,
-    HlmSelectImports,
-    BrnSelectImports,
-    HlmButtonImports,
-    CommonModule,
-    ReactiveFormsModule,
-    Navbar,
-	NgIcon,
-	HlmIconImports,
-	HlmAccordionImports,
-    HlmCardDescription,
-    HlmAccordionIcon,
-    HlmAccordionContent,
-    HlmAccordionItem,
-    HlmAccordion
-],
+		Navbar,
+		HlmFormFieldImports,
+		HlmSelectImports,
+		BrnSelectImports,
+		HlmButtonImports,
+		CommonModule,
+		ReactiveFormsModule,
+		Navbar,
+		NgIcon,
+		HlmIconImports,
+		HlmAccordionImports,
+		HlmCardDescription,
+		HlmAccordionIcon,
+		HlmAccordionContent,
+		HlmAccordionItem,
+		HlmAccordion,
+	],
 	templateUrl: './google-auth.html',
 	styleUrl: './google-auth.css',
 })

@@ -4,7 +4,6 @@ import dev.revature.fantasy.dto.LeagueStatsDto;
 import dev.revature.fantasy.dto.ScoreDto;
 import dev.revature.fantasy.dto.StatDto;
 import dev.revature.fantasy.dto.WeeklyMedianLuckDto;
-import dev.revature.fantasy.logger.GlobalLogger;
 import dev.revature.fantasy.model.RosterUser;
 import dev.revature.fantasy.model.WeekScore;
 
@@ -219,7 +218,7 @@ public class Stats {
         var leagueStatsDto = new LeagueStatsDto(
                 stats.toArray(new StatDto[stats.size()]),
                 weeklyMedianLuck.toArray(new WeeklyMedianLuckDto[weeklyMedianLuck.size()]));
-        GlobalLogger.debug("Computed stats for league " + leagueStatsDto.toString());
+        // GlobalLogger.debug("Computed stats for league " + leagueStatsDto.toString());
         return leagueStatsDto;
     }
 }

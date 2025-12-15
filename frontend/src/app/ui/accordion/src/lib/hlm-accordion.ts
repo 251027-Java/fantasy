@@ -5,7 +5,9 @@ import type { ClassValue } from 'clsx';
 
 @Directive({
 	selector: '[hlmAccordion], hlm-accordion',
-	hostDirectives: [{ directive: BrnAccordion, inputs: ['type', 'dir', 'orientation'] }],
+	hostDirectives: [
+		{ directive: BrnAccordion, inputs: ['type', 'dir', 'orientation'] },
+	],
 	host: {
 		'[class]': '_computedClass()',
 	},
@@ -13,6 +15,9 @@ import type { ClassValue } from 'clsx';
 export class HlmAccordion {
 	public readonly userClass = input<ClassValue>('', { alias: 'class' });
 	protected readonly _computedClass = computed(() =>
-		hlm('flex data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col', this.userClass()),
+		hlm(
+			'flex data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col',
+			this.userClass(),
+		),
 	);
 }
