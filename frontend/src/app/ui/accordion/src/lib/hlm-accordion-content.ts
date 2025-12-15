@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	input,
+} from '@angular/core';
 import { BrnAccordionContent } from '@spartan-ng/brain/accordion';
 import { hlm } from '@spartan-ng/helm/utils';
 import type { ClassValue } from 'clsx';

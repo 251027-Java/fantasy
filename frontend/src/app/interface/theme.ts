@@ -9,6 +9,7 @@ export interface Theme {
 	headerNameClass: string;
 	loadingTableClass: string;
 	loadingTableBackgroundClass: string;
+	tableBodyGradientClass: string;
 }
 
 export type ThemeColor =
