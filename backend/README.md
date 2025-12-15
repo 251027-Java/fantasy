@@ -98,6 +98,12 @@ A PostgreSQL database in a docker container is used for our backend. Once create
 
 To view the DDL initialization of the production database, view the file, `scripts/schema.sql`. See [DDL generation](#ddl-generation) for more information on this file.
 
+### ER Diagram
+
+The entity relationship diagram based off of `scripts/schema.sql`.
+
+![Entity Relationship Diagram](./erd.png)
+
 ### Creation
 
 Create and start a docker container with a dev database (no tables) and prod database (with initial tables):
