@@ -173,7 +173,7 @@ export class StatsService {
 				this.filteredStats.set(
 					'MedianLuck',
 					new Map<number, boolean>(
-						this.statsResponse().weeklyMedianLuck[0].stats.map((val, idx) => [
+						this.statsResponse().weeklyMedianLuck[0].stats.map((_val, idx) => [
 							idx + 1,
 							true,
 						]),
