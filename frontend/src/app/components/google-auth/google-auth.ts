@@ -1,9 +1,5 @@
-import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
-=======
-import { AfterViewInit, Component } from '@angular/core';
->>>>>>> 0147a7bf454860ee30413061a9c4dd44f80c58a0
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
@@ -26,8 +22,6 @@ import { AuthRequest, AuthResponse } from '../../interface/auth-interfaces';
 import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { Navbar } from '../navbar/navbar';
-
-
 
 declare var google: any;
 
@@ -56,8 +50,6 @@ declare var google: any;
 	styleUrl: './google-auth.css',
 })
 export class GoogleAuth implements AfterViewInit {
-
-
 	section1Visible = false;
 	section2Visible = false;
 	section3Visible = false;
@@ -68,7 +60,7 @@ export class GoogleAuth implements AfterViewInit {
 		private loginServe: LoginService,
 	) {}
 
-	ngOnInit(){
+	ngOnInit() {
 		setTimeout(() => this.checkVisibility(), 100);
 	}
 
@@ -155,27 +147,25 @@ export class GoogleAuth implements AfterViewInit {
 		}
 	}
 
-
 	// Create functionality for components loading into window
 	@HostListener('window:scroll', [])
-	onScroll(){
+	onScroll() {
 		this.checkVisibility();
 	}
 
-	checkVisibility(){
+	checkVisibility() {
 		const sections = [
-			{id: 'section1', property:"section1Visible"},
-			{id: 'section1', property:"section1Visible"},
-			{id: 'section1', property:"section1Visible"}
+			{ id: 'section1', property: 'section1Visible' },
+			{ id: 'section1', property: 'section1Visible' },
+			{ id: 'section1', property: 'section1Visible' },
 		];
 
-		sections.forEach(section =>{
+		sections.forEach((section) => {
 			const element = document.getElementById(section.id);
-			if(element){
+			if (element) {
 				const rect = element.getBoundingClientRect();
 				const isVisible = rect.top < window.innerHeight * 0.75;
 				(this as any)[section.property] = isVisible;
-
 			}
 		});
 	}

@@ -9,7 +9,7 @@
 
 @import "@spartan-ng/brain/hlm-tailwind-preset.css";
 
-@plugin 'tailwind-scrollbar';
+@plugin "tailwind-scrollbar";
 
 :root {
 	color-scheme: light;
