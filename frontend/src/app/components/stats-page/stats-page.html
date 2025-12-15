@@ -12,7 +12,7 @@
         {{displayedComponentTitlePrebold}}<span class="font-bold" [ngClass]="themeService.getCurrentThemeClassString('displayedComponentTitleBoldClass')">{{displayedComponentTitleBold}}</span>{{displayedComponentTitlePostbold}}
     </h1>
 
-    <div class="flex justify-between items-center gap-4 md:gap-8 lg:gap-10" style="margin: 2% auto 0.5%; width:90%;">
+    <div class="flex justify-between items-start gap-4 md:gap-8 lg:gap-10" style="margin: 2% auto 0.5%; width:90%;">
         <div class="flex gap-2 md:gap-6 lg:gap-10 justify-center">
             @for (tab of tabs; track tab.label) {
                 @if (tab.isActive){
@@ -22,7 +22,7 @@
                 }
             }
         </div>
-        <div class="flex gap-2 justify-center">
+        <div class="flex gap-2 overflow-x-auto scrollbar-thin">
             @for (themeColor of themeService.getThemeColors(); track themeColor) {
                 <button (click)="themeService.setStatsTheme(themeColor)" class="w-8 md:w-12 h-12 flex-1 px-4 py-2 rounded-md text-center font-medium border text-gray-300 cursor-pointer" [ngClass]="themeService.getThemeClassString(themeColor, 'selectThemeButtonClasses')"></button>
             }
