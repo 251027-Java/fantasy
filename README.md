@@ -35,4 +35,4 @@ git clone https://github.com/251027-Java/fantasy.git
 cd fantasy
 ```
 
-Further documentation can be found on how to set up the frontend and backend in their respective directories' README.
+Further documentation can be found on how to set up the [frontend](frontend/README.md) and [backend](backend/README.md) in their respective directories' README.
