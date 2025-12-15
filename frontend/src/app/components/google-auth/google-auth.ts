@@ -1,3 +1,4 @@
+import { AfterViewInit, Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -50,11 +51,21 @@ declare var google: any;
 	styleUrl: './google-auth.css',
 })
 export class GoogleAuth implements AfterViewInit {
+
+
+	section1Visible = false;
+	section2Visible = false;
+	section3Visible = false;
+
 	constructor(
 		private router: Router,
 		private authService: AuthService,
 		private loginServe: LoginService,
 	) {}
+
+	ngOnInit(){
+		setTimeout(() => this.checkVisibility(), 100);
+	}
 
 	loadGoogleClientId(): string {
 		// grab the google client id from the environment variables
@@ -137,5 +148,30 @@ export class GoogleAuth implements AfterViewInit {
 		} else {
 			console.error('Authorization failed, no code received.', response);
 		}
+	}
+
+
+	// Create functionality for components loading into window
+	@HostListener('window:scroll', [])
+	onScroll(){
+		this.checkVisibility();
+	}
+
+	checkVisibility(){
+		const sections = [
+			{id: 'section1', property:"section1Visible"},
+			{id: 'section1', property:"section1Visible"},
+			{id: 'section1', property:"section1Visible"}
+		];
+
+		sections.forEach(section =>{
+			const element = document.getElementById(section.id);
+			if(element){
+				const rect = element.getBoundingClientRect();
+				const isVisible = rect.top < window.innerHeight * 0.75;
+				(this as any)[section.property] = isVisible;
+
+			}
+		});
 	}
 }

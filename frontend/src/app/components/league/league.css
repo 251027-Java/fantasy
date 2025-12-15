@@ -16,7 +16,7 @@
 }
 
 .scrollbox::-webkit-scrollbar-track {
-	background: #f1f1f1;
+	background: #000000;
 	border-radius: 8px;
 }
 
@@ -26,11 +26,11 @@
 }
 
 .scrollbox::-webkit-scrollbar-thumb:hover {
-	background: #0b8043;
+	background: #000000;
 }
 
 /* For Firefox */
 .scrollbox {
 	scrollbar-width: thin;
-	scrollbar-color: #0f9d58 #f1f1f1;
+	scrollbar-color: #000000 #f1f1f100;
 }

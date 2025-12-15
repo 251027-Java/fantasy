@@ -51,6 +51,7 @@ export class League implements OnInit {
 	public loading: boolean = true;
 	public error: boolean = false;
 	public emptyListUser: boolean = false;
+	public hoveredCardId: string | null = null;
 	private currentCard: CardData = {
 		id: '',
 		title: '',
@@ -76,6 +77,14 @@ export class League implements OnInit {
 		console.log(`current username: ${this.loginServe.username}`);
 
 		//console.log("Raw data3 (JSON string):", JSON.stringify(this.cardList, null, 2));
+	}
+
+	setHover(id: string): void {
+		this.hoveredCardId = id;
+	}
+
+	clearHover(): void {
+		this.hoveredCardId = null;
 	}
 
 	Logout(): void {
