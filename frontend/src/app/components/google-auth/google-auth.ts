@@ -44,6 +44,7 @@ declare var google: any;
 		HlmAccordionContent,
 		HlmAccordionItem,
 		HlmAccordion,
+		HlmButtonImports,
 	],
 	templateUrl: './google-auth.html',
 	styleUrl: './google-auth.css',

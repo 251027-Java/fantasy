@@ -5,7 +5,9 @@
 
     <!-- Separation 1 -->
     <section class="top-component text-white">
-
+        <video autoplay loop muted playsinline class="absolute object-cover min-w-full min-h-full">
+            <source src="obj-catch.mp4" type="video/mp4">
+        </video>
         <div class="flex flex-col items-center justify-center p-10">
 
             <div class="top-text-content">
@@ -20,14 +22,17 @@
     <section class="bottom-component flex flex-row " id="section1" [class.visible]="section1Visible">
 
         <!-- Container holding all elements within this section -->
-        <section class="h-full flex flex-row justify-start w-full flex-grow p-10 ">
+        <section class="h-full flex flex-col lg:flex-row justify-start w-full flex-grow p-10 ">
             
-            <div class="flex-grow-1 bg-white flex items-center justify-center">
-                <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNThmMzl4OWIzdGljMW8wdnMxeGs1ajhtaG9maGZza3R6bHRteXY1MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fEYkIHnX4WoXQw2OfX/giphy.gif" 
-                    alt="Football action" class="gif-object max-h-full max-w-full object-contain" /> 
+            <div class="basis-2/4 bg-white">
+                <video autoplay loop muted playsinline class="object-cover min-h-full">
+                    <source src="zay-siu.mp4" type="video/mp4">
+                </video>
+                <!-- <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNThmMzl4OWIzdGljMW8wdnMxeGs1ajhtaG9maGZza3R6bHRteXY1MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fEYkIHnX4WoXQw2OfX/giphy.gif" 
+                    alt="Football action" class="gif-object max-h-full max-w-full object-contain" />  -->
             </div>
             
-            <div class="flex-grow-4 left-side-section p-10 flex items-center justify-center flex-col">
+            <div class="grow left-side-section p-10 flex items-center justify-center flex-col">
                 <h1 class="text-4xl text-black font-bold">What is Fantasy Friend?</h1>
                 <p class="mt-4 text-lg text-black max-w-2xl">
                     Fantasy Friend is your ultimate companion app for fantasy football. 
@@ -57,10 +62,10 @@
             </div>
         </div>
 
-        <div class="flex flex-row justify-between items-stretch gap-30">
+        <div class="flex flex-col sm:flex-row justify-between">
             
             <!-- Card 1 -->
-            <section class="h-full flex flex-row justify-center w-full flex-grow">
+            <section class="h-full flex flex-row justify-center w-full basis-1/5">
                 
                 <!-- <div class="flex-grow-4 right-side-section p-12 text-white p-6">
                     <div class="info-content flex items-center justify-center flex-col">
@@ -152,7 +157,7 @@
             </section>
 
             <!-- Card 2 -->
-            <section class="h-full flex flex-row justify-center w-full flex-grow ">
+            <section class="h-full flex flex-row justify-center w-full basis-1/5">
                 
                 <!-- <div class="flex-grow-1 bg-white flex items-center justify-center">
                     <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNThmMzl4OWIzdGljMW8wdnMxeGs1ajhtaG9maGZza3R6bHRteXY1MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fEYkIHnX4WoXQw2OfX/giphy.gif" 
@@ -238,7 +243,7 @@
             </section>
 
             <!-- Card 3 -->
-            <section class="h-full flex flex-row justify-center w-full text-black flex-grow">
+            <section class="h-full flex flex-row justify-center w-full text-black basis-1/5">
                 
 
                         <section
@@ -343,7 +348,7 @@
                             <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
                             id="google-btn" (click)="signInWithGoogle()">Login with Google</button>
                          }@else{
-                            <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
+                            <button hlmBtn class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors" 
                             id="google-btn" (click)="navigateSearch()">Go to Search</button>
                          }
                     </div>
