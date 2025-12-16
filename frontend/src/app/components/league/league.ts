@@ -7,13 +7,14 @@ import {
 	Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
 import { HlmInput } from '@spartan-ng/helm/input';
 import { HlmSelectImports } from '@spartan-ng/helm/select';
 import { CardData } from '../../interface/card-data';
-import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
@@ -31,7 +32,9 @@ import { Navbar } from '../navbar/navbar';
 		ReactiveFormsModule,
 		HlmInput,
 		Navbar,
+		NgIcon,
 	],
+	providers: [provideIcons({ lucideX })],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
 })
@@ -41,7 +44,6 @@ export class League implements OnInit {
 		private router: Router,
 		private loginServe: LoginService,
 		private statsService: StatsService,
-		private authService: AuthService,
 		private themeService: ThemeService,
 		private cdRef: ChangeDetectorRef,
 	) {}

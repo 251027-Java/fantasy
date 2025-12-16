@@ -34,3 +34,8 @@
 	scrollbar-width: thin;
 	scrollbar-color: #000000 #f1f1f100;
 }
+
+button:hover .remove-icon {
+	color: red;
+	transition: color 0.2s ease-in-out;
+}
