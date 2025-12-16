@@ -36,6 +36,6 @@
 }
 
 button:hover .remove-icon {
-  color: red;
-  transition: color 0.2s ease-in-out; 
+	color: red;
+	transition: color 0.2s ease-in-out;
 }

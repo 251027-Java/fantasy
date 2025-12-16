@@ -102,8 +102,8 @@ export class GoogleAuth implements AfterViewInit {
 		}
 	}
 
-	navigateSearch(){
-		this.router.navigateByUrl('league')
+	navigateSearch() {
+		this.router.navigateByUrl('league');
 	}
 
 	// Example of a manual button rendering function

@@ -38,7 +38,7 @@ export class StatsPage {
 			imageBackgroundClass: 'luckstatsbackground-inverted',
 		},
 		{
-			namePrebold: "Your ",
+			namePrebold: 'Your ',
 			nameBold: 'Weekly',
 			namePostbold: ' Breakdown.',
 			label: 'Median Luck Scores',
