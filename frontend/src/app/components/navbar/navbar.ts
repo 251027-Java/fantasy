@@ -1,6 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { AuthService } from '../../services/auth-service';
 import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
@@ -8,7 +9,7 @@ import { ThemeService } from '../../services/theme-service';
 
 @Component({
 	selector: 'app-navbar',
-	imports: [],
+	imports: [HlmButtonImports],
 	templateUrl: './navbar.html',
 	styleUrl: './navbar.css',
 })
