@@ -18,6 +18,8 @@ import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { Navbar } from '../navbar/navbar';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 
 @Component({
 	selector: 'app-league',
@@ -31,7 +33,9 @@ import { Navbar } from '../navbar/navbar';
 		ReactiveFormsModule,
 		HlmInput,
 		Navbar,
+		NgIcon,
 	],
+	providers: [provideIcons({ lucideX })],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
 })
