@@ -7,6 +7,8 @@ import {
 	Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
@@ -31,7 +33,9 @@ import { Navbar } from '../navbar/navbar';
 		ReactiveFormsModule,
 		HlmInput,
 		Navbar,
+		NgIcon,
 	],
+	providers: [provideIcons({ lucideX })],
 	templateUrl: './league.html',
 	styleUrl: './league.css',
 })

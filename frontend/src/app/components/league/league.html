@@ -51,7 +51,7 @@
             <div>
               @for (user of userSearchList; track userSearchList) {
 
-                <button hlmBtn (click)="removeUserFromSearch(user)">X {{user}}</button>
+                <button hlmBtn (click)="removeUserFromSearch(user)"><ng-icon class="text-red-400" name="lucideX" />{{user}}</button>
               }
             </div>
           </div>
