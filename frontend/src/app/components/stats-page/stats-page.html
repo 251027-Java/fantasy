@@ -16,9 +16,9 @@
         <div class="flex gap-2 md:gap-6 lg:gap-10 justify-center">
             @for (tab of tabs; track tab.label) {
                 @if (tab.isActive){
-                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md flex items-center justify-center font-medium border text-gray-100 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md flex items-center justify-center font-medium border text-gray-100 cursor-pointer" [ngClass]="themeService.getCurrentThemeClassString('selectedTabButtonClasses')" style="line-height: 120%;">{{tab.label}}</button>
                 } @else {
-                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md flex items-center justify-center font-medium border border-gray-500 bg-black text-gray-400 hover:bg-gray-700 cursor-pointer">{{tab.label}}</button>
+                    <button (click)="selectTab(tab)" class="border-2 md:w-36 w-20 h-12 flex-1 px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-md flex items-center justify-center font-medium border border-gray-500 bg-black text-gray-400 hover:bg-gray-700 cursor-pointer" style="line-height: 120%;">{{tab.label}}</button>
                 }
             }
         </div>
