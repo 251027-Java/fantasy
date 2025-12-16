@@ -7,6 +7,8 @@ import {
 	Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 import { BrnSelectImports } from '@spartan-ng/brain/select';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmFormFieldImports } from '@spartan-ng/helm/form-field';
@@ -18,8 +20,6 @@ import { LoginService } from '../../services/login-service';
 import { StatsService } from '../../services/stats-service';
 import { ThemeService } from '../../services/theme-service';
 import { Navbar } from '../navbar/navbar';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideX } from '@ng-icons/lucide';
 
 @Component({
 	selector: 'app-league',
