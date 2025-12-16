@@ -123,9 +123,6 @@
 	justify-content: center;
 }
 
-.bottom-component.visible {
-}
-
 .very-bottom-component {
 	height: 95vh;
 	background: white;

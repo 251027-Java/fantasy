@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { AuthResponse } from '../interface/auth-interfaces';
@@ -8,7 +9,10 @@ import { AuthResponse } from '../interface/auth-interfaces';
 	providedIn: 'root',
 })
 export class AuthService {
-	constructor(private http: HttpClient) {}
+	constructor(
+		private http: HttpClient,
+		private router: Router,
+	) {}
 
 	// verifyGoogleToken(token: string): Observable<AuthResponse> {
 	//   return this.http.post<AuthResponse>('api/auth/google', { token });
@@ -42,5 +46,12 @@ export class AuthService {
 	getToken(): string {
 		const token: string | null = sessionStorage.getItem('token');
 		return token ? token : 'no_token_found';
+	}
+
+	logout(): void {
+		// remove the token from the session storage
+		sessionStorage.removeItem('token');
+		// redirect to auth page
+		this.router.navigateByUrl('/auth');
 	}
 }
